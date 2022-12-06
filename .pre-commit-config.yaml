@@ -26,3 +26,23 @@ repos:
   - id: pydocstyle
     additional_dependencies: [toml]
     exclude: "tests/"
+
+- repo: local
+  hooks:
+  - id: mypy-code
+    name: "mypy: strict checks on code"
+    entry: mypy
+    language: python
+    types: [python]
+    require_serial: true
+    exclude: "^(doc/)|(tests/)|^(examples/)"
+    args: ["--strict", "--namespace-packages", "--explicit-package-bases"]
+
+  - id: mypy-tests
+    name: "mypy: lenient checks on tests"
+    entry: mypy
+    language: python
+    types: [python]
+    require_serial: true
+    files: "^(tests/)|^(examples/)"
+    args: ["--namespace-packages", "--explicit-package-bases"]
