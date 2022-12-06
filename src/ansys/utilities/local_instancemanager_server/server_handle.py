@@ -25,5 +25,9 @@ class ServerHandle:
         self._finalizer()
 
     @property
+    def url(self) -> str:
+        return self._launcher.url
+
+    @property
     def closed(self) -> bool:
         return not self._finalizer.alive

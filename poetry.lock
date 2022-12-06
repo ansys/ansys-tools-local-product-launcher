@@ -8,7 +8,7 @@ python-versions = "*"
 
 [[package]]
 name = "ansys-sphinx-theme"
-version = "0.7.3"
+version = "0.7.4"
 description = "A theme devised by ANSYS, Inc. for Sphinx documentation."
 category = "dev"
 optional = false
@@ -781,7 +781,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7,<4.0"
-content-hash = "bbc91b5f88f62f42d5c33c62b17c536f7ebf8aeef683585556c4b777a8312c97"
+content-hash = "dacc3bd723d5c91befa82e376e9a210e05a9a608ebfb4d5305658c351be055b0"
 
 [metadata.files]
 alabaster = [
@@ -789,8 +789,8 @@ alabaster = [
     {file = "alabaster-0.7.12.tar.gz", hash = "sha256:a661d72d58e6ea8a57f7a86e37d86716863ee5e92788398526d58b26a4e4dc02"},
 ]
 ansys-sphinx-theme = [
-    {file = "ansys-sphinx-theme-0.7.3.tar.gz", hash = "sha256:b15f7175596177b43ad561fca542599545edb969658e659cb208ea407149b57e"},
-    {file = "ansys_sphinx_theme-0.7.3-py3-none-any.whl", hash = "sha256:386a7badb8f386f670d583dcf42f1990ac762a0bdf64663cd9da98a824673202"},
+    {file = "ansys-sphinx-theme-0.7.4.tar.gz", hash = "sha256:8ae811a59a3dc017f0e79bfffbf800ed0b8972040e32fb8fac973878db6a4e9a"},
+    {file = "ansys_sphinx_theme-0.7.4-py3-none-any.whl", hash = "sha256:7f292ea8d5a78df78844d8a8e9f516c9f000a3d8ed4d7603f3bca1eb05d61c3d"},
 ]
 attrs = [
     {file = "attrs-22.1.0-py2.py3-none-any.whl", hash = "sha256:86efa402f67bf2df34f51a335487cf46b1ec130d02b8d39fd248abfd30da551c"},

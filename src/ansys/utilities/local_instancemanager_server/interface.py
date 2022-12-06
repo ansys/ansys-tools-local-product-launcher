@@ -34,6 +34,10 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     def check(self) -> bool:
         """Check if the product instance is responding to requests."""
 
+    @property
+    def url(self) -> str:
+        """Provide the on which the server is listening."""
+
 
 # TODO: Remove code below here; this is just to demonstrate / test how the
 # protocol works. Mypy will check that the 'MyLauncher' matches the protocol.
