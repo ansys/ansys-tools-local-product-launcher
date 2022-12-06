@@ -9,4 +9,8 @@ try:
 except ModuleNotFoundError:
     import importlib_metadata  # type: ignore
 
+from . import interface
+
 __version__ = importlib_metadata.version(__name__.replace(".", "-"))
+
+__all__ = ["interface"]
