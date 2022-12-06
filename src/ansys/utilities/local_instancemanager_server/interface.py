@@ -15,7 +15,13 @@ LAUNCHER_CONFIG_T = TypeVar("LAUNCHER_CONFIG_T", bound="pydantic.BaseModel")
 
 
 class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
-    """Manages a local product instance."""
+    """Manages a local product instance.
+
+    It is recommended (but not required) to derive from this class,
+    e.g. ``MyLauncher(LauncherProtocol[MyConfigModel]``, and check the
+    resulting code with ``mypy``.
+    Otherwise, compatibility with the interface will not be checked.
+    """
 
     CONFIG_MODEL: Type[LAUNCHER_CONFIG_T]
 
@@ -37,7 +43,7 @@ class Foo(pydantic.BaseModel):
     x: int
 
 
-class MyLauncher:
+class MyLauncher(LauncherProtocol[Foo]):
     CONFIG_MODEL = Foo
 
     def __init__(self, *, config: Foo):
@@ -48,10 +54,3 @@ class MyLauncher:
 
     def check(self) -> bool:
         ...
-
-
-def foo(x: LauncherProtocol[LAUNCHER_CONFIG_T]) -> None:
-    return
-
-
-foo(MyLauncher(config=Foo(x=1)))
