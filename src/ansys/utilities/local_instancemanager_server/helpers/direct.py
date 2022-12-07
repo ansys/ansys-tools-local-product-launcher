@@ -21,9 +21,3 @@ class DirectLauncherBase(LauncherProtocol[LAUNCHER_CONFIG_T], ABC):
         self._process.wait()
         self._stdout.close()
         self._stderr.close()
-
-
-# class MyLocalLauncher:
-#     def __init__(self, config):
-#         # create process
-#         super().__init__(...)
