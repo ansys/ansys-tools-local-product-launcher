@@ -1,5 +1,6 @@
 """Interface definitions for implementing a local product launcher."""
 
+from enum import Enum, auto
 from typing import Type, TypeVar
 
 try:
@@ -14,6 +15,11 @@ __all__ = ["LAUNCHER_CONFIG_T", "LauncherProtocol"]
 LAUNCHER_CONFIG_T = TypeVar("LAUNCHER_CONFIG_T", bound="pydantic.BaseModel")
 
 
+class ServerType(Enum):
+    GENERIC = auto()
+    GRPC = auto()
+
+
 class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     """Manages a local product instance.
 
@@ -24,6 +30,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     """
 
     CONFIG_MODEL: Type[LAUNCHER_CONFIG_T]
+    SERVER_TYPE: ServerType
 
     def __init__(self, *, config: LAUNCHER_CONFIG_T):
         """Launch a local product instance with the given configuration."""
@@ -37,24 +44,3 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     @property
     def url(self) -> str:
         """Provide the on which the server is listening."""
-
-
-# TODO: Remove code below here; this is just to demonstrate / test how the
-# protocol works. Mypy will check that the 'MyLauncher' matches the protocol.
-
-
-class Foo(pydantic.BaseModel):
-    x: int
-
-
-class MyLauncher(LauncherProtocol[Foo]):
-    CONFIG_MODEL = Foo
-
-    def __init__(self, *, config: Foo):
-        ...
-
-    def close(self) -> None:
-        ...
-
-    def check(self) -> bool:
-        ...
