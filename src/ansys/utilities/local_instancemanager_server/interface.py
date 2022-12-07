@@ -44,7 +44,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
 
 
 class Foo(pydantic.BaseModel):
-    x: int
+    x: int = pydantic.Field(..., description="Helpful description")
 
 
 class MyLauncher(LauncherProtocol[Foo]):
