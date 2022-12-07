@@ -11,24 +11,24 @@ import click
 import pydantic
 
 
-if 'LOCAL_PIM_USERDATA_PATH' in os.environ:
-    USER_DATA_PATH = os.environ['LOCAL_PIM_USERDATA_PATH']
+if "LOCAL_PIM_USERDATA_PATH" in os.environ:
+    USER_DATA_PATH = os.environ["LOCAL_PIM_USERDATA_PATH"]
     if not os.path.isdir(USER_DATA_PATH):
-        raise FileNotFoundError(f'Invalid LOCAL_PIM_USERDATA_PATH at {USER_DATA_PATH}')
+        raise FileNotFoundError(f"Invalid LOCAL_PIM_USERDATA_PATH at {USER_DATA_PATH}")
 
 else:
-    USER_DATA_PATH = appdirs.user_data_dir('local_pim')
+    USER_DATA_PATH = appdirs.user_data_dir("local_pim")
     try:
         # Set up data directory
         os.makedirs(USER_DATA_PATH, exist_ok=True)
     except Exception as e:
         warnings.warn(
             f'Unable to create `LOCAL_PIM_USERDATA_PATH` at "{USER_DATA_PATH}"\n'
-            f'Error: {e}\n\n'
-            'Override the default path by setting the environmental variable '
-            '`LOCAL_PIM_USERDATA_PATH` to a writable path.'
+            f"Error: {e}\n\n"
+            "Override the default path by setting the environmental variable "
+            "`LOCAL_PIM_USERDATA_PATH` to a writable path."
         )
-        USER_DATA_PATH = ''
+        USER_DATA_PATH = ""
 
 LOCAL_PIM_CONFIG_PATH = os.path.join(USER_DATA_PATH, "config.json")
 
@@ -50,6 +50,7 @@ def product_command_factory(name: str):
 
     return _wrapped
 
+
 _DEFAULT_PRODUCT_CONFIG = {"configs": {}}
 
 
@@ -59,7 +60,9 @@ def build_cli_from_entrypoints():
         product_name, launcher_name = entry_point.name.split(".")
         product_command = product_commands.get(product_name, None)
         if product_command is None:
-            product_command = product_commands.setdefault(product_name, product_command_factory(product_name))
+            product_command = product_commands.setdefault(
+                product_name, product_command_factory(product_name)
+            )
 
         launcher_kls = entry_point.load()  # type: LauncherProtocol
         launcher_config_kls = launcher_kls.CONFIG_MODEL  # type: LAUNCHER_CONFIG_T
@@ -67,7 +70,9 @@ def build_cli_from_entrypoints():
         def _launcher_configure_command(**kwargs):
             model = launcher_config_kls(**kwargs)  # type: pydantic.BaseModel
             config_handler = ConfigurationHandler()
-            product_config = config_handler.configuration.setdefault(product_name, _DEFAULT_PRODUCT_CONFIG)
+            product_config = config_handler.configuration.setdefault(
+                product_name, _DEFAULT_PRODUCT_CONFIG
+            )
             product_config["configs"][launcher_name] = model.dict()
             # For now, set default launcher to latest modified
             product_config["launcher"] = launcher_name
@@ -103,5 +108,5 @@ class ConfigurationHandler:
 
 build_cli_from_entrypoints()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()
