@@ -9,8 +9,12 @@ try:
 except ModuleNotFoundError:
     import importlib_metadata  # type: ignore
 
-from . import interface
+from . import helpers, interface, plugins
 
 __version__ = importlib_metadata.version(__name__.replace(".", "-"))
 
-__all__ = ["interface"]
+__all__ = [
+    "interface",
+    "helpers",
+    "plugins",
+]
