@@ -1,16 +1,16 @@
 import json
 import os
 import pathlib
+from typing import Any, Dict, Union
 import warnings
-
-from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
-from .plugins import get_entry_points
 
 import appdirs
 import click
 import pydantic
 
+from .plugins import get_entry_points
 
+USER_DATA_PATH: str
 if "LOCAL_PIM_USERDATA_PATH" in os.environ:
     USER_DATA_PATH = os.environ["LOCAL_PIM_USERDATA_PATH"]
     if not os.path.isdir(USER_DATA_PATH):
@@ -30,32 +30,34 @@ else:
         )
         USER_DATA_PATH = ""
 
-LOCAL_PIM_CONFIG_PATH = os.path.join(USER_DATA_PATH, "config.json")
+
+LOCAL_PIM_CONFIG_PATH: str = os.path.join(USER_DATA_PATH, "config.json")
 
 
 @click.group()
-def cli():
+def cli() -> None:
     pass
 
 
 @cli.group()
-def configure():
+def configure() -> None:
     pass
 
 
-def product_command_factory(name: str):
+def product_command_factory(name: str) -> click.Group:
     @configure.group(name=name)
-    def _wrapped():
+    def _wrapped() -> None:
         pass
 
     return _wrapped
 
 
+_DEFAULT_PRODUCT_CONFIG: Dict[str, Union[str, Dict[str, Any]]]
 _DEFAULT_PRODUCT_CONFIG = {"configs": {}}
 
 
-def build_cli_from_entrypoints():
-    product_commands = {}
+def build_cli_from_entrypoints() -> None:
+    product_commands: Dict[str, Any] = {}
     for entry_point in get_entry_points():
         product_name, launcher_name = entry_point.name.split(".")
         product_command = product_commands.get(product_name, None)
@@ -64,10 +66,10 @@ def build_cli_from_entrypoints():
                 product_name, product_command_factory(product_name)
             )
 
-        launcher_kls = entry_point.load()  # type: LauncherProtocol
-        launcher_config_kls = launcher_kls.CONFIG_MODEL  # type: LAUNCHER_CONFIG_T
+        launcher_kls = entry_point.load()
+        launcher_config_kls = launcher_kls.CONFIG_MODEL
 
-        def _launcher_configure_command(**kwargs):
+        def _launcher_configure_command(**kwargs: Dict[str, Any]) -> None:
             model = launcher_config_kls(**kwargs)  # type: pydantic.BaseModel
             config_handler = ConfigurationHandler()
             product_config = config_handler.configuration.setdefault(
@@ -91,17 +93,17 @@ def build_cli_from_entrypoints():
 
 
 class ConfigurationHandler:
-    def __init__(self):
+    def __init__(self) -> None:
         if pathlib.Path(LOCAL_PIM_CONFIG_PATH).exists():
             self._read_config_from_file()
         else:
-            self.configuration = {}
+            self.configuration: Dict[Any, Any] = {}
 
-    def _read_config_from_file(self):
+    def _read_config_from_file(self) -> None:
         with open(LOCAL_PIM_CONFIG_PATH, "r") as f:
             self.configuration = json.load(f)
 
-    def write_config_to_file(self):
+    def write_config_to_file(self) -> None:
         with open(LOCAL_PIM_CONFIG_PATH, "w") as f:
             json.dump(self.configuration, f)
 
