@@ -2,25 +2,10 @@ from __future__ import annotations
 
 from typing import Optional, Type, cast
 
+from .config import CONFIG_HANDLER, CONFIGS_KEY, LAUNCH_MODE_KEY
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol, ServerType
 from .plugins import get_launcher
 from .server_handle import GrpcServerHandle, ServerHandle
-
-LAUNCH_METHOD_KEY = "launch_method"
-CONFIGS_KEY = "configs"
-CONFIG = {
-    "ACP": {
-        "launch_method": "direct",
-        "configs": {
-            "direct": {
-                "binary_path": "C:\\Program Files\\ANSYS Inc\\v232\\ACP\\acp_grpcserver.exe",
-                "stdout_file": "D:\\tmp\\out.txt",
-                "stderr_file": "D:\\tmp\\err.txt",
-            },
-            "docker": {},
-        },
-    }
-}
 
 
 def launch_product(
@@ -28,6 +13,7 @@ def launch_product(
     config: Optional[LAUNCHER_CONFIG_T] = None,
     launch_method: Optional[str] = None,
 ) -> ServerHandle:
+
     if launch_method is None:
         if config is not None:
             raise ValueError(
@@ -35,7 +21,9 @@ def launch_product(
                 "also needs to be specified."
             )
         try:
-            launch_method_evaluated = cast(str, CONFIG[product_name][LAUNCH_METHOD_KEY])
+            launch_method_evaluated = cast(
+                str, CONFIG_HANDLER.configuration[product_name][LAUNCH_MODE_KEY]
+            )
         except KeyError as exc:
             raise KeyError(
                 f"No 'launch_method' configuration found for product '{product_name}'."
@@ -50,7 +38,8 @@ def launch_product(
 
     if config is None:
         try:
-            config_json = CONFIG[product_name][CONFIGS_KEY][launch_method_evaluated]  # type: ignore
+            product_config = CONFIG_HANDLER.configuration[product_name][CONFIGS_KEY]
+            config_json = product_config[launch_method_evaluated]
         except KeyError as exc:
             raise KeyError(
                 f"No configuration found for product '{product_name}', "
