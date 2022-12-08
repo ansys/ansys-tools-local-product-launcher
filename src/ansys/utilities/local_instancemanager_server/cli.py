@@ -62,12 +62,14 @@ def config_writer_callback_factory(
     return _config_writer_callback
 
 
-def build_cli_from_entrypoints(entry_points) -> click.Group():
+def build_cli_from_entrypoints(
+    entry_points: Tuple[importlib_metadata.EntryPoint, ...]
+) -> click.Group:
     _cli = click.Group()
 
     @_cli.group(invoke_without_command=True)
     @click.pass_context
-    def configure(ctx) -> None:
+    def configure(ctx: click.Context) -> None:
         if ctx.invoked_subcommand is None:
             if not entry_points:
                 click.echo("No plugins configured")

@@ -3,9 +3,8 @@ import pydantic
 import pytest
 
 from ansys.utilities.local_instancemanager_server import cli, interface
-from tests.test_cli.common import check_result_config
 
-from .common import make_mock_entrypoint
+from .common import check_result_config, make_mock_entrypoint
 
 
 class MockConfig(pydantic.BaseModel):

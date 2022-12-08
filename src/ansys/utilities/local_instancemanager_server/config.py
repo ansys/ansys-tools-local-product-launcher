@@ -2,7 +2,7 @@ from functools import lru_cache
 import json
 import os
 import pathlib
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 import appdirs
 
@@ -16,24 +16,18 @@ CONFIGS_KEY = "configs"
 
 class ConfigurationHandler:
     def __init__(self) -> None:
-        self._configuration: Optional[Dict[Any, Any]] = None
+        if self.config_path.exists():
+            self._read_config_from_file()
+        else:
+            self.configuration: Dict[Any, Any] = {}
 
     def _read_config_from_file(self) -> None:
         with open(self.config_path, "r") as f:
-            self._configuration = json.load(f)
+            self.configuration = json.load(f)
 
     def write_config_to_file(self) -> None:
         with open(self.config_path, "w") as f:
             json.dump(self.configuration, f)
-
-    @property
-    def configuration(self) -> Dict[Any, Any]:
-        if self._configuration is None:
-            if self.config_path.exists():
-                self._read_config_from_file()
-            else:
-                self._configuration = {}
-        return self._configuration
 
     @property
     def config_path(self) -> pathlib.Path:
