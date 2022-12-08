@@ -18,9 +18,9 @@ def get_entry_points() -> Tuple[importlib_metadata.EntryPoint, ...]:
 
 
 def get_launcher(
-    *, product_name: str, launch_method: str
+    *, product_name: str, launch_mode: str
 ) -> Type[LauncherProtocol[LAUNCHER_CONFIG_T]]:
-    ep_name = f"{product_name}.{launch_method}"
+    ep_name = f"{product_name}.{launch_mode}"
     for entrypoint in get_entry_points():
         if entrypoint.name == ep_name:
             return entrypoint.load()  # type: ignore

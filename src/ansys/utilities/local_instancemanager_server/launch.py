@@ -11,39 +11,39 @@ from .server_handle import GrpcServerHandle, ServerHandle
 def launch_product(
     product_name: str,
     config: Optional[LAUNCHER_CONFIG_T] = None,
-    launch_method: Optional[str] = None,
+    launch_mode: Optional[str] = None,
 ) -> ServerHandle:
 
-    if launch_method is None:
+    if launch_mode is None:
         if config is not None:
             raise ValueError(
-                "When explicitly passing a 'config', the 'launch_method' "
+                "When explicitly passing a 'config', the 'launch_mode' "
                 "also needs to be specified."
             )
         try:
-            launch_method_evaluated = cast(
+            launch_mode_evaluated = cast(
                 str, CONFIG_HANDLER.configuration[product_name][LAUNCH_MODE_KEY]
             )
         except KeyError as exc:
             raise KeyError(
-                f"No 'launch_method' configuration found for product '{product_name}'."
+                f"No 'launch_mode' configuration found for product '{product_name}'."
             ) from exc
     else:
-        launch_method_evaluated = launch_method
+        launch_mode_evaluated = launch_mode
 
     launcher_klass: Type[LauncherProtocol[LAUNCHER_CONFIG_T]] = get_launcher(
         product_name=product_name,
-        launch_method=launch_method_evaluated,
+        launch_mode=launch_mode_evaluated,
     )
 
     if config is None:
         try:
             product_config = CONFIG_HANDLER.configuration[product_name][CONFIGS_KEY]
-            config_json = product_config[launch_method_evaluated]
+            config_json = product_config[launch_mode_evaluated]
         except KeyError as exc:
             raise KeyError(
                 f"No configuration found for product '{product_name}', "
-                f"launch_method='{launch_method_evaluated}'."
+                f"launch_mode='{launch_mode_evaluated}'."
             ) from exc
         config = launcher_klass.CONFIG_MODEL(**config_json)
     else:
