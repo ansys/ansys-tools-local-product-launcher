@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Dict
 import weakref
 
 import grpc
 
-from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
+from .interface import LAUNCHER_CONFIG_T, LauncherProtocol, ServerType
 
 
 class ServerHandle:
@@ -16,6 +16,16 @@ class ServerHandle:
             self,
             self._launcher.close,
         )
+        self._channels: Dict[str, grpc.Channel] = dict()
+        urls = self.urls
+        if urls.keys() != launcher.SERVER_SPEC.keys():
+            raise RuntimeError(
+                f"The URL keys '{urls.keys()}' provided by the launcher "
+                f"do not match the SERVER_SPEC keys '{launcher.SERVER_SPEC.keys()}'"
+            )
+        for key, server_type in launcher.SERVER_SPEC.items():
+            if server_type == ServerType.GRPC:
+                self._channels[key] = grpc.insecure_channel(urls[key])
 
     def __enter__(self) -> ServerHandle:
         return self
@@ -30,19 +40,13 @@ class ServerHandle:
         return self._launcher.check()
 
     @property
-    def url(self) -> str:
-        return self._launcher.url
+    def urls(self) -> Dict[str, str]:
+        return self._launcher.urls
 
     @property
     def closed(self) -> bool:
         return not self._finalizer.alive
 
-
-class GrpcServerHandle(ServerHandle):
-    def __init__(self, *, launcher: LauncherProtocol[LAUNCHER_CONFIG_T]):
-        super().__init__(launcher=launcher)
-        self._channel = grpc.insecure_channel(self.url)
-
     @property
-    def channel(self) -> grpc.Channel:
-        return self._channel
+    def channels(self) -> Dict[str, grpc.Channel]:
+        return self._channels

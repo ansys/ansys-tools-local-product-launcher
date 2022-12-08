@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import Optional, Type, cast
 
 from .config import CONFIG_HANDLER, CONFIGS_KEY, LAUNCH_MODE_KEY
-from .interface import LAUNCHER_CONFIG_T, LauncherProtocol, ServerType
+from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
 from .plugins import get_launcher
-from .server_handle import GrpcServerHandle, ServerHandle
+from .server_handle import ServerHandle
 
 
 def launch_product(
@@ -52,8 +52,4 @@ def launch_product(
                 f"Incompatible config of type '{type(config)} supplied, "
                 f"needs '{launcher_klass.CONFIG_MODEL}'."
             )
-    if launcher_klass.SERVER_TYPE is ServerType.GRPC:
-        server_klass: Type[ServerHandle] = GrpcServerHandle
-    else:
-        server_klass = ServerHandle
-    return server_klass(launcher=launcher_klass(config=config))
+    return ServerHandle(launcher=launcher_klass(config=config))
