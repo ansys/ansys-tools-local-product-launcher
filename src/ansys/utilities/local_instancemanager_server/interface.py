@@ -1,7 +1,7 @@
 """Interface definitions for implementing a local product launcher."""
 
 from enum import Enum, auto
-from typing import Type, TypeVar
+from typing import Dict, Optional, Type, TypeVar
 
 try:
     from typing import Protocol
@@ -30,17 +30,20 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     """
 
     CONFIG_MODEL: Type[LAUNCHER_CONFIG_T]
-    SERVER_TYPE: ServerType
+    SERVER_SPEC: Dict[str, ServerType]
 
     def __init__(self, *, config: LAUNCHER_CONFIG_T):
-        """Launch a local product instance with the given configuration."""
+        """Initialize the launcher, without starting the product."""
 
-    def close(self) -> None:
+    def start(self) -> None:
+        """Start the product instance."""
+
+    def stop(self) -> None:
         """Tear down the product instance."""
 
-    def check(self) -> bool:
+    def check(self, timeout: Optional[float] = None) -> bool:
         """Check if the product instance is responding to requests."""
 
     @property
-    def url(self) -> str:
-        """Provide the on which the server is listening."""
+    def urls(self) -> Dict[str, str]:
+        """Provide the URLs on which the server is listening."""
