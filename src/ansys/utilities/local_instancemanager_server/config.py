@@ -2,11 +2,11 @@ from functools import lru_cache
 import json
 import os
 import pathlib
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import appdirs
 
-__all__ = ["CONFIG_HANDLER", "LAUNCH_MODE_KEY", "CONFIGS_KEY"]
+__all__ = ["ConfigurationHandler", "LAUNCH_MODE_KEY", "CONFIGS_KEY"]
 
 _CONFIG_PATH_ENV_VAR_NAME = "LOCAL_PIM_CONFIG_PATH"
 
@@ -14,20 +14,26 @@ LAUNCH_MODE_KEY = "launch_mode"
 CONFIGS_KEY = "configs"
 
 
-class _ConfigurationHandler:
+class ConfigurationHandler:
     def __init__(self) -> None:
-        if self.config_path.exists():
-            self._read_config_from_file()
-        else:
-            self.configuration: Dict[Any, Any] = {}
+        self._configuration: Optional[Dict[Any, Any]] = None
 
     def _read_config_from_file(self) -> None:
         with open(self.config_path, "r") as f:
-            self.configuration = json.load(f)
+            self._configuration = json.load(f)
 
     def write_config_to_file(self) -> None:
         with open(self.config_path, "w") as f:
             json.dump(self.configuration, f)
+
+    @property
+    def configuration(self) -> Dict[Any, Any]:
+        if self._configuration is None:
+            if self.config_path.exists():
+                self._read_config_from_file()
+            else:
+                self._configuration = {}
+        return self._configuration
 
     @property
     def config_path(self) -> pathlib.Path:
@@ -57,6 +63,3 @@ class _ConfigurationHandler:
                     f"variable '{_CONFIG_PATH_ENV_VAR_NAME}'."
                 ) from exc
         return config_path
-
-
-CONFIG_HANDLER = _ConfigurationHandler()

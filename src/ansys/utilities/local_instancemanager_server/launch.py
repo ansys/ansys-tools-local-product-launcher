@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Optional, Type, cast
 
-from .config import CONFIG_HANDLER, CONFIGS_KEY, LAUNCH_MODE_KEY
+from .config import CONFIGS_KEY, LAUNCH_MODE_KEY, ConfigurationHandler
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol, ServerType
 from .plugins import get_launcher
 from .server_handle import GrpcServerHandle, ServerHandle
@@ -13,7 +13,7 @@ def launch_product(
     config: Optional[LAUNCHER_CONFIG_T] = None,
     launch_mode: Optional[str] = None,
 ) -> ServerHandle:
-
+    config_handler = ConfigurationHandler()
     if launch_mode is None:
         if config is not None:
             raise ValueError(
@@ -22,7 +22,7 @@ def launch_product(
             )
         try:
             launch_mode_evaluated = cast(
-                str, CONFIG_HANDLER.configuration[product_name][LAUNCH_MODE_KEY]
+                str, config_handler.configuration[product_name][LAUNCH_MODE_KEY]
             )
         except KeyError as exc:
             raise KeyError(
@@ -38,7 +38,7 @@ def launch_product(
 
     if config is None:
         try:
-            product_config = CONFIG_HANDLER.configuration[product_name][CONFIGS_KEY]
+            product_config = config_handler.configuration[product_name][CONFIGS_KEY]
             config_json = product_config[launch_mode_evaluated]
         except KeyError as exc:
             raise KeyError(
