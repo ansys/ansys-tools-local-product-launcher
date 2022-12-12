@@ -3,7 +3,7 @@ import pydantic
 
 from ansys.utilities.local_instancemanager_server import cli, interface
 
-from .common import check_result_config, make_mock_entrypoint
+from .common import check_result_config  # , make_mock_entrypoint
 
 TEST_PRODUCT_A = "PRODUCT_A"
 TEST_PRODUCT_B = "PRODUCT_B"
@@ -36,15 +36,17 @@ class MockLauncherB1(interface.LauncherProtocol[MockConfigB1]):
     CONFIG_MODEL = MockConfigB1
 
 
-ENTRYPOINTS = (
-    make_mock_entrypoint(TEST_PRODUCT_A, TEST_LAUNCHER_METHOD_A1, MockLauncherA1),
-    make_mock_entrypoint(TEST_PRODUCT_A, TEST_LAUNCHER_METHOD_A2, MockLauncherA2),
-    make_mock_entrypoint(TEST_PRODUCT_B, TEST_LAUNCHER_METHOD_B1, MockLauncherB1),
-)
+PLUGINS = {
+    TEST_PRODUCT_A: {
+        TEST_LAUNCHER_METHOD_A1: MockLauncherA1,
+        TEST_LAUNCHER_METHOD_A2: MockLauncherA2,
+    },
+    TEST_PRODUCT_B: {TEST_LAUNCHER_METHOD_B1: MockLauncherB1},
+}
 
 
 def test_cli_structure():
-    command = cli.build_cli_from_entrypoints(ENTRYPOINTS)
+    command = cli.build_cli(PLUGINS)
     assert "configure" in command.commands
     configure_group = command.commands["configure"]
 
@@ -62,7 +64,7 @@ def test_cli_structure():
 
 
 def test_configure_single_product_launcher(temp_config_file):
-    cli_command = cli.build_cli_from_entrypoints(ENTRYPOINTS)
+    cli_command = cli.build_cli(PLUGINS)
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
@@ -82,7 +84,7 @@ def test_configure_single_product_launcher(temp_config_file):
 
 
 def test_configure_two_product_launchers(temp_config_file):
-    cli_command = cli.build_cli_from_entrypoints(ENTRYPOINTS)
+    cli_command = cli.build_cli(PLUGINS)
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
@@ -109,7 +111,7 @@ def test_configure_two_product_launchers(temp_config_file):
 
 
 def test_configure_two_products(temp_config_file):
-    cli_command = cli.build_cli_from_entrypoints(ENTRYPOINTS)
+    cli_command = cli.build_cli(PLUGINS)
     runner = CliRunner()
     result = runner.invoke(
         cli_command,

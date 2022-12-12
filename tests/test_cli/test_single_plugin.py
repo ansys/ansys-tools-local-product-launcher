@@ -4,7 +4,7 @@ import pytest
 
 from ansys.utilities.local_instancemanager_server import cli, interface
 
-from .common import check_result_config, make_mock_entrypoint
+from .common import check_result_config
 
 
 class MockConfig(pydantic.BaseModel):
@@ -28,21 +28,20 @@ EXPECTED_CONFIG = {
 
 
 @pytest.fixture
-def mock_entrypoints():
-    mock_entrypoint = make_mock_entrypoint(TEST_PRODUCT, TEST_LAUNCHER_METHOD, MockLauncher)
-    return (mock_entrypoint,)
+def mock_plugins():
+    return {TEST_PRODUCT: {TEST_LAUNCHER_METHOD: MockLauncher}}
 
 
 def test_cli_no_plugins():
-    command = cli.build_cli_from_entrypoints(tuple())
+    command = cli.build_cli(dict())
     runner = CliRunner()
     result = runner.invoke(command, ["configure"])
     assert result.exit_code == 0
     assert "No plugins" in result.output
 
 
-def test_cli_mock_plugin(mock_entrypoints):
-    command = cli.build_cli_from_entrypoints(mock_entrypoints)
+def test_cli_mock_plugin(mock_plugins):
+    command = cli.build_cli(mock_plugins)
     assert "configure" in command.commands
     configure_group = command.commands["configure"]
 
@@ -69,8 +68,8 @@ def test_cli_mock_plugin(mock_entrypoints):
         (["configure", "my_product", "my_launcher"], ["1", "value"]),
     ],
 )
-def test_run_cli(temp_config_file, mock_entrypoints, commands, prompts):
-    cli_command = cli.build_cli_from_entrypoints(mock_entrypoints)
+def test_run_cli(temp_config_file, mock_plugins, commands, prompts):
+    cli_command = cli.build_cli(mock_plugins)
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
@@ -82,8 +81,8 @@ def test_run_cli(temp_config_file, mock_entrypoints, commands, prompts):
     check_result_config(temp_config_file, EXPECTED_CONFIG)
 
 
-def test_run_cli_throws_on_incorrect_type(temp_config_file, mock_entrypoints):
-    cli_command = cli.build_cli_from_entrypoints(mock_entrypoints)
+def test_run_cli_throws_on_incorrect_type(temp_config_file, mock_plugins):
+    cli_command = cli.build_cli(mock_plugins)
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
