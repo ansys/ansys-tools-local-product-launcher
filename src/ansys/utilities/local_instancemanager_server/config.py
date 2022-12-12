@@ -6,7 +6,7 @@ from typing import Any, Dict
 
 import appdirs
 
-__all__ = ["CONFIG_HANDLER", "LAUNCH_MODE_KEY", "CONFIGS_KEY"]
+__all__ = ["ConfigurationHandler", "LAUNCH_MODE_KEY", "CONFIGS_KEY"]
 
 _CONFIG_PATH_ENV_VAR_NAME = "LOCAL_PIM_CONFIG_PATH"
 
@@ -14,7 +14,7 @@ LAUNCH_MODE_KEY = "launch_mode"
 CONFIGS_KEY = "configs"
 
 
-class _ConfigurationHandler:
+class ConfigurationHandler:
     def __init__(self) -> None:
         if self.config_path.exists():
             self._read_config_from_file()
@@ -57,6 +57,3 @@ class _ConfigurationHandler:
                     f"variable '{_CONFIG_PATH_ENV_VAR_NAME}'."
                 ) from exc
         return config_path
-
-
-CONFIG_HANDLER = _ConfigurationHandler()
