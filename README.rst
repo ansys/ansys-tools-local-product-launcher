@@ -1,5 +1,5 @@
-Local Instance Management Server
-================================
+Local Product Launcher
+======================
 |pyansys| |python| |pypi| |GH-CI| |codecov| |MIT| |black|
 
 .. |pyansys| image:: https://img.shields.io/badge/Py-Ansys-ffc107.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAABDklEQVQ4jWNgoDfg5mD8vE7q/3bpVyskbW0sMRUwofHD7Dh5OBkZGBgW7/3W2tZpa2tLQEOyOzeEsfumlK2tbVpaGj4N6jIs1lpsDAwMJ278sveMY2BgCA0NFRISwqkhyQ1q/Nyd3zg4OBgYGNjZ2ePi4rB5loGBhZnhxTLJ/9ulv26Q4uVk1NXV/f///////69du4Zdg78lx//t0v+3S88rFISInD59GqIH2esIJ8G9O2/XVwhjzpw5EAam1xkkBJn/bJX+v1365hxxuCAfH9+3b9/+////48cPuNehNsS7cDEzMTAwMMzb+Q2u4dOnT2vWrMHu9ZtzxP9vl/69RVpCkBlZ3N7enoDXBwEAAA+YYitOilMVAAAAAElFTkSuQmCC
@@ -42,8 +42,13 @@ At least two installation modes are provided: user and developer.
 For users
 ^^^^^^^^^
 
+We recommend using a [virtual environment](https://docs.python.org/3/library/venv.html)
+to keep Python packages isolated from your system Python.
+
 In order to install the Ansys Local Product Launcher, make sure you
-have the latest version of `pip`_. To do so, run:
+have the latest version of `pip`_.
+
+To do so, run:
 
 .. code:: bash
 
@@ -53,7 +58,7 @@ Then, you can simply execute:
 
 .. code:: bash
 
-    poetry run python -m pip install ansys-tools-local-product-launcher
+    python -m pip install ansys-tools-local-product-launcher
 
 For developers
 ^^^^^^^^^^^^^^
@@ -94,9 +99,9 @@ need to follow these steps:
 
 #. Finally, verify your development installation by running:
 
-.. code:: bash
+    .. code:: bash
 
-    tox
+        tox
 
 
 How to testing
