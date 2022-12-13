@@ -48,9 +48,14 @@ def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> LAUNCHER
 
 
 def set_config(*, product_name: str, launch_mode: str, config: LAUNCHER_CONFIG_T) -> None:
-    product_config = get_config()[product_name]
-    product_config.launch_mode = launch_mode
-    product_config.configs[launch_mode] = config
+    try:
+        product_config = get_config()[product_name]
+        product_config.launch_mode = launch_mode
+        product_config.configs[launch_mode] = config
+    except KeyError:
+        get_config()[product_name] = ProductConfig(
+            launch_mode=launch_mode, configs={launch_mode: config}
+        )
 
 
 def load_config() -> LauncherConfiguration:

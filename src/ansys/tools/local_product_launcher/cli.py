@@ -2,7 +2,7 @@ from typing import Any, Callable, Dict, List, Sequence, Type
 
 import click
 
-from .config import ProductConfig, get_config, get_config_path, save_config
+from .config import get_config_path, save_config, set_config
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
 from .plugins import get_all_plugins
 
@@ -38,17 +38,8 @@ def config_writer_callback_factory(
     launcher_config_kls: Type[LAUNCHER_CONFIG_T], product_name: str, launch_mode: str
 ) -> Callable[..., None]:
     def _config_writer_callback(**kwargs: Dict[str, Any]) -> None:
-        config = get_config()
-        model = launcher_config_kls(**kwargs)
-
-        if product_name not in config:
-            config[product_name] = ProductConfig(
-                configs={launch_mode: model}, launch_mode=launch_mode
-            )
-        else:
-            config[product_name].configs.update({launch_mode: model})
-            # For now, set default launcher to latest modified
-            config[product_name].launch_mode = launch_mode
+        config = launcher_config_kls(**kwargs)
+        set_config(product_name=product_name, launch_mode=launch_mode, config=config)
         save_config()
         click.echo(f"Updated {get_config_path()}")
 
