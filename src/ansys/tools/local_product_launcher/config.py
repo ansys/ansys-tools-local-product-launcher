@@ -78,16 +78,16 @@ def get_config_path() -> pathlib.Path:
             )
 
     else:
-        config_path = (
-            pathlib.Path(appdirs.user_config_dir("ansys_tools_local_product_launcher"))
-            / "config.json"
+        config_path_dir = pathlib.Path(
+            appdirs.user_config_dir("ansys_tools_local_product_launcher")
         )
+        config_path = config_path_dir / "config.json"
         try:
             # Set up data directory
-            config_path.parent.mkdir(exist_ok=True, parents=True)
+            config_path_dir.mkdir(exist_ok=True, parents=True)
         except OSError as exc:
             raise type(exc)(
-                f"Unable to create config directory '{config_path.parent}'.\n"
+                f"Unable to create config directory '{config_path_dir}'.\n"
                 f"Error:\n{exc}\n\n"
                 "Override the default config file path by setting the environment "
                 f"variable '{_CONFIG_PATH_ENV_VAR_NAME}'."
