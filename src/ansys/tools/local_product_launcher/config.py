@@ -79,12 +79,12 @@ def get_config_path() -> pathlib.Path:
 
     else:
         config_path = (
-            pathlib.Path(appdirs.user_data_dir("ansys_tools_local_product_launcher"))
+            pathlib.Path(appdirs.user_config_dir("ansys_tools_local_product_launcher"))
             / "config.json"
         )
         try:
             # Set up data directory
-            config_path.parent.mkdir(exist_ok=True)
+            config_path.parent.mkdir(exist_ok=True, parents=True)
         except OSError as exc:
             raise type(exc)(
                 f"Unable to create config directory '{config_path.parent}'.\n"
