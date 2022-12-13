@@ -11,7 +11,7 @@ from .plugins import get_config_model
 
 __all__ = ["ConfigurationHandler"]
 
-_CONFIG_PATH_ENV_VAR_NAME = "LOCAL_PIM_CONFIG_PATH"
+_CONFIG_PATH_ENV_VAR_NAME = "ANSYS_LAUNCHER_CONFIG_PATH"
 
 
 class ProductConfig(pydantic.BaseModel):
@@ -78,7 +78,10 @@ def get_config_path() -> pathlib.Path:
             )
 
     else:
-        config_path = pathlib.Path(appdirs.user_data_dir("local_pim")) / "config.json"
+        config_path = (
+            pathlib.Path(appdirs.user_data_dir("ansys_tools_local_product_launcher"))
+            / "config.json"
+        )
         try:
             # Set up data directory
             config_path.parent.mkdir(exist_ok=True)
