@@ -88,4 +88,4 @@ def test_run_cli_throws_on_incorrect_type(temp_config_file, mock_plugins):
         cli_command,
         ["configure", TEST_PRODUCT, TEST_LAUNCHER_METHOD, "--int_field=TEXT", "--str_field=value"],
     )
-    assert result.exit_code == 1
+    assert result.exit_code != 0

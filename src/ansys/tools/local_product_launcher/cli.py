@@ -1,10 +1,20 @@
-from typing import Any, Callable, Dict, List, Sequence, Type
+import json
+import textwrap
+from typing import Any, Callable, Dict, List, Optional, Sequence, Type
 
 import click
 
 from .config import get_config_path, save_config, set_config
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
 from .plugins import get_all_plugins
+
+
+def format_prompt(*, field_name: str, description: Optional[str]) -> str:
+    prompt = f"\n{field_name}:"
+    if description is not None:
+        prompt += f"\n" + textwrap.indent(description, " " * 4)
+    prompt += "\n"
+    return prompt
 
 
 def get_subcommands_from_plugins(
@@ -23,15 +33,44 @@ def get_subcommands_from_plugins(
             )
             launch_mode_command = click.Command(launch_mode, callback=_config_writer_callback)
             for field_name, field_details in launcher_config_kls.schema()["properties"].items():
-                # TODO arg type
                 description = field_details.get("description", None)
-                prompt = field_name if description is None else f"{field_name} ({description})"
-                option = click.Option([f"--{field_name}"], prompt=prompt, help=description)
+                default = field_details.get("default", None)
+                option = click.Option(
+                    [f"--{field_name}"],
+                    prompt=format_prompt(
+                        field_name=field_name,
+                        description=description,
+                    ),
+                    help=description,
+                    default=default,
+                    type=pydantic_schema_to_option_type(field_details.get("type")),
+                )
                 launch_mode_command.params.append(option)
 
             product_command.add_command(launch_mode_command)
 
     return all_product_commands
+
+
+class JSONParamType(click.ParamType):
+    name = "json"
+
+    def convert(self, value: Any, param: Any, ctx: Any) -> Any:
+        if value is None:
+            return None
+        if not isinstance(value, str):
+            return value
+        return json.loads(value)
+
+
+def pydantic_schema_to_option_type(schema_type: str) -> Any:
+    kwarg_lookup = {
+        "integer": int,
+        "string": str,
+        "boolean": bool,
+        "object": JSONParamType(),
+    }
+    return kwarg_lookup.get(schema_type)
 
 
 def config_writer_callback_factory(
@@ -57,11 +96,6 @@ def build_cli(plugins: Dict[str, Dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
         if ctx.invoked_subcommand is None:
             if not plugins:
                 click.echo("No plugins configured")
-            # ctx.invoked_subcommand = "ACP"
-        # else:
-        # ctx.invoke(all_subcommands[0].commands["direct"])
-        # raise (ValueError(type(ctx.invoked_subcommand), ctx.invoked_subcommand))
-        # pass
 
     for subcommand in all_subcommands:
         configure.add_command(subcommand)
