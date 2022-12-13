@@ -1,7 +1,7 @@
 """
-utilities.
+tools.
 
-local_instancemanager_server
+local_product_launcher
 """
 
 try:

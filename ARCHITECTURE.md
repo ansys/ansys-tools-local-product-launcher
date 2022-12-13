@@ -74,7 +74,7 @@ Using the generic helper functions, each PyAnsys library implements the generic 
 E.g. in `pyproject.toml` for PyMAPDL:
 ```pyproject.toml
 [entrypoints]
-local_pim_server.mapdl.direct = "launch_mapdl_local"
+ansys.tools.local_product_launcher.mapdl.direct = "launch_mapdl_local"
 ```
 
 ### Launcher / server

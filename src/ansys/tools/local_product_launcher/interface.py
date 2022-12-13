@@ -41,7 +41,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     def stop(self) -> None:
         """Tear down the product instance."""
 
-    def check(self, timeout: Optional[float] = None) -> bool:
+    def check(self, *, timeout: Optional[float] = None) -> bool:
         """Check if the product instance is responding to requests."""
 
     @property
