@@ -77,6 +77,9 @@ def build_cli(plugins: Dict[str, Dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
     return _cli
 
 
+# Needs to be defined at the module level, since this is what the [tool.poetry.scripts]
+# entry point refers to.
+cli = build_cli(plugins=get_all_plugins())
+
 if __name__ == "__main__":
-    cli = build_cli(plugins=get_all_plugins())
     cli()

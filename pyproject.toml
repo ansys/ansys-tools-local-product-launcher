@@ -4,14 +4,14 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 # Check https://python-poetry.org/docs/pyproject/ for all available sections
-name = "ansys-utilities-local-instancemanager-server"
+name = "ansys-tools-local-product-launcher"
 version = "0.1.dev0"
 description = "A utility for launching ansys products on the local machine"
 license = "MIT"
 authors = ["ANSYS, Inc. <ansys.support@ansys.com>"]
 maintainers = ["PyAnsys developers <pyansys.maintainers@ansys.com>"]
 readme = "README.rst"
-repository = "https://github.com/pyansys/local-pim-server"
+repository = "https://github.com/pyansys/ansys-tools-local-product-launcher"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
@@ -23,7 +23,7 @@ packages = [
 ]
 
 [tool.poetry.scripts]
-local_pim = "ansys.utilities.local_instancemanager_server.cli:cli"
+ansys-launcher = "ansys.tools.local_product_launcher.cli:cli"
 
 
 [tool.poetry.dependencies]
@@ -71,7 +71,7 @@ default_section = "THIRDPARTY"
 src_paths = ["doc", "src", "tests"]
 
 [tool.coverage.run]
-source = ["ansys.utilities"]
+source = ["ansys.tools"]
 
 [tool.coverage.report]
 show_missing = true

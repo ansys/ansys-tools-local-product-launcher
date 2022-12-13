@@ -7,7 +7,7 @@ except ModuleNotFoundError:
 
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
 
-LAUNCHER_ENTRY_POINT = "local_pim_server.launcher"
+LAUNCHER_ENTRY_POINT = "ansys.tools.local_product_launcher.launcher"
 
 
 def get_launcher(

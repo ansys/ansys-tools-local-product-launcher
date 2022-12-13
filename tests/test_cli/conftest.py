@@ -1,6 +1,6 @@
 import pytest
 
-from ansys.utilities.local_instancemanager_server import config
+from ansys.tools.local_product_launcher import config
 
 
 @pytest.fixture

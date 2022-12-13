@@ -1,4 +1,4 @@
-from ansys.utilities.local_instancemanager_server import __version__
+from ansys.tools.local_product_launcher import __version__
 
 
 def test_pkg_version():

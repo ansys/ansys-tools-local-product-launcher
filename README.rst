@@ -7,19 +7,19 @@ Local Instance Management Server
    :alt: PyAnsys
 
 .. |python| image:: https://img.shields.io/badge/Python-%3E%3D3.7-blue
-   :target: https://pypi.org/project/pyutilities-local-instancemanager-server/
+   :target: https://pypi.org/project/ansys-tools-local-product-launcher/
    :alt: Python
 
-.. |pypi| image:: https://img.shields.io/pypi/v/pyutilities-local-instancemanager-server.svg?logo=python&logoColor=white
-   :target: https://pypi.org/project/pyutilities-local-instancemanager-server
+.. |pypi| image:: https://img.shields.io/pypi/v/ansys-tools-local-product-launcher.svg?logo=python&logoColor=white
+   :target: https://pypi.org/project/ansys-tools-local-product-launcher
    :alt: PyPI
 
-.. |codecov| image:: https://codecov.io/gh/pyansys/pyutilities-local-instancemanager-server/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/pyansys/pyutilities-local-instancemanager-server
+.. |codecov| image:: https://codecov.io/gh/pyansys/ansys-tools-local-product-launcher/branch/main/graph/badge.svg
+   :target: https://codecov.io/gh/pyansys/ansys-tools-local-product-launcher
    :alt: Codecov
 
-.. |GH-CI| image:: https://github.com/pyansys/pyutilities-local-instancemanager-server/actions/workflows/ci_cd.yml/badge.svg
-   :target: https://github.com/pyansys/pyutilities-local-instancemanager-server/actions/workflows/ci_cd.yml
+.. |GH-CI| image:: https://github.com/pyansys/ansys-tools-local-product-launcher/actions/workflows/ci_cd.yml/badge.svg
+   :target: https://github.com/pyansys/ansys-tools-local-product-launcher/actions/workflows/ci_cd.yml
    :alt: GH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
@@ -42,7 +42,7 @@ At least two installation modes are provided: user and developer.
 For users
 ^^^^^^^^^
 
-In order to install Pyutilities local_instancemanager_server, make sure you
+In order to install the Ansys Local Product Launcher, make sure you
 have the latest version of `pip`_. To do so, run:
 
 .. code:: bash
@@ -53,12 +53,12 @@ Then, you can simply execute:
 
 .. code:: bash
 
-    poetry run python -m pip install ansys-utilities-local-instancemanager-server
+    poetry run python -m pip install ansys-tools-local-product-launcher
 
 For developers
 ^^^^^^^^^^^^^^
 
-Installing Pyutilities local_instancemanager_server in developer mode allows
+Installing the Ansys Local Product Launcher in developer mode allows
 you to modify the source and enhance it.
 
 Before contributing to the project, please refer to the `PyAnsys Developer's guide`_. You will
@@ -68,8 +68,8 @@ need to follow these steps:
 
     .. code:: bash
 
-        git clone https://github.com/pyansys/local-pim-server
-        cd local-pim-server
+        git clone https://github.com/pyansys/ansys-tools-local-product-launcher
+        cd ansys-tools-local-product-launcher
 
 #. Make sure you have the latest version of poetry:
 

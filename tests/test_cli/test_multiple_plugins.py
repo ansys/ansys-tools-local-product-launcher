@@ -1,7 +1,7 @@
 from click.testing import CliRunner
 import pydantic
 
-from ansys.utilities.local_instancemanager_server import cli, interface
+from ansys.tools.local_product_launcher import cli, interface
 
 from .common import check_result_config  # , make_mock_entrypoint
 
