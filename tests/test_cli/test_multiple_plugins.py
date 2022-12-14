@@ -3,13 +3,13 @@ import pydantic
 
 from ansys.tools.local_product_launcher import cli, interface
 
-from .common import check_result_config  # , make_mock_entrypoint
+from .common import check_result_config
 
 TEST_PRODUCT_A = "PRODUCT_A"
 TEST_PRODUCT_B = "PRODUCT_B"
-TEST_LAUNCHER_METHOD_A1 = "LAUNCHER_A1"
-TEST_LAUNCHER_METHOD_A2 = "LAUNCHER_A2"
-TEST_LAUNCHER_METHOD_B1 = "LAUNCHER_B1"
+TEST_LAUNCH_MODE_A1 = "LAUNCHER_A1"
+TEST_LAUNCH_MODE_A2 = "LAUNCHER_A2"
+TEST_LAUNCH_MODE_B1 = "LAUNCHER_B1"
 
 
 class MockConfigA1(pydantic.BaseModel):
@@ -38,10 +38,10 @@ class MockLauncherB1(interface.LauncherProtocol[MockConfigB1]):
 
 PLUGINS = {
     TEST_PRODUCT_A: {
-        TEST_LAUNCHER_METHOD_A1: MockLauncherA1,
-        TEST_LAUNCHER_METHOD_A2: MockLauncherA2,
+        TEST_LAUNCH_MODE_A1: MockLauncherA1,
+        TEST_LAUNCH_MODE_A2: MockLauncherA2,
     },
-    TEST_PRODUCT_B: {TEST_LAUNCHER_METHOD_B1: MockLauncherB1},
+    TEST_PRODUCT_B: {TEST_LAUNCH_MODE_B1: MockLauncherB1},
 }
 
 
@@ -53,12 +53,12 @@ def test_cli_structure():
     assert TEST_PRODUCT_A in configure_group.commands
     assert TEST_PRODUCT_B in configure_group.commands
 
-    assert TEST_LAUNCHER_METHOD_A1 in configure_group.commands[TEST_PRODUCT_A].commands
-    assert TEST_LAUNCHER_METHOD_A2 in configure_group.commands[TEST_PRODUCT_A].commands
-    assert TEST_LAUNCHER_METHOD_B1 in configure_group.commands[TEST_PRODUCT_B].commands
+    assert TEST_LAUNCH_MODE_A1 in configure_group.commands[TEST_PRODUCT_A].commands
+    assert TEST_LAUNCH_MODE_A2 in configure_group.commands[TEST_PRODUCT_A].commands
+    assert TEST_LAUNCH_MODE_B1 in configure_group.commands[TEST_PRODUCT_B].commands
 
     assert (
-        configure_group.commands[TEST_PRODUCT_A].commands[TEST_LAUNCHER_METHOD_A1].params[0].name
+        configure_group.commands[TEST_PRODUCT_A].commands[TEST_LAUNCH_MODE_A1].params[0].name
         == "field_a1"
     )
 
@@ -68,16 +68,16 @@ def test_configure_single_product_launcher(temp_config_file):
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
-        ["configure", TEST_PRODUCT_A, TEST_LAUNCHER_METHOD_A1, "--field_a1=1"],
+        ["configure", TEST_PRODUCT_A, TEST_LAUNCH_MODE_A1, "--field_a1=1"],
     )
 
     assert result.exit_code == 0
     expected_config = {
         TEST_PRODUCT_A: {
             "configs": {
-                TEST_LAUNCHER_METHOD_A1: {"field_a1": 1},
+                TEST_LAUNCH_MODE_A1: {"field_a1": 1},
             },
-            "launch_mode": TEST_LAUNCHER_METHOD_A1,
+            "launch_mode": TEST_LAUNCH_MODE_A1,
         }
     }
     check_result_config(temp_config_file, expected_config)
@@ -88,23 +88,23 @@ def test_configure_two_product_launchers(temp_config_file):
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
-        ["configure", TEST_PRODUCT_A, TEST_LAUNCHER_METHOD_A1, "--field_a1=1"],
+        ["configure", TEST_PRODUCT_A, TEST_LAUNCH_MODE_A1, "--field_a1=1"],
     )
     assert result.exit_code == 0
 
     result = runner.invoke(
         cli_command,
-        ["configure", TEST_PRODUCT_A, TEST_LAUNCHER_METHOD_A2, "--field_a2=2"],
+        ["configure", TEST_PRODUCT_A, TEST_LAUNCH_MODE_A2, "--field_a2=2"],
     )
     assert result.exit_code == 0
 
     expected_config = {
         TEST_PRODUCT_A: {
             "configs": {
-                TEST_LAUNCHER_METHOD_A1: {"field_a1": 1},
-                TEST_LAUNCHER_METHOD_A2: {"field_a2": 2},
+                TEST_LAUNCH_MODE_A1: {"field_a1": 1},
+                TEST_LAUNCH_MODE_A2: {"field_a2": 2},
             },
-            "launch_mode": TEST_LAUNCHER_METHOD_A2,
+            "launch_mode": TEST_LAUNCH_MODE_A2,
         }
     }
     check_result_config(temp_config_file, expected_config)
@@ -115,28 +115,28 @@ def test_configure_two_products(temp_config_file):
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
-        ["configure", TEST_PRODUCT_A, TEST_LAUNCHER_METHOD_A1, "--field_a1=1"],
+        ["configure", TEST_PRODUCT_A, TEST_LAUNCH_MODE_A1, "--field_a1=1"],
     )
     assert result.exit_code == 0
 
     result = runner.invoke(
         cli_command,
-        ["configure", TEST_PRODUCT_B, TEST_LAUNCHER_METHOD_B1, "--field_b1=3"],
+        ["configure", TEST_PRODUCT_B, TEST_LAUNCH_MODE_B1, "--field_b1=3"],
     )
     assert result.exit_code == 0
 
     expected_config = {
         TEST_PRODUCT_A: {
             "configs": {
-                TEST_LAUNCHER_METHOD_A1: {"field_a1": 1},
+                TEST_LAUNCH_MODE_A1: {"field_a1": 1},
             },
-            "launch_mode": TEST_LAUNCHER_METHOD_A1,
+            "launch_mode": TEST_LAUNCH_MODE_A1,
         },
         TEST_PRODUCT_B: {
             "configs": {
-                TEST_LAUNCHER_METHOD_B1: {"field_b1": 3},
+                TEST_LAUNCH_MODE_B1: {"field_b1": 3},
             },
-            "launch_mode": TEST_LAUNCHER_METHOD_B1,
+            "launch_mode": TEST_LAUNCH_MODE_B1,
         },
     }
     import json
