@@ -23,7 +23,7 @@ packages = [
 ]
 
 [tool.poetry.scripts]
-ansys-launcher = "ansys.tools.local_product_launcher.cli:cli"
+ansys-launcher = "ansys.tools.local_product_launcher._cli:cli"
 
 
 [tool.poetry.dependencies]

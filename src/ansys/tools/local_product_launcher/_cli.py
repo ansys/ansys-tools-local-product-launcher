@@ -4,9 +4,15 @@ from typing import Any, Callable, Dict, List, Optional, Sequence, Type, cast
 
 import click
 
-from .config import get_config_path, get_launch_mode_for, is_configured, save_config, set_config
+from ._plugins import get_all_plugins
+from .config import (
+    _get_config_path,
+    _save_config,
+    get_launch_mode_for,
+    is_configured,
+    set_config_for,
+)
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
-from .plugins import get_all_plugins
 
 
 def format_prompt(*, field_name: str, description: Optional[str]) -> str:
@@ -102,14 +108,14 @@ def config_writer_callback_factory(
     def _config_writer_callback(**kwargs: Dict[str, Any]) -> None:
         overwrite_default = cast(bool, kwargs.pop(_OVERWRITE_DEFAULT_FLAG_NAME, False))
         config = launcher_config_kls(**kwargs)
-        set_config(
+        set_config_for(
             product_name=product_name,
             launch_mode=launch_mode,
             config=config,
             overwrite_default=overwrite_default,
         )
-        save_config()
-        click.echo(f"\nUpdated {get_config_path()}")
+        _save_config()
+        click.echo(f"\nUpdated {_get_config_path()}")
 
     return _config_writer_callback
 

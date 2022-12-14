@@ -2,7 +2,7 @@ from click.testing import CliRunner
 import pydantic
 import pytest
 
-from ansys.tools.local_product_launcher import cli, config, interface, plugins
+from ansys.tools.local_product_launcher import _cli, _plugins, config, interface
 
 from .common import check_result_config
 
@@ -52,7 +52,7 @@ def monkeypatch_entrypoints(monkeypatch_entrypoints_from_plugins):
 
 
 def test_cli_structure():
-    command = cli.build_cli(plugins.get_all_plugins())
+    command = _cli.build_cli(_plugins.get_all_plugins())
     assert "configure" in command.commands
     configure_group = command.commands["configure"]
 
@@ -70,7 +70,7 @@ def test_cli_structure():
 
 
 def test_configure_single_product_launcher(temp_config_file):
-    cli_command = cli.build_cli(plugins.get_all_plugins())
+    cli_command = _cli.build_cli(_plugins.get_all_plugins())
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
@@ -90,14 +90,14 @@ def test_configure_single_product_launcher(temp_config_file):
 
 
 def test_configure_two_product_launchers(temp_config_file):
-    cli_command = cli.build_cli(plugins.get_all_plugins())
+    cli_command = _cli.build_cli(_plugins.get_all_plugins())
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
         ["configure", TEST_PRODUCT_A, TEST_LAUNCH_MODE_A1, "--field_a1=1"],
     )
     assert result.exit_code == 0
-    config.reset_config()
+    config._reset_config()
 
     result = runner.invoke(
         cli_command,
@@ -118,14 +118,14 @@ def test_configure_two_product_launchers(temp_config_file):
 
 
 def test_configure_two_product_launchers_overwrite(temp_config_file):
-    cli_command = cli.build_cli(plugins.get_all_plugins())
+    cli_command = _cli.build_cli(_plugins.get_all_plugins())
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
         ["configure", TEST_PRODUCT_A, TEST_LAUNCH_MODE_A1, "--field_a1=1"],
     )
     assert result.exit_code == 0
-    config.reset_config()
+    config._reset_config()
 
     result = runner.invoke(
         cli_command,
@@ -146,14 +146,14 @@ def test_configure_two_product_launchers_overwrite(temp_config_file):
 
 
 def test_configure_two_products(temp_config_file):
-    cli_command = cli.build_cli(plugins.get_all_plugins())
+    cli_command = _cli.build_cli(_plugins.get_all_plugins())
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
         ["configure", TEST_PRODUCT_A, TEST_LAUNCH_MODE_A1, "--field_a1=1"],
     )
     assert result.exit_code == 0
-    config.reset_config()
+    config._reset_config()
 
     result = runner.invoke(
         cli_command,
