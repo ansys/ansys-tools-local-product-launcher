@@ -17,19 +17,19 @@ class MockLauncher(interface.LauncherProtocol[MockConfig]):
 
 
 TEST_PRODUCT = "my_product"
-TEST_LAUNCHER_METHOD = "my_launcher"
+TEST_LAUNCH_MODE = "my_launcher"
 
 EXPECTED_CONFIG = {
     TEST_PRODUCT: {
-        "configs": {TEST_LAUNCHER_METHOD: {"int_field": 1, "str_field": "value"}},
-        "launch_mode": TEST_LAUNCHER_METHOD,
+        "configs": {TEST_LAUNCH_MODE: {"int_field": 1, "str_field": "value"}},
+        "launch_mode": TEST_LAUNCH_MODE,
     }
 }
 
 
 @pytest.fixture
 def mock_plugins():
-    return {TEST_PRODUCT: {TEST_LAUNCHER_METHOD: MockLauncher}}
+    return {TEST_PRODUCT: {TEST_LAUNCH_MODE: MockLauncher}}
 
 
 def test_cli_no_plugins():
@@ -49,9 +49,9 @@ def test_cli_mock_plugin(mock_plugins):
     assert TEST_PRODUCT in configure_group.commands
 
     product_group = configure_group.commands[TEST_PRODUCT]
-    assert TEST_LAUNCHER_METHOD in product_group.commands
+    assert TEST_LAUNCH_MODE in product_group.commands
 
-    launcher_command = product_group.commands[TEST_LAUNCHER_METHOD]
+    launcher_command = product_group.commands[TEST_LAUNCH_MODE]
     assert len(launcher_command.params) == 2
     assert [p.name for p in launcher_command.params] == ["int_field", "str_field"]
 
@@ -60,7 +60,7 @@ def test_cli_mock_plugin(mock_plugins):
     ["commands", "prompts"],
     [
         (
-            ["configure", TEST_PRODUCT, TEST_LAUNCHER_METHOD, "--int_field=1", "--str_field=value"],
+            ["configure", TEST_PRODUCT, TEST_LAUNCH_MODE, "--int_field=1", "--str_field=value"],
             [],
         ),
         (["configure", "my_product", "my_launcher", "--str_field=value"], ["1"]),
@@ -86,6 +86,6 @@ def test_run_cli_throws_on_incorrect_type(temp_config_file, mock_plugins):
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
-        ["configure", TEST_PRODUCT, TEST_LAUNCHER_METHOD, "--int_field=TEXT", "--str_field=value"],
+        ["configure", TEST_PRODUCT, TEST_LAUNCH_MODE, "--int_field=TEXT", "--str_field=value"],
     )
     assert result.exit_code != 0
