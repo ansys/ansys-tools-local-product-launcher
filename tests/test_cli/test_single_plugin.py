@@ -1,8 +1,10 @@
+from typing import Dict
+
 from click.testing import CliRunner
 import pydantic
 import pytest
 
-from ansys.tools.local_product_launcher import cli, interface
+from ansys.tools.local_product_launcher import _cli, interface
 
 from .common import check_result_config
 
@@ -10,6 +12,7 @@ from .common import check_result_config
 class MockConfig(pydantic.BaseModel):
     int_field: int
     str_field: str
+    json_field: Dict[str, str]
 
 
 class MockLauncher(interface.LauncherProtocol[MockConfig]):
@@ -21,7 +24,9 @@ TEST_LAUNCH_MODE = "my_launcher"
 
 EXPECTED_CONFIG = {
     TEST_PRODUCT: {
-        "configs": {TEST_LAUNCH_MODE: {"int_field": 1, "str_field": "value"}},
+        "configs": {
+            TEST_LAUNCH_MODE: {"int_field": 1, "str_field": "value", "json_field": {"a": "b"}}
+        },
         "launch_mode": TEST_LAUNCH_MODE,
     }
 }
@@ -33,7 +38,7 @@ def mock_plugins():
 
 
 def test_cli_no_plugins():
-    command = cli.build_cli(dict())
+    command = _cli.build_cli(dict())
     runner = CliRunner()
     result = runner.invoke(command, ["configure"])
     assert result.exit_code == 0
@@ -41,7 +46,7 @@ def test_cli_no_plugins():
 
 
 def test_cli_mock_plugin(mock_plugins):
-    command = cli.build_cli(mock_plugins)
+    command = _cli.build_cli(mock_plugins)
     assert "configure" in command.commands
     configure_group = command.commands["configure"]
 
@@ -52,10 +57,11 @@ def test_cli_mock_plugin(mock_plugins):
     assert TEST_LAUNCH_MODE in product_group.commands
 
     launcher_command = product_group.commands[TEST_LAUNCH_MODE]
-    assert len(launcher_command.params) == 3
+    assert len(launcher_command.params) == 4
     assert [p.name for p in launcher_command.params] == [
         "int_field",
         "str_field",
+        "json_field",
         "overwrite_default",
     ]
 
@@ -64,16 +70,24 @@ def test_cli_mock_plugin(mock_plugins):
     ["commands", "prompts"],
     [
         (
-            ["configure", TEST_PRODUCT, TEST_LAUNCH_MODE, "--int_field=1", "--str_field=value"],
+            [
+                "configure",
+                TEST_PRODUCT,
+                TEST_LAUNCH_MODE,
+                "--int_field=1",
+                "--str_field=value",
+                '--json_field={"a": "b"}',
+            ],
             [],
         ),
-        (["configure", "my_product", "my_launcher", "--str_field=value"], ["1"]),
-        (["configure", "my_product", "my_launcher", "--int_field=1"], ["value"]),
-        (["configure", "my_product", "my_launcher"], ["1", "value"]),
+        (["configure", "my_product", "my_launcher", "--str_field=value"], ["1", '{"a": "b"}']),
+        (["configure", "my_product", "my_launcher", "--int_field=1"], ["value", '{"a": "b"}']),
+        (["configure", "my_product", "my_launcher", '--json_field={"a": "b"}'], ["1", "value"]),
+        (["configure", "my_product", "my_launcher"], ["1", "value", '{"a": "b"}']),
     ],
 )
 def test_run_cli(temp_config_file, mock_plugins, commands, prompts):
-    cli_command = cli.build_cli(mock_plugins)
+    cli_command = _cli.build_cli(mock_plugins)
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
@@ -86,7 +100,7 @@ def test_run_cli(temp_config_file, mock_plugins, commands, prompts):
 
 
 def test_run_cli_throws_on_incorrect_type(temp_config_file, mock_plugins):
-    cli_command = cli.build_cli(mock_plugins)
+    cli_command = _cli.build_cli(mock_plugins)
     runner = CliRunner()
     result = runner.invoke(
         cli_command,

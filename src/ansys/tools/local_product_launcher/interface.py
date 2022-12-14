@@ -10,7 +10,7 @@ except ImportError:
 
 import pydantic
 
-__all__ = ["LAUNCHER_CONFIG_T", "LauncherProtocol"]
+__all__ = ["LAUNCHER_CONFIG_T", "LauncherProtocol", "ServerType"]
 
 LAUNCHER_CONFIG_T = TypeVar("LAUNCHER_CONFIG_T", bound="pydantic.BaseModel")
 

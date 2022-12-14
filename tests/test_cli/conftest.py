@@ -10,5 +10,5 @@ def temp_config_file(monkeypatch, tmp_path):
     def get_config_path_patched():
         return output_path
 
-    monkeypatch.setattr(config, "get_config_path", get_config_path_patched)
+    monkeypatch.setattr(config, "_get_config_path", get_config_path_patched)
     yield output_path

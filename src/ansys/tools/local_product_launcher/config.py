@@ -7,31 +7,25 @@ import appdirs
 import pydantic
 import pydantic.generics
 
+from ._plugins import get_config_model
 from .interface import LAUNCHER_CONFIG_T
-from .plugins import get_config_model
 
-__all__ = ["ConfigurationHandler"]
+__all__ = ["get_config_for", "set_config_for", "is_configured", "get_launch_mode_for"]
+
 
 _CONFIG_PATH_ENV_VAR_NAME = "ANSYS_LAUNCHER_CONFIG_PATH"
 
 
-class ProductConfig(pydantic.BaseModel):
+class _ProductConfig(pydantic.BaseModel):
     launch_mode: str
     configs: Dict[str, Any]
 
 
-class LauncherConfiguration(pydantic.BaseModel):
-    __root__: Dict[str, ProductConfig]
+class _LauncherConfiguration(pydantic.BaseModel):
+    __root__: Dict[str, _ProductConfig]
 
 
-CONFIG: Optional[LauncherConfiguration] = None
-
-
-def _get_config() -> Dict[str, ProductConfig]:
-    global CONFIG
-    if CONFIG is None:
-        CONFIG = load_config()
-    return CONFIG.__root__
+_CONFIG: Optional[_LauncherConfiguration] = None
 
 
 def get_launch_mode_for(*, product_name: str, launch_mode: Optional[str] = None) -> str:
@@ -64,7 +58,7 @@ def is_configured(*, product_name: str, launch_mode: Optional[str] = None) -> bo
         return False
 
 
-def set_config(
+def set_config_for(
     *,
     product_name: str,
     launch_mode: str,
@@ -77,27 +71,34 @@ def set_config(
         if overwrite_default:
             product_config.launch_mode = launch_mode
     else:
-        _get_config()[product_name] = ProductConfig(
+        _get_config()[product_name] = _ProductConfig(
             launch_mode=launch_mode, configs={launch_mode: config}
         )
 
 
-def load_config() -> LauncherConfiguration:
-    config_path = get_config_path()
+def _get_config() -> Dict[str, _ProductConfig]:
+    global _CONFIG
+    if _CONFIG is None:
+        _CONFIG = _load_config()
+    return _CONFIG.__root__
+
+
+def _load_config() -> _LauncherConfiguration:
+    config_path = _get_config_path()
     if not config_path.exists():
-        return LauncherConfiguration(__root__={})
+        return _LauncherConfiguration(__root__={})
     with open(config_path, "r") as in_f:
-        return LauncherConfiguration(
-            __root__={key: ProductConfig(**val) for key, val in json.load(in_f).items()}
+        return _LauncherConfiguration(
+            __root__={key: _ProductConfig(**val) for key, val in json.load(in_f).items()}
         )
 
 
-def reset_config() -> None:
-    global CONFIG
-    CONFIG = None
+def _reset_config() -> None:
+    global _CONFIG
+    _CONFIG = None
 
 
-def get_config_path() -> pathlib.Path:
+def _get_config_path() -> pathlib.Path:
     if _CONFIG_PATH_ENV_VAR_NAME in os.environ:
         config_path = pathlib.Path(os.environ[_CONFIG_PATH_ENV_VAR_NAME])
         if not config_path.parent.exists():
@@ -124,8 +125,8 @@ def get_config_path() -> pathlib.Path:
     return config_path
 
 
-def save_config() -> None:
-    if CONFIG is not None:
-        file_path = get_config_path()
+def _save_config() -> None:
+    if _CONFIG is not None:
+        file_path = _get_config_path()
         with open(file_path, "w") as out_f:
-            out_f.write(CONFIG.json())
+            out_f.write(_CONFIG.json())

@@ -9,14 +9,14 @@ except ModuleNotFoundError:
 
 import pytest
 
-from ansys.tools.local_product_launcher import config, plugins
+from ansys.tools.local_product_launcher import _plugins, config
 from ansys.tools.local_product_launcher.interface import LAUNCHER_CONFIG_T, LauncherProtocol
 
 
 @pytest.fixture(autouse=True)
 def reset_config():
     """Reset the configuration at the start of each test."""
-    config.reset_config()
+    config._reset_config()
 
 
 def get_mock_entrypoints_from_plugins(
@@ -36,7 +36,7 @@ def get_mock_entrypoints_from_plugins(
 def monkeypatch_entrypoints_from_plugins(monkeypatch):
     def inner(target_plugins):
         monkeypatch.setattr(
-            plugins,
+            _plugins,
             "_get_entry_points",
             partial(get_mock_entrypoints_from_plugins, target_plugins=target_plugins),
         )

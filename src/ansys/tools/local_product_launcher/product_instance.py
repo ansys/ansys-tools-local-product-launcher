@@ -8,8 +8,10 @@ import grpc
 
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol, ServerType
 
+__all__ = ["ProductInstance"]
 
-class ServerHandle:
+
+class ProductInstance:
     def __init__(self, *, launcher: LauncherProtocol[LAUNCHER_CONFIG_T]):
         self._launcher = launcher
         self._finalizer: weakref.finalize
@@ -17,7 +19,7 @@ class ServerHandle:
         self._channels: Dict[str, grpc.Channel]
         self.start()
 
-    def __enter__(self) -> ServerHandle:
+    def __enter__(self) -> ProductInstance:
         return self
 
     def __exit__(self, *exc: Any) -> None:

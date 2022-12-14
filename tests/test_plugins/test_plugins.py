@@ -3,7 +3,7 @@
 import pydantic
 import pytest
 
-from ansys.tools.local_product_launcher import interface, plugins
+from ansys.tools.local_product_launcher import _plugins, interface
 
 TEST_PRODUCT_A = "PRODUCT_A"
 TEST_PRODUCT_B = "PRODUCT_B"
@@ -51,7 +51,7 @@ def monkeypatch_entrypoints(monkeypatch_entrypoints_from_plugins):
 
 
 def test_get_all_plugins(monkeypatch_entrypoints):
-    assert plugins.get_all_plugins() == PLUGINS
+    assert _plugins.get_all_plugins() == PLUGINS
 
 
 @pytest.mark.parametrize(
@@ -66,7 +66,7 @@ def test_get_config_model(
     monkeypatch_entrypoints, product_name, launch_mode, expected_config_model
 ):
     assert (
-        plugins.get_config_model(product_name=product_name, launch_mode=launch_mode)
+        _plugins.get_config_model(product_name=product_name, launch_mode=launch_mode)
         == expected_config_model
     )
 
@@ -81,12 +81,12 @@ def test_get_config_model(
 )
 def test_get_launcher(monkeypatch_entrypoints, product_name, launch_mode, expected_launcher):
     assert (
-        plugins.get_launcher(product_name=product_name, launch_mode=launch_mode)
+        _plugins.get_launcher(product_name=product_name, launch_mode=launch_mode)
         == expected_launcher
     )
 
 
 def test_get_launcher_inexistent():
     with pytest.raises(KeyError) as exc:
-        plugins.get_launcher(product_name="does_not_exist", launch_mode="does_not_exist")
+        _plugins.get_launcher(product_name="does_not_exist", launch_mode="does_not_exist")
     assert "No plugin found" in str(exc.value)
