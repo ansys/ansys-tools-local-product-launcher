@@ -19,7 +19,7 @@ html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "ansys-tools-local-product-launcher"
 
 # specify the location of your github repo
-cname = os.environ.get("DOC_CNAME", "local-product-launcher.tools.docs.pyansys.com")
+cname = os.environ.get("DOCUMENTATION_CNAME", "local-product-launcher.tools.docs.pyansys.com")
 """The canonical name of the webpage hosting the documentation."""
 html_theme_options = {
     "github_url": "https://github.com/pyansys/ansys-tools-local-product-launcher",
@@ -32,6 +32,7 @@ html_theme_options = {
         "json_url": f"{cname}/release/versions.json",
         "version_match": get_version_match(__version__),
     },
+    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
 }
 
 # Sphinx extensions
