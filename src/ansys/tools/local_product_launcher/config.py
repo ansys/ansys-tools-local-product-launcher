@@ -1,10 +1,11 @@
 import json
 import os
 import pathlib
-from typing import Dict, Optional, Type
+from typing import Any, Dict, Optional, Type, cast
 
 import appdirs
 import pydantic
+import pydantic.generics
 
 from .interface import LAUNCHER_CONFIG_T
 from .plugins import get_config_model
@@ -16,7 +17,7 @@ _CONFIG_PATH_ENV_VAR_NAME = "ANSYS_LAUNCHER_CONFIG_PATH"
 
 class ProductConfig(pydantic.BaseModel):
     launch_mode: str
-    configs: Dict[str, pydantic.BaseModel]
+    configs: Dict[str, Any]
 
 
 class LauncherConfiguration(pydantic.BaseModel):
@@ -26,7 +27,7 @@ class LauncherConfiguration(pydantic.BaseModel):
 CONFIG: Optional[LauncherConfiguration] = None
 
 
-def get_config() -> Dict[str, ProductConfig]:
+def _get_config() -> Dict[str, ProductConfig]:
     global CONFIG
     if CONFIG is None:
         CONFIG = load_config()
@@ -36,7 +37,7 @@ def get_config() -> Dict[str, ProductConfig]:
 def get_launch_mode_for(*, product_name: str, launch_mode: Optional[str] = None) -> str:
     if launch_mode is not None:
         return launch_mode
-    return get_config()[product_name].launch_mode
+    return _get_config()[product_name].launch_mode
 
 
 def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> LAUNCHER_CONFIG_T:
@@ -44,7 +45,15 @@ def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> LAUNCHER
     config_class: Type[LAUNCHER_CONFIG_T] = get_config_model(
         product_name=product_name, launch_mode=launch_mode
     )
-    return config_class(**get_config()[product_name].configs[launch_mode].dict())
+    config_entry = _get_config()[product_name].configs[launch_mode]
+    if isinstance(config_entry, dict):
+        _get_config()[product_name].configs[launch_mode] = config_class(**config_entry)
+    else:
+        if not isinstance(config_entry, config_class):
+            raise TypeError(
+                f"Configuration is of wrong type '{type(config_entry)}', should be '{config_class}'"
+            )
+    return cast(LAUNCHER_CONFIG_T, _get_config()[product_name].configs[launch_mode])
 
 
 def is_configured(*, product_name: str, launch_mode: Optional[str] = None) -> bool:
@@ -62,13 +71,13 @@ def set_config(
     config: LAUNCHER_CONFIG_T,
     overwrite_default: bool = False,
 ) -> None:
-    try:
-        product_config = get_config()[product_name]
+    if is_configured(product_name=product_name):
+        product_config = _get_config()[product_name]
         product_config.configs[launch_mode] = config
         if overwrite_default:
             product_config.launch_mode = launch_mode
-    except KeyError:
-        get_config()[product_name] = ProductConfig(
+    else:
+        _get_config()[product_name] = ProductConfig(
             launch_mode=launch_mode, configs={launch_mode: config}
         )
 

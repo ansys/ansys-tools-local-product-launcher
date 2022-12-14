@@ -50,25 +50,25 @@ def get_subcommands_from_plugins(
                 )
                 launch_mode_command.params.append(option)
 
+            extra_kwargs_overwrite_option = dict()
             if is_configured(product_name=product_name):
                 current_launch_mode = get_launch_mode_for(product_name=product_name)
                 if current_launch_mode != launch_mode:
-                    set_as_default_option = click.Option(
-                        [f"--{_OVERWRITE_DEFAULT_FLAG_NAME}"],
-                        is_flag=True,
-                        show_default=True,
+                    extra_kwargs_overwrite_option = dict(
                         prompt=(
                             f"\nOverwrite default launch mode for {product_name} "
                             f"(currently set to '{current_launch_mode}')?"
                         ),
+                        show_default=True,
                     )
 
-            else:
-                set_as_default_option = click.Option(
+            launch_mode_command.params.append(
+                click.Option(
                     [f"--{_OVERWRITE_DEFAULT_FLAG_NAME}"],
                     is_flag=True,
+                    **extra_kwargs_overwrite_option,  # type: ignore
                 )
-            launch_mode_command.params.append(set_as_default_option)
+            )
 
             product_command.add_command(launch_mode_command)
 
