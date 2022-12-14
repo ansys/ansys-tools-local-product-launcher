@@ -104,6 +104,33 @@ def test_configure_two_product_launchers(temp_config_file):
                 TEST_LAUNCH_MODE_A1: {"field_a1": 1},
                 TEST_LAUNCH_MODE_A2: {"field_a2": 2},
             },
+            "launch_mode": TEST_LAUNCH_MODE_A1,
+        }
+    }
+    check_result_config(temp_config_file, expected_config)
+
+
+def test_configure_two_product_launchers_overwrite(temp_config_file):
+    cli_command = cli.build_cli(PLUGINS)
+    runner = CliRunner()
+    result = runner.invoke(
+        cli_command,
+        ["configure", TEST_PRODUCT_A, TEST_LAUNCH_MODE_A1, "--field_a1=1"],
+    )
+    assert result.exit_code == 0
+
+    result = runner.invoke(
+        cli_command,
+        ["configure", TEST_PRODUCT_A, TEST_LAUNCH_MODE_A2, "--field_a2=2", "--overwrite_default"],
+    )
+    assert result.exit_code == 0
+
+    expected_config = {
+        TEST_PRODUCT_A: {
+            "configs": {
+                TEST_LAUNCH_MODE_A1: {"field_a1": 1},
+                TEST_LAUNCH_MODE_A2: {"field_a2": 2},
+            },
             "launch_mode": TEST_LAUNCH_MODE_A2,
         }
     }
