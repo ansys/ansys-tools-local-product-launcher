@@ -52,8 +52,12 @@ def test_cli_mock_plugin(mock_plugins):
     assert TEST_LAUNCH_MODE in product_group.commands
 
     launcher_command = product_group.commands[TEST_LAUNCH_MODE]
-    assert len(launcher_command.params) == 2
-    assert [p.name for p in launcher_command.params] == ["int_field", "str_field"]
+    assert len(launcher_command.params) == 3
+    assert [p.name for p in launcher_command.params] == [
+        "int_field",
+        "str_field",
+        "overwrite_default",
+    ]
 
 
 @pytest.mark.parametrize(

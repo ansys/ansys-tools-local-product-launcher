@@ -1,10 +1,10 @@
 import json
 import textwrap
-from typing import Any, Callable, Dict, List, Optional, Sequence, Type
+from typing import Any, Callable, Dict, List, Optional, Sequence, Type, cast
 
 import click
 
-from .config import get_config_path, save_config, set_config
+from .config import get_config_path, get_launch_mode_for, is_configured, save_config, set_config
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
 from .plugins import get_all_plugins
 
@@ -15,6 +15,9 @@ def format_prompt(*, field_name: str, description: Optional[str]) -> str:
         prompt += f"\n" + textwrap.indent(description, " " * 4)
     prompt += "\n"
     return prompt
+
+
+_OVERWRITE_DEFAULT_FLAG_NAME = "overwrite_default"
 
 
 def get_subcommands_from_plugins(
@@ -47,6 +50,26 @@ def get_subcommands_from_plugins(
                 )
                 launch_mode_command.params.append(option)
 
+            if is_configured(product_name=product_name):
+                current_launch_mode = get_launch_mode_for(product_name=product_name)
+                if current_launch_mode != launch_mode:
+                    set_as_default_option = click.Option(
+                        [f"--{_OVERWRITE_DEFAULT_FLAG_NAME}"],
+                        is_flag=True,
+                        show_default=True,
+                        prompt=(
+                            f"\nOverwrite default launch mode for {product_name} "
+                            f"(currently set to '{current_launch_mode}')?"
+                        ),
+                    )
+
+            else:
+                set_as_default_option = click.Option(
+                    [f"--{_OVERWRITE_DEFAULT_FLAG_NAME}"],
+                    is_flag=True,
+                )
+            launch_mode_command.params.append(set_as_default_option)
+
             product_command.add_command(launch_mode_command)
 
     return all_product_commands
@@ -77,10 +100,16 @@ def config_writer_callback_factory(
     launcher_config_kls: Type[LAUNCHER_CONFIG_T], product_name: str, launch_mode: str
 ) -> Callable[..., None]:
     def _config_writer_callback(**kwargs: Dict[str, Any]) -> None:
+        overwrite_default = cast(bool, kwargs.pop(_OVERWRITE_DEFAULT_FLAG_NAME, False))
         config = launcher_config_kls(**kwargs)
-        set_config(product_name=product_name, launch_mode=launch_mode, config=config)
+        set_config(
+            product_name=product_name,
+            launch_mode=launch_mode,
+            config=config,
+            overwrite_default=overwrite_default,
+        )
         save_config()
-        click.echo(f"Updated {get_config_path()}")
+        click.echo(f"\nUpdated {get_config_path()}")
 
     return _config_writer_callback
 

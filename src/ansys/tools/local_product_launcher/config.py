@@ -47,11 +47,26 @@ def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> LAUNCHER
     return config_class(**get_config()[product_name].configs[launch_mode].dict())
 
 
-def set_config(*, product_name: str, launch_mode: str, config: LAUNCHER_CONFIG_T) -> None:
+def is_configured(*, product_name: str, launch_mode: Optional[str] = None) -> bool:
+    try:
+        get_config_for(product_name=product_name, launch_mode=launch_mode)
+        return True
+    except KeyError:
+        return False
+
+
+def set_config(
+    *,
+    product_name: str,
+    launch_mode: str,
+    config: LAUNCHER_CONFIG_T,
+    overwrite_default: bool = False,
+) -> None:
     try:
         product_config = get_config()[product_name]
-        product_config.launch_mode = launch_mode
         product_config.configs[launch_mode] = config
+        if overwrite_default:
+            product_config.launch_mode = launch_mode
     except KeyError:
         get_config()[product_name] = ProductConfig(
             launch_mode=launch_mode, configs={launch_mode: config}
