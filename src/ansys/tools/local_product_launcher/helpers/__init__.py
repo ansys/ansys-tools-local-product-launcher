@@ -1,3 +1,3 @@
-from . import ansys_root, direct, grpc, ports
+from . import ansys_root, grpc, ports
 
-__all__ = ["direct", "grpc", "ports", "ansys_root"]
+__all__ = ["grpc", "ports", "ansys_root"]
