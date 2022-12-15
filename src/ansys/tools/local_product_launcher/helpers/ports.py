@@ -1,15 +1,23 @@
+"""Helpers for managing port assignment."""
+
 from contextlib import ExitStack, closing
 import socket
 from typing import List
 
 
 def find_free_ports(num_ports: int = 1) -> List[int]:
-    """Find a free port on localhost.
+    """Find free ports on localhost.
 
     .. note::
 
-        There is no guarantee that the port is *still* free when it is
-        used by the calling code.
+        Since there is no way to reserve a port that would still allow
+        a server to connect to it, there is no guarantee that the ports
+        are *still* free when it is eventually used.
+
+    Parameters
+    ----------
+    num_ports :
+        The number of free ports to obtain.
     """
     port_list = []
     with ExitStack() as context_stack:
