@@ -1,13 +1,17 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
+import os
 
+from ansys_sphinx_theme import get_version_match
 from ansys_sphinx_theme import pyansys_logo_black as logo
+
+from ansys.tools.local_product_launcher import __version__
 
 # Project information
 project = "ansys-tools-local-product-launcher"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
-release = version = "0.1.dev0"
+release = version = __version__
 
 # Select desired logo, theme, and declare the html title
 html_logo = logo
@@ -15,6 +19,8 @@ html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "ansys-tools-local-product-launcher"
 
 # specify the location of your github repo
+cname = os.environ.get("DOCUMENTATION_CNAME", "local-product-launcher.tools.docs.pyansys.com")
+"""The canonical name of the webpage hosting the documentation."""
 html_theme_options = {
     "github_url": "https://github.com/pyansys/ansys-tools-local-product-launcher",
     "show_prev_next": False,
@@ -22,6 +28,11 @@ html_theme_options = {
     "additional_breadcrumbs": [
         ("PyAnsys", "https://docs.pyansys.com/"),
     ],
+    "switcher": {
+        "json_url": f"{cname}/release/versions.json",
+        "version_match": get_version_match(__version__),
+    },
+    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
 }
 
 # Sphinx extensions
