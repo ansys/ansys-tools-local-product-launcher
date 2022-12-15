@@ -1,11 +1,23 @@
+"""Helper to find the Ansys install directory."""
+
 import os
 import re
 from typing import Optional
 
 
 def get_ansys_root(release_version: Optional[str] = None) -> str:
-    """Identify the ansys executable based on the release version (e.g. "201")"""
+    """Find the root of the Ansys install directory.
 
+    Returns the root path of the Ansys installation for the specified
+    version.
+
+    Parameters
+    ----------
+    release_version :
+        The release short-code (e.g. ``"231"``) for which the Ansys
+        install directory should be found. If not specified, use the
+        latest installed version.
+    """
     if release_version is None:
         awp_regex = re.compile("^AWP_ROOT([1-9]{3})$")
         available_versions = []

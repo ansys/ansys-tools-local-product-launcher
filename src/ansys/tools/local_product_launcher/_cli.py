@@ -7,15 +7,16 @@ import click
 from ._plugins import get_all_plugins
 from .config import (
     _get_config_path,
-    _save_config,
     get_launch_mode_for,
     is_configured,
+    save_config,
     set_config_for,
 )
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
 
 
 def format_prompt(*, field_name: str, description: Optional[str]) -> str:
+    """Get the formatted prompt string from its field name and description."""
     prompt = f"\n{field_name}:"
     if description is not None:
         prompt += f"\n" + textwrap.indent(description, " " * 4)
@@ -29,7 +30,7 @@ _OVERWRITE_DEFAULT_FLAG_NAME = "overwrite_default"
 def get_subcommands_from_plugins(
     *, plugins: Dict[str, Dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
 ) -> Sequence[click.Command]:
-
+    """Construct 'configure' subcommands from the plugins."""
     all_product_commands: List[click.Group] = []
     for product_name, launch_mode_configs in plugins.items():
         product_command = click.Group(product_name)
@@ -82,9 +83,12 @@ def get_subcommands_from_plugins(
 
 
 class JSONParamType(click.ParamType):
+    """Implements interpreting options as JSON."""
+
     name = "json"
 
     def convert(self, value: Any, param: Any, ctx: Any) -> Any:
+        """Implement string to dict conversion."""
         if value is None:
             return None
         if not isinstance(value, str):
@@ -93,6 +97,7 @@ class JSONParamType(click.ParamType):
 
 
 def pydantic_schema_to_option_type(schema_type: str) -> Any:
+    """Get click option type from the pydantic schema type."""
     kwarg_lookup = {
         "integer": int,
         "string": str,
@@ -105,6 +110,8 @@ def pydantic_schema_to_option_type(schema_type: str) -> Any:
 def config_writer_callback_factory(
     launcher_config_kls: Type[LAUNCHER_CONFIG_T], product_name: str, launch_mode: str
 ) -> Callable[..., None]:
+    """Construct the callback for updating the config file."""
+
     def _config_writer_callback(**kwargs: Dict[str, Any]) -> None:
         overwrite_default = cast(bool, kwargs.pop(_OVERWRITE_DEFAULT_FLAG_NAME, False))
         config = launcher_config_kls(**kwargs)
@@ -114,13 +121,14 @@ def config_writer_callback_factory(
             config=config,
             overwrite_default=overwrite_default,
         )
-        _save_config()
+        save_config()
         click.echo(f"\nUpdated {_get_config_path()}")
 
     return _config_writer_callback
 
 
 def build_cli(plugins: Dict[str, Dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]) -> click.Group:
+    """Construct the CLI from the plugins."""
     _cli = click.Group()
 
     all_subcommands = get_subcommands_from_plugins(plugins=plugins)
@@ -128,6 +136,31 @@ def build_cli(plugins: Dict[str, Dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
     @_cli.group(invoke_without_command=True)
     @click.pass_context
     def configure(ctx: click.Context) -> None:
+        """
+        Configure the options for a specific product and launch mode.
+
+        The available products and launch modes are determined dynamically
+        from the intalled plugins.
+
+        To get a list of products:
+
+        .. code:: bash
+
+            ansys-launcher configure
+
+        To get a list of launch mode for a given product:
+
+        .. code:: bash
+
+            ansys-launcher configure <PRODUCT_NAME>
+
+        To configure a product launch mode:
+
+        .. code:: bash
+
+            ansys-launcher configure <PRODUCT_NAME> <LAUNCH_MODE>
+
+        """
         if ctx.invoked_subcommand is None:
             if not plugins:
                 click.echo("No plugins configured")

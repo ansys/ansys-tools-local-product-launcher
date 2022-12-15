@@ -1,3 +1,12 @@
+"""Tools for managing the Product Launcher configuration.
+
+Manage the default configuration for launching products. The configuration
+is loaded from / stored to a ``config.json`` file.
+By default, this file is located in the user config directory (platform-dependent).
+Its location can be specified explicitly with the ``ANSYS_LAUNCHER_CONFIG_PATH``
+environment variable.
+"""
+
 import json
 import os
 import pathlib
@@ -10,7 +19,13 @@ import pydantic.generics
 from ._plugins import get_config_model
 from .interface import LAUNCHER_CONFIG_T
 
-__all__ = ["get_config_for", "set_config_for", "is_configured", "get_launch_mode_for"]
+__all__ = [
+    "get_config_for",
+    "set_config_for",
+    "is_configured",
+    "get_launch_mode_for",
+    "save_config",
+]
 
 
 _CONFIG_PATH_ENV_VAR_NAME = "ANSYS_LAUNCHER_CONFIG_PATH"
@@ -29,12 +44,52 @@ _CONFIG: Optional[_LauncherConfiguration] = None
 
 
 def get_launch_mode_for(*, product_name: str, launch_mode: Optional[str] = None) -> str:
+    """Get the default launch mode configured for a product.
+
+    Parameters
+    ----------
+    product_name :
+        The product whose launch mode  is retrieved.
+    launch_mode :
+        If not ``None``, this value is returned.
+
+    Returns
+    -------
+    :
+        The launch mode for the product.
+    """
     if launch_mode is not None:
         return launch_mode
     return _get_config()[product_name].launch_mode
 
 
 def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> LAUNCHER_CONFIG_T:
+    """Get the configuration object for a (product, launch_mode) combination.
+
+    Retrieve the default configuration object for the product. If the
+    ``launch_mode`` is given, the configuration for that mode is returned.
+    Otherwise, the default launch mode configuration is returned.
+
+    Parameters
+    ----------
+    product_name :
+        The product whose configuration is returned.
+    launch_mode :
+        The launch mode whose configuration is returned.
+
+    Returns
+    -------
+    :
+        The configuration object.
+
+    Raises
+    ------
+    KeyError
+        If the requested configuration does not exist.
+    TypeError
+        If the configuration type does not match the type specified by
+        the launcher plugin.
+    """
     launch_mode = get_launch_mode_for(product_name=product_name, launch_mode=launch_mode)
     config_class: Type[LAUNCHER_CONFIG_T] = get_config_model(
         product_name=product_name, launch_mode=launch_mode
@@ -51,6 +106,16 @@ def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> LAUNCHER
 
 
 def is_configured(*, product_name: str, launch_mode: Optional[str] = None) -> bool:
+    """Check if a configuration exists for the product / launch mode.
+
+    Parameters
+    ----------
+    product_name :
+        The product whose configuration is checked.
+    launch_mode :
+        The launch mode whose configuration is checked. If ``None``, the
+        default launch mode is used.
+    """
     try:
         get_config_for(product_name=product_name, launch_mode=launch_mode)
         return True
@@ -65,6 +130,25 @@ def set_config_for(
     config: LAUNCHER_CONFIG_T,
     overwrite_default: bool = False,
 ) -> None:
+    """Set the configuration for a given product and launch mode.
+
+    Update the configuration by setting the configuration for the
+    given product and launch mode.
+    Note that this method only updates the in-memory configuration, and
+    does not store it to file.
+
+    Parameters
+    ----------
+    product_name :
+        Name of the product whose configuration will be updated.
+    launch_mode :
+        Launch mode to which the configuration applies.
+    config :
+        The configuration object.
+    overwrite_default :
+        If ``True``, the default launch mode for the product is
+        changed to ``launch_mode``.
+    """
     if is_configured(product_name=product_name):
         product_config = _get_config()[product_name]
         product_config.configs[launch_mode] = config
@@ -74,6 +158,17 @@ def set_config_for(
         _get_config()[product_name] = _ProductConfig(
             launch_mode=launch_mode, configs={launch_mode: config}
         )
+
+
+def save_config() -> None:
+    """Store the configuration to disk.
+
+    Save the current in-memory configuration to the ``config.json`` file.
+    """
+    if _CONFIG is not None:
+        file_path = _get_config_path()
+        with open(file_path, "w") as out_f:
+            out_f.write(_CONFIG.json())
 
 
 def _get_config() -> Dict[str, _ProductConfig]:
@@ -123,10 +218,3 @@ def _get_config_path() -> pathlib.Path:
                 f"variable '{_CONFIG_PATH_ENV_VAR_NAME}'."
             ) from exc
     return config_path
-
-
-def _save_config() -> None:
-    if _CONFIG is not None:
-        file_path = _get_config_path()
-        with open(file_path, "w") as out_f:
-            out_f.write(_CONFIG.json())

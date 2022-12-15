@@ -39,22 +39,39 @@ html_theme_options = {
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
-    "numpydoc",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.napoleon",
+    "sphinx_autodoc_typehints",
+    "numpydoc",
     "sphinx_copybutton",
+    "ansys_sphinx_theme",
+    "sphinx_click",
 ]
 
 # Intersphinx mapping
 intersphinx_mapping = {
     "python": ("https://docs.python.org/dev", None),
-    # kept here as an example
-    # "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
-    # "numpy": ("https://numpy.org/devdocs", None),
-    # "matplotlib": ("https://matplotlib.org/stable", None),
-    # "pandas": ("https://pandas.pydata.org/pandas-docs/stable", None),
-    # "pyvista": ("https://docs.pyvista.org/", None),
-    # "grpc": ("https://grpc.github.io/grpc/python/", None),
+    "grpc": ("https://grpc.github.io/grpc/python/", None),
 }
+
+# nitpick exceptions
+nitpick_ignore = [
+    (
+        "py:class",
+        "ansys.tools.local_product_launcher.interface.LAUNCHER_CONFIG_T",
+    )  # TypeVar, not a class
+]
+
+nitpick_ignore_regex = [
+    (".*", "pydantic\..*"),
+]
+
+# autodoc options
+autoclass_content = "class"
+
+# sphinx_autodoc_typehints configuration
+typehints_defaults = "comma"
+simplify_optional_unions = False
 
 # numpydoc configuration
 numpydoc_show_class_members = False

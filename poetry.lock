@@ -612,6 +612,19 @@ testing = ["covdefaults (>=2.2)", "coverage (>=6.5)", "diff-cover (>=7.0.1)", "n
 type-comment = ["typed-ast (>=1.5.4)"]
 
 [[package]]
+name = "sphinx-click"
+version = "4.4.0"
+description = "Sphinx extension that automatically documents click applications"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+click = ">=7.0"
+docutils = "*"
+sphinx = ">=2.0"
+
+[[package]]
 name = "sphinx-copybutton"
 version = "0.4.0"
 description = "Add a copy button to each of your code cells."
@@ -783,7 +796,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7,<4.0"
-content-hash = "f42f834aafda9b009cbae75b5662f771135367bd7dad8b0b470f332b3da48844"
+content-hash = "a075dc792a75b1c19353eac2cd2e6eefd839fd58488b0899f9205596e5884b49"
 
 [metadata.files]
 alabaster = [
@@ -1230,6 +1243,10 @@ sphinx = [
 sphinx-autodoc-typehints = [
     {file = "sphinx_autodoc_typehints-1.19.5-py3-none-any.whl", hash = "sha256:ea55b3cc3f485e3a53668bcdd08de78121ab759f9724392fdb5bf3483d786328"},
     {file = "sphinx_autodoc_typehints-1.19.5.tar.gz", hash = "sha256:38a227378e2bc15c84e29af8cb1d7581182da1107111fd1c88b19b5eb7076205"},
+]
+sphinx-click = [
+    {file = "sphinx-click-4.4.0.tar.gz", hash = "sha256:cc67692bd28f482c7f01531c61b64e9d2f069bfcf3d24cbbb51d4a84a749fa48"},
+    {file = "sphinx_click-4.4.0-py3-none-any.whl", hash = "sha256:2821c10a68fc9ee6ce7c92fad26540d8d8c8f45e6d7258f0e4fb7529ae8fab49"},
 ]
 sphinx-copybutton = [
     {file = "sphinx-copybutton-0.4.0.tar.gz", hash = "sha256:8daed13a87afd5013c3a9af3575cc4d5bec052075ccd3db243f895c07a689386"},
