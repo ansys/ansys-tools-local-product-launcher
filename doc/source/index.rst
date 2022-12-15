@@ -8,7 +8,6 @@
     :hidden:
     :maxdepth: 3
 
-    Overview <self>
     intro
     plugin_creation
     cli
