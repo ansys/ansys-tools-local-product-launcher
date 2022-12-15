@@ -46,6 +46,7 @@ extensions = [
     "sphinx_copybutton",
     "ansys_sphinx_theme",
     "sphinx_click",
+    "sphinx_design",
 ]
 
 # Intersphinx mapping
