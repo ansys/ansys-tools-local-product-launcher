@@ -12,6 +12,7 @@
     plugin_creation
     api/index
     cli
+    rationale
 
 
 Ansys Local Product Launcher
@@ -45,3 +46,10 @@ A Python utility for launching Ansys products on the local machine, and configur
         :link-type: doc
 
         Reference for the command line tool to configure the Local Product Launcher.
+
+    .. grid-item-card:: :octicon:`light-bulb` Rationale
+        :columns: 12
+        :link: rationale
+        :link-type: doc
+
+        A look into why the Local Product Launcher was created.
