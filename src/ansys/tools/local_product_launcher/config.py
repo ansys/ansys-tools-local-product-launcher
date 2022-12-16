@@ -60,7 +60,10 @@ def get_launch_mode_for(*, product_name: str, launch_mode: Optional[str] = None)
     """
     if launch_mode is not None:
         return launch_mode
-    return _get_config()[product_name].launch_mode
+    try:
+        return _get_config()[product_name].launch_mode
+    except KeyError as exc:
+        raise KeyError(f"No configuration defined for product name '{product_name}'") from exc
 
 
 def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> LAUNCHER_CONFIG_T:
