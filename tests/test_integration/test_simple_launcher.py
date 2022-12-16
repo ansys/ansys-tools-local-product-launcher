@@ -47,5 +47,6 @@ def test_contextmanager():
     with launch_product(
         PRODUCT_NAME, launch_mode=LAUNCH_MODE, config=SimpleLauncherConfig()
     ) as server:
+        server.wait(timeout=10)
         assert server.check()
     assert not server.check()
