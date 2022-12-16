@@ -25,7 +25,7 @@ This configuration is defined as a `pydantic <https://docs.pydantic.dev>`_ model
     class DirectLauncherConfig(pydantic.BaseModel):
         binary_path: str
 
-The config class inherits from ``pydantic.BaseModel``, and defines a single option ``binary_path`` of type :py:class:`str`.
+The configuration class inherits from ``pydantic.BaseModel``, and defines a single option ``binary_path`` of type :py:class:`str`.
 
 Launcher
 ''''''''
