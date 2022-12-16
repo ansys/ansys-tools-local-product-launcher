@@ -19,7 +19,7 @@ def test_get_root():
 
 
 @pytest.mark.xfail(
-    reason="This test can only pass if an Ansys v232 installation is present on the machine."
+    reason="This test can only pass if an Ansys v231 installation is present on the machine."
 )
 def test_get_root_from_version():
-    get_ansys_root(release_version="232")
+    get_ansys_root(release_version="231")
