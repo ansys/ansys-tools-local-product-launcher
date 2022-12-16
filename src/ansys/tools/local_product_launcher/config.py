@@ -140,7 +140,7 @@ def set_config_for(
     Parameters
     ----------
     product_name :
-        Name of the product whose configuration will be updated.
+        Name of the product whose configuration is updated.
     launch_mode :
         Launch mode to which the configuration applies.
     config :
