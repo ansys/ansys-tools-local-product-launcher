@@ -1,3 +1,2 @@
-ANSYS
-Ansys
-ansys
+mypy
+pydantic

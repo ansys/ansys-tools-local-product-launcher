@@ -49,7 +49,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     defined in this class.
 
     To check for compatibility, it is recommended to derive from this
-    class, e.g. ``MyLauncher(LauncherProtocol[MyConfigModel])``, and
+    class, for example ``MyLauncher(LauncherProtocol[MyConfigModel])``, and
     check the resulting code with `mypy <https://mypy.readthedocs.io>`_.
 
     The ``__init__`` method should accept exactly one, keyword-only
