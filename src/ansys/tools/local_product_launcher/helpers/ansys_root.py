@@ -14,7 +14,7 @@ def get_ansys_root(release_version: Optional[str] = None) -> str:
     Parameters
     ----------
     release_version :
-        The release short-code (e.g. ``"231"``) for which the Ansys
+        The release short-code (for example ``"231"``) for which the Ansys
         install directory should be found. If not specified, use the
         latest installed version.
     """
