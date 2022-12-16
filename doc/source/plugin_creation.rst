@@ -1,7 +1,7 @@
 Creating a Launcher Plugin
 --------------------------
 
-In this short how-to guide, we will walk you through creating a plugin for the Local Product Launcher. The plugin will launch Ansys Composite PrepPost (ACP) as a subprocess.
+This short how-to guide walks you through creating a plugin for the Local Product Launcher. The plugin launches Ansys Composite PrepPost (ACP) as a sub-process.
 
 The Local Product Launcher defines the interface a plugin must satisfy, in the :mod:`.interface` module.
 
@@ -14,7 +14,7 @@ The Local Product Launcher defines the interface a plugin must satisfy, in the :
 Configuration
 '''''''''''''
 
-To start, we define the user-definable configuration for our launcher. Since we want to run ACP as a subprocess, the path to the server binary needs to be defined.
+To start, we define the user-definable configuration for our launcher. Since we want to run ACP as a sub-process, the path to the server binary needs to be defined.
 
 This configuration is defined as a `pydantic <https://docs.pydantic.dev>`_ model:
 
@@ -30,7 +30,7 @@ We inherit from ``pydantic.BaseModel``, and define a single option ``binary_path
 Launcher
 ''''''''
 
-Next, we need to define the launcher itself. Below, you can see the full launcher code. There's quite a lot going on there, so we will then discuss each part separately.
+Next, we need to define the launcher itself. Below, you can see the full launcher code. There's quite a lot going on there, so each part is then discussed separately.
 
 .. code:: python
 
@@ -79,8 +79,8 @@ The launcher class inherits from ``LauncherProtocol[LauncherConfig]``. This isn'
 
 Next, setting ``CONFIG_MODEL = DirectLauncherConfig`` connects the launcher to the configuration class we've defined above.
 
-The subsequent line ``SERVER_SPEC = {"main": ServerType.GRPC}`` defines which kind of servers the product will start. Here, we have only a single server, which is accessible via gRPC. The keys in this dictionary can be chosen arbitrarily, but should be consistent across the launcher implementation.
-Ideally, you use the key to convey some meaning. For example, you could coose ``"main"`` for the main interface to your product, and ``file_transfer`` if there's an additional service for file up-/download.
+The subsequent line ``SERVER_SPEC = {"main": ServerType.GRPC}`` defines which kind of servers the product starts. Here, there's only a single server, which is accessible via gRPC. The keys in this dictionary can be chosen arbitrarily, but should be consistent across the launcher implementation.
+Ideally, you use the key to convey some meaning. For example, ``"main"`` could refer to the main interface to your product, and ``file_transfer`` to an additional service for file up-/download.
 
 The ``__init__`` method
 
@@ -112,7 +112,7 @@ Now, we come to the meat of the launcher implementation:
             text=True,
         )
 
-This :meth:`start<.LauncherProtocol.start>` method selects an available port using :func:`.find_free_ports`. It then starts the server as a subprocess. Note that here, we are simply discarding the server output and error. In a real launcher, we should give the option to redirect it e.g. to a file.
+This :meth:`start<.LauncherProtocol.start>` method selects an available port using :func:`.find_free_ports`. It then starts the server as a sub-process. Note that here, we are simply discarding the server output and error. In a real launcher, we should give the option to redirect it e.g. to a file.
 We also keep track of the URL and port on which the server should be accessible, in the ``_url`` attribute.
 
 Next, we need to implement a way of stopping the process:
@@ -229,7 +229,7 @@ The entry point itself has two parts:
 
   must load the launcher class.
 
-You will have to re-install your package (even if installed with ``pip install -e``) for the entry points to update.
+You need to re-install your package (even if installed with ``pip install -e``) for the entry points to update.
 
 CLI Defaults and Description
 ''''''''''''''''''''''''''''
@@ -269,4 +269,4 @@ To do so, we edit our ``DirectLaunchConfig`` class, assigning a ``pydantic.Field
 
 For the default value, we use the :func:`.get_ansys_root` helper to find the Ansys installation directory.
 
-Now, the user will see the description when running ``ansys-launcher configure ACP direct``, and can simply accept the default value if they wish!
+Now, the user can see the description when running ``ansys-launcher configure ACP direct``, and simply accept the default value if they wish!

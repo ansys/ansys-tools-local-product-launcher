@@ -26,7 +26,7 @@ For example, assuming that the ``ACP`` plug-in is installed:
 
     ansys-launcher configure ACP direct
 
-The CLI will prompt for the configuration options available for this launcher.
+The CLI prompts for the configuration options available for this launcher.
 
 
 Launching

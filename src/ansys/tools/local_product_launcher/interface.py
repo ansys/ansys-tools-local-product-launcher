@@ -73,7 +73,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     """
 
     SERVER_SPEC: Dict[str, ServerType]
-    """Defines the server type(s) that will be started.
+    """Defines the server type(s) that are started.
 
     For example,
 
@@ -87,8 +87,8 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     defines a server which is accessible via URL at the ``"MAIN"`` key,
     and a server accessible via gRPC at the ``"FILE_TRANSFER"`` key.
 
-    The :attr:`.ProductInstance.urls` will have keys ``{"MAIN", "FILE_TRANSFER"}``,
-    whereas :meth:`.ProductInstance.channels` property will only have the
+    The :attr:`.ProductInstance.urls` then has keys ``{"MAIN", "FILE_TRANSFER"}``,
+    whereas :meth:`.ProductInstance.channels` property only has the
     ``"FILE_TRANSFER"`` key.
     """
 

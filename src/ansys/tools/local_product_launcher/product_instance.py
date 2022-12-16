@@ -104,8 +104,8 @@ class ProductInstance:
         ----------
         timeout :
             Time to wait for the servers to respond, in seconds. Note that
-            there is guarantee that ``check`` will return within this time.
-            This parameter is used as a hint to the launcher implementation.
+            there is no guarantee that ``check`` returns within this time.
+            Instead, this parameter is used as a hint to the launcher implementation.
         """
         return self._launcher.check(timeout=timeout)
 
