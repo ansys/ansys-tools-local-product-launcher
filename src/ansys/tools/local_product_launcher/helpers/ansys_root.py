@@ -19,47 +19,67 @@ def get_ansys_root(release_version: Optional[str] = None) -> str:
         latest installed version.
     """
     if release_version is None:
-        awp_regex = re.compile("^AWP_ROOT([1-9]{3})$")
+        release_version = _get_release_version_from_envvar()
+
+    ans_root = _get_ans_root_from_envvar(release_version)
+
+    if ans_root is None:
+        ans_root = _get_ans_root_from_default_locations(release_version)
+
+    if not os.path.exists(ans_root):
+        raise FileNotFoundError(f"Ansys installation directory {ans_root} does not exist.")
+    return ans_root
+
+
+def _get_release_version_from_envvar() -> Optional[str]:
+    awp_regex = re.compile("^AWP_ROOT([1-9]{3})$")
+    available_versions = []
+    for key in os.environ:
+        match = re.match(awp_regex, key)
+        if not match:
+            continue
+        available_versions.append(match.groups()[0])
+    if not available_versions:
+        return None
+    return max(available_versions)
+
+
+def _get_ans_root_from_envvar(release_version: Optional[str]) -> Optional[str]:
+    if release_version is None:
+        return None
+    awp_root_varname = f"AWP_ROOT{release_version}"
+    return os.environ.get(awp_root_varname)
+
+
+def _get_ans_root_from_default_locations(release_version: Optional[str]) -> str:
+    if os.name == "nt":
+        default_locations = [os.path.join("c:\\", "Program Files", "ANSYS Inc")]
+    else:
+        default_locations = [
+            os.path.join("/", "usr", "ansys_inc"),
+            os.path.join("/", "ansys_inc", f"v{release_version}"),
+        ]
+
+    if release_version is None:
+        version_dir_regex = re.compile("^v([1-9]{3})$")
         available_versions = []
-        for key in os.environ:
-            match = re.match(awp_regex, key)
-            if not match:
-                continue
-            available_versions.append(match.groups()[0])
+        for base_location in default_locations:
+            for entry in os.listdir(base_location):
+                match = re.match(version_dir_regex, entry)
+                if not match:
+                    continue
+                available_versions.append(match.groups()[0])
         if not available_versions:
-            raise RuntimeError(
-                "No 'AWP_ROOT*' environment variable defined; the 'release_version' "
-                "needs to be explicitly specified."
+            raise FileNotFoundError(
+                f"No Ansys install found in default locations {default_locations}."
             )
         release_version = max(available_versions)
 
-    awp_root_varname = f"AWP_ROOT{release_version}"
-
-    if os.name == "nt":
-        program_files = os.getenv("PROGRAMFILES", os.path.join("c:\\", "Program Files"))
-        ans_root = os.getenv(
-            awp_root_varname,
-            os.path.join(program_files, "ANSYS Inc", f"v{release_version}"),
-        )
-        if not os.path.exists(ans_root):
-            raise FileNotFoundError(f"Ansys installation directory {ans_root} does not exist.")
-    else:
-        if awp_root_varname in os.environ:
-            ans_root = os.environ[awp_root_varname]
-        else:
-            candidate_root_dirs = [
-                os.path.join("/", "usr", "ansys_inc", f"v{release_version}"),
-                os.path.join("/", "ansys_inc", f"v{release_version}"),
-            ]
-
-            for candidate_dir in candidate_root_dirs:
-                ans_root = candidate_dir
-                if os.path.exists(ans_root):
-                    break
-            else:
-                raise FileNotFoundError(
-                    f"No Ansys installation found for version '{release_version}'.\n"
-                    f"Tried: {candidate_root_dirs}."
-                )
-
-    return ans_root
+    for base_location in default_locations:
+        candidate_dir = os.path.join(base_location, f"v{release_version}")
+        if os.path.exists(candidate_dir):
+            return candidate_dir
+    raise FileNotFoundError(
+        f"No Ansys install for version '{release_version}' "
+        f"found in default locations {default_locations}"
+    )
