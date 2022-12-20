@@ -171,8 +171,11 @@ def save_config() -> None:
     """
     if _CONFIG is not None:
         file_path = _get_config_path()
+        # Convert to JSON before saving; in this way, errors during
+        # JSON encoding will not clobber the config file.
+        config_json = json.dumps(dataclasses.asdict(_CONFIG)["__root__"])
         with open(file_path, "w") as out_f:
-            json.dump(dataclasses.asdict(_CONFIG)["__root__"], out_f)
+            out_f.write(config_json)
 
 
 def _get_config() -> Dict[str, _ProductConfig]:
