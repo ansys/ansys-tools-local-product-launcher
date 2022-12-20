@@ -255,7 +255,7 @@ To do so, we edit our ``DirectLaunchConfig`` class, using :py:func:`dataclasses.
     from ansys.tools.local_product_launcher.helpers.ansys_root import get_ansys_root
 
 
-    def get_default_binary_path() -> Union[str, dataclasses._MISSING_TYPE]:
+    def get_default_binary_path() -> str:
         try:
             ans_root = get_ansys_root()
             binary_path = os.path.join(ans_root, "ACP", "acp_grpcserver")
@@ -263,13 +263,13 @@ To do so, we edit our ``DirectLaunchConfig`` class, using :py:func:`dataclasses.
                 binary_path += ".exe"
             return binary_path
         except (RuntimeError, FileNotFoundError):
-            return dataclasses.MISSING
+            return ""
 
 
     @dataclasses.dataclass
     class DirectLaunchConfig:
 
-        binary_path: str = dataclasses.field(  # type: ignore # mypy doesn't understand the dataclasses.MISSING assignment
+        binary_path: str = dataclasses.field(
             default=get_default_binary_path(),
             metadata={
                 DOC_METADATA_KEY: "Path to the ACP gRPC server executable."
