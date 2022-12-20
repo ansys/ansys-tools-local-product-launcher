@@ -5,7 +5,7 @@ and register it
 """
 
 from enum import Enum, auto
-from typing import Any, Dict, Optional, Type, TypeVar
+from typing import Any, ClassVar, Dict, Optional, Type, TypeVar
 
 try:
     from typing import Protocol
@@ -27,7 +27,7 @@ DOC_METADATA_KEY = "launcher_doc"
 class DataclassProtocol(Protocol):
     """Protocol class for Python dataclasses."""
 
-    __dataclass_fields__: Dict[str, Any]
+    __dataclass_fields__: ClassVar[Dict[str, Any]]
 
 
 LAUNCHER_CONFIG_T = TypeVar("LAUNCHER_CONFIG_T", bound=DataclassProtocol)

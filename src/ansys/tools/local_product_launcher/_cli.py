@@ -47,7 +47,7 @@ def get_subcommands_from_plugins(
                 description = field.metadata.get(DOC_METADATA_KEY, None)
                 if field.default is not dataclasses.MISSING:
                     default = field.default
-                elif field.default_factory is not dataclasses.MISSING:  # type: ignore
+                elif field.default_factory is not dataclasses.MISSING:
                     default = field.default_factory()
                 else:
                     default = None
