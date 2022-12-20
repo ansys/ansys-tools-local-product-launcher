@@ -48,7 +48,7 @@ def launch_product(
     )
 
     if config is None:
-        config = get_config_for(product_name=product_name, launch_mode=launch_mode)
+        config = get_config_for(product_name=product_name, launch_mode=launch_mode)  # type: ignore
     if not isinstance(config, launcher_klass.CONFIG_MODEL):
         raise TypeError(
             f"Incompatible config of type '{type(config)} supplied, "

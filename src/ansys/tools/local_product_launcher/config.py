@@ -16,7 +16,7 @@ from typing import Any, Dict, Optional, Type, cast
 import appdirs
 
 from ._plugins import get_config_model
-from .interface import LAUNCHER_CONFIG_T
+from .interface import LAUNCHER_CONFIG_T, DataclassProtocol
 
 __all__ = [
     "get_config_for",
@@ -67,7 +67,7 @@ def get_launch_mode_for(*, product_name: str, launch_mode: Optional[str] = None)
         raise KeyError(f"No configuration defined for product name '{product_name}'") from exc
 
 
-def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> LAUNCHER_CONFIG_T:
+def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> DataclassProtocol:
     """Get the configuration object for a (product, launch_mode) combination.
 
     Retrieve the default configuration object for the product. If the
@@ -95,7 +95,7 @@ def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> LAUNCHER
         the launcher plugin.
     """
     launch_mode = get_launch_mode_for(product_name=product_name, launch_mode=launch_mode)
-    config_class: Type[LAUNCHER_CONFIG_T] = get_config_model(
+    config_class: Type[DataclassProtocol] = get_config_model(
         product_name=product_name, launch_mode=launch_mode
     )
     config_entry = _get_config()[product_name].configs[launch_mode]
@@ -106,7 +106,7 @@ def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> LAUNCHER
             raise TypeError(
                 f"Configuration is of wrong type '{type(config_entry)}', should be '{config_class}'"
             )
-    return cast(LAUNCHER_CONFIG_T, _get_config()[product_name].configs[launch_mode])
+    return cast(DataclassProtocol, _get_config()[product_name].configs[launch_mode])
 
 
 def is_configured(*, product_name: str, launch_mode: Optional[str] = None) -> bool:
