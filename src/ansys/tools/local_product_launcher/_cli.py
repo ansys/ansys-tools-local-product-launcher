@@ -1,3 +1,4 @@
+import dataclasses
 import json
 import textwrap
 from typing import Any, Callable, Dict, List, Optional, Sequence, Type, cast
@@ -12,7 +13,7 @@ from .config import (
     save_config,
     set_config_for,
 )
-from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
+from .interface import DOC_METADATA_KEY, LAUNCHER_CONFIG_T, LauncherProtocol
 
 
 def format_prompt(*, field_name: str, description: Optional[str]) -> str:
@@ -42,18 +43,23 @@ def get_subcommands_from_plugins(
                 launcher_config_kls, product_name, launch_mode
             )
             launch_mode_command = click.Command(launch_mode, callback=_config_writer_callback)
-            for field_name, field_details in launcher_config_kls.schema()["properties"].items():
-                description = field_details.get("description", None)
-                default = field_details.get("default", None)
+            for field in dataclasses.fields(launcher_config_kls):
+                description = field.metadata.get(DOC_METADATA_KEY, None)
+                if field.default is not dataclasses.MISSING:
+                    default = field.default
+                elif field.default_factory is not dataclasses.MISSING:  # type: ignore
+                    default = field.default_factory()
+                else:
+                    default = None
                 option = click.Option(
-                    [f"--{field_name}"],
+                    [f"--{field.name}"],
                     prompt=format_prompt(
-                        field_name=field_name,
+                        field_name=field.name,
                         description=description,
                     ),
                     help=description,
                     default=default,
-                    type=pydantic_schema_to_option_type(field_details.get("type")),
+                    type=python_type_to_option_type(field.type),
                 )
                 launch_mode_command.params.append(option)
 
@@ -96,15 +102,14 @@ class JSONParamType(click.ParamType):
         return json.loads(value)
 
 
-def pydantic_schema_to_option_type(schema_type: str) -> Any:
-    """Get click option type from the pydantic schema type."""
-    kwarg_lookup = {
-        "integer": int,
-        "string": str,
-        "boolean": bool,
-        "object": JSONParamType(),
+def python_type_to_option_type(field_type: Type[Any]) -> Any:
+    """Get click option type from the dataclass field type."""
+    type_lookup = {
+        int: int,
+        str: str,
+        bool: bool,
     }
-    return kwarg_lookup.get(schema_type)
+    return type_lookup.get(field_type, JSONParamType())
 
 
 def config_writer_callback_factory(

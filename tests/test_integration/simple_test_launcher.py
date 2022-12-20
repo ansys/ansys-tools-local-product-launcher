@@ -1,22 +1,28 @@
+import dataclasses
 import pathlib
 import subprocess
 import sys
 from typing import Optional
 
 import grpc
-import pydantic
 
 from ansys.tools.local_product_launcher.helpers.grpc import check_grpc_health
 from ansys.tools.local_product_launcher.helpers.ports import find_free_ports
-from ansys.tools.local_product_launcher.interface import LauncherProtocol, ServerType
+from ansys.tools.local_product_launcher.interface import (
+    DOC_METADATA_KEY,
+    LauncherProtocol,
+    ServerType,
+)
 
 SCRIPT_PATH = pathlib.Path(__file__).parent / "simple_test_server.py"
 SERVER_KEY = "main"
 
 
-class SimpleLauncherConfig(pydantic.BaseModel):
-    script_path: str = pydantic.Field(
-        default=str(SCRIPT_PATH), description="Location of the server Python script."
+@dataclasses.dataclass
+class SimpleLauncherConfig:
+    script_path: str = dataclasses.field(
+        default=str(SCRIPT_PATH),
+        metadata={DOC_METADATA_KEY: "Location of the server Python script."},
     )
 
 

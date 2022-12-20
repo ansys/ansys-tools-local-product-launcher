@@ -63,9 +63,7 @@ nitpick_ignore = [
     )  # TypeVar, not a class
 ]
 
-nitpick_ignore_regex = [
-    (".*", "pydantic\..*"),
-]
+nitpick_ignore_regex = []
 
 # autodoc options
 autoclass_content = "class"

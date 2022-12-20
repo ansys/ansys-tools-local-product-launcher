@@ -1,7 +1,7 @@
+from dataclasses import dataclass
 from typing import Dict
 
 from click.testing import CliRunner
-import pydantic
 import pytest
 
 from ansys.tools.local_product_launcher import _cli, interface
@@ -9,7 +9,8 @@ from ansys.tools.local_product_launcher import _cli, interface
 from .common import check_result_config
 
 
-class MockConfig(pydantic.BaseModel):
+@dataclass
+class MockConfig:
     int_field: int
     str_field: str
     json_field: Dict[str, str]

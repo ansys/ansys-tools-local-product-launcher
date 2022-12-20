@@ -1,4 +1,5 @@
-import pydantic
+from dataclasses import dataclass
+
 import pytest
 
 from ansys.tools.local_product_launcher import config, launch_product
@@ -7,6 +8,11 @@ from .simple_test_launcher import SimpleLauncher, SimpleLauncherConfig
 
 PRODUCT_NAME = "TestProduct"
 LAUNCH_MODE = "direct"
+
+
+@dataclass
+class OtherConfig:
+    int_attr: int
 
 
 @pytest.fixture(autouse=True)
@@ -40,7 +46,7 @@ def test_invalid_launch_mode_raises():
 
 def test_invalid_config_raises():
     with pytest.raises(TypeError):
-        launch_product(PRODUCT_NAME, launch_mode=LAUNCH_MODE, config=pydantic.BaseModel())
+        launch_product(PRODUCT_NAME, launch_mode=LAUNCH_MODE, config=OtherConfig(int_attr=3))
 
 
 def test_contextmanager():
