@@ -7,14 +7,13 @@ Its location can be specified explicitly with the ``ANSYS_LAUNCHER_CONFIG_PATH``
 environment variable.
 """
 
+import dataclasses
 import json
 import os
 import pathlib
 from typing import Any, Dict, Optional, Type, cast
 
 import appdirs
-import pydantic
-import pydantic.generics
 
 from ._plugins import get_config_model
 from .interface import LAUNCHER_CONFIG_T
@@ -31,12 +30,14 @@ __all__ = [
 _CONFIG_PATH_ENV_VAR_NAME = "ANSYS_LAUNCHER_CONFIG_PATH"
 
 
-class _ProductConfig(pydantic.BaseModel):
+@dataclasses.dataclass
+class _ProductConfig:
     launch_mode: str
     configs: Dict[str, Any]
 
 
-class _LauncherConfiguration(pydantic.BaseModel):
+@dataclasses.dataclass
+class _LauncherConfiguration:
     __root__: Dict[str, _ProductConfig]
 
 
@@ -171,7 +172,7 @@ def save_config() -> None:
     if _CONFIG is not None:
         file_path = _get_config_path()
         with open(file_path, "w") as out_f:
-            out_f.write(_CONFIG.json())
+            json.dump(dataclasses.asdict(_CONFIG)["__root__"], out_f)
 
 
 def _get_config() -> Dict[str, _ProductConfig]:

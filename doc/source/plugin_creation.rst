@@ -16,16 +16,17 @@ Configuration
 
 To start, let's define the user-definable configuration for our launcher. Since ACP should be run as a sub-process, the path to the server binary needs to be defined.
 
-This configuration is defined as a `pydantic <https://docs.pydantic.dev>`_ model:
+This configuration is defined as a :py:func:`dataclass <dataclasses.dataclass>`:
 
 .. code:: python
 
-    import pydantic
+    from dataclasses import dataclass
 
-    class DirectLauncherConfig(pydantic.BaseModel):
+    @dataclass
+    class DirectLauncherConfig:
         binary_path: str
 
-The configuration class inherits from ``pydantic.BaseModel``, and defines a single option ``binary_path`` of type :py:class:`str`.
+The configuration class defines a single option ``binary_path`` of type :py:class:`str`.
 
 Launcher
 ''''''''
@@ -238,19 +239,23 @@ With the three parts outlined above, you've successfully created a Local Product
 
 Finally, we can improve the usability of the command line by adding a default and description to the configuration class.
 
-To do so, we edit our ``DirectLaunchConfig`` class, assigning a ``pydantic.Field`` to the ``binary_path`` class attribute.
+To do so, we edit our ``DirectLaunchConfig`` class, using :py:func:`dataclasses.field` to enrich the ``binary_path``:
+
+* The default value is specified as the ``default`` argument.
+* The description is given in the ``metadata`` dictionary, using the special key :py:obj:`DOC_METADATA_KEY <.interface.DOC_METADATA_KEY>`.
 
 
 .. code:: python
 
     import os
+    import dataclasses
+    from typing import Union, Literal
 
-    import pydantic
-
+    from ansys.tools.local_product_launcher.interface import DOC_METADATA_KEY
     from ansys.tools.local_product_launcher.helpers.ansys_root import get_ansys_root
 
 
-    def get_default_binary_path() -> Union[str, pydantic.fields.UndefinedType]:
+    def get_default_binary_path() -> Union[str, Literal[dataclasses.MISSING]]:
         try:
             ans_root = get_ansys_root()
             binary_path = os.path.join(ans_root, "ACP", "acp_grpcserver")
@@ -258,12 +263,16 @@ To do so, we edit our ``DirectLaunchConfig`` class, assigning a ``pydantic.Field
                 binary_path += ".exe"
             return binary_path
         except (RuntimeError, FileNotFoundError):
-            return pydantic.fields.Undefined
+            return dataclasses.MISSING
 
 
-    class DirectLaunchConfig(pydantic.BaseModel):
-        binary_path: str = pydantic.Field(
-            default=get_default_binary_path(), description="Path to the ACP gRPC server executable."
+    @dataclasses.dataclass
+    class DirectLaunchConfig:
+        binary_path: str = dataclasses.field(
+            default=get_default_binary_path(),
+            metadata={
+                DOC_METADATA_KEY: "Path to the ACP gRPC server executable."
+            },
         )
 
 

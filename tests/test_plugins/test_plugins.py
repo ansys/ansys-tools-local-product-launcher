@@ -1,6 +1,7 @@
 """Tests for the 'plugins' module."""
 
-import pydantic
+from dataclasses import dataclass
+
 import pytest
 
 from ansys.tools.local_product_launcher import _plugins, interface
@@ -12,7 +13,8 @@ TEST_LAUNCH_MODE_A2 = "LAUNCHER_A2"
 TEST_LAUNCH_MODE_B1 = "LAUNCHER_B1"
 
 
-class MockConfigA1(pydantic.BaseModel):
+@dataclass
+class MockConfigA1:
     pass
 
 
@@ -20,7 +22,8 @@ class MockLauncherA1(interface.LauncherProtocol[MockConfigA1]):
     CONFIG_MODEL = MockConfigA1
 
 
-class MockConfigA2(pydantic.BaseModel):
+@dataclass
+class MockConfigA2:
     pass
 
 
@@ -28,7 +31,8 @@ class MockLauncherA2(interface.LauncherProtocol[MockConfigA2]):
     CONFIG_MODEL = MockConfigA2
 
 
-class MockConfigB1(pydantic.BaseModel):
+@dataclass
+class MockConfigB1:
     pass
 
 

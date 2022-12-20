@@ -5,18 +5,32 @@ and register it
 """
 
 from enum import Enum, auto
-from typing import Dict, Optional, Type, TypeVar
+from typing import Any, Dict, Optional, Type, TypeVar
 
 try:
     from typing import Protocol
 except ImportError:
     from typing_extensions import Protocol  # type: ignore
 
-import pydantic
+__all__ = [
+    "LAUNCHER_CONFIG_T",
+    "DOC_METADATA_KEY",
+    "DataclassProtocol",
+    "LauncherProtocol",
+    "ServerType",
+]
 
-__all__ = ["LAUNCHER_CONFIG_T", "LauncherProtocol", "ServerType"]
+DOC_METADATA_KEY = "launcher_doc"
+"""Key used in the :py:class:`dataclasses.Field` ``metadata``, for the option description."""
 
-LAUNCHER_CONFIG_T = TypeVar("LAUNCHER_CONFIG_T", bound="pydantic.BaseModel")
+
+class DataclassProtocol(Protocol):
+    """Protocol class for Python dataclasses."""
+
+    __dataclass_fields__: Dict[str, Any]
+
+
+LAUNCHER_CONFIG_T = TypeVar("LAUNCHER_CONFIG_T", bound=DataclassProtocol)
 """Type variable for launcher configuration objects."""
 
 
@@ -67,9 +81,9 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     """Defines the configuration options for the launcher.
 
     The configuration options which this launcher accepts, specified
-    as a `pydantic <https://docs.pydantic.dev>`_ Model. Note that the
-    ``default`` and ``description`` of the model fields are used in the
-    configuration CLI, if available.
+    as a :py:func:`dataclass <dataclasses.dataclass>`. Note that the
+    ``default`` and ``metadata[DOC_METADATA_KEY]`` of the fields are
+    used in the configuration CLI, if available.
     """
 
     SERVER_SPEC: Dict[str, ServerType]
