@@ -2,6 +2,8 @@ import pytest
 
 from ansys.tools.local_product_launcher import config
 
+pytest.register_assert_rewrite("test_cli.common")
+
 
 @pytest.fixture
 def temp_config_file(monkeypatch, tmp_path):
