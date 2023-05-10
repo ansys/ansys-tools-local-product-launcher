@@ -38,7 +38,9 @@ class DataclassProtocol(Protocol):
 
 
 LAUNCHER_CONFIG_T = TypeVar("LAUNCHER_CONFIG_T", bound=DataclassProtocol)
-"""Type variable for launcher configuration objects."""
+# This docstring is commented-out because numpydoc causes the documentation build to fail when
+# it is included.
+# """Type variable for launcher configuration objects."""
 
 
 class ServerType(Enum):
