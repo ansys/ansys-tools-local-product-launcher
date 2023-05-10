@@ -9,7 +9,7 @@ import grpc
 from ansys.tools.local_product_launcher.helpers.grpc import check_grpc_health
 from ansys.tools.local_product_launcher.helpers.ports import find_free_ports
 from ansys.tools.local_product_launcher.interface import (
-    DOC_METADATA_KEY,
+    METADATA_KEY_DOC,
     LauncherProtocol,
     ServerType,
 )
@@ -22,7 +22,7 @@ SERVER_KEY = "main"
 class SimpleLauncherConfig:
     script_path: str = dataclasses.field(
         default=str(SCRIPT_PATH),
-        metadata={DOC_METADATA_KEY: "Location of the server Python script."},
+        metadata={METADATA_KEY_DOC: "Location of the server Python script."},
     )
 
 

@@ -1,5 +1,5 @@
-from dataclasses import dataclass
-from typing import Dict
+from dataclasses import dataclass, field
+from typing import Dict, Optional
 
 from click.testing import CliRunner
 import pytest
@@ -14,6 +14,10 @@ class MockConfig:
     int_field: int
     str_field: str
     json_field: Dict[str, str]
+    optional_field: Optional[str] = None
+    noprompt_field: str = field(
+        metadata={interface.METADATA_KEY_NOPROMPT: True}, default="noprompt_value"
+    )
 
 
 class MockLauncher(interface.LauncherProtocol[MockConfig]):
@@ -26,7 +30,13 @@ TEST_LAUNCH_MODE = "my_launcher"
 EXPECTED_CONFIG = {
     TEST_PRODUCT: {
         "configs": {
-            TEST_LAUNCH_MODE: {"int_field": 1, "str_field": "value", "json_field": {"a": "b"}}
+            TEST_LAUNCH_MODE: {
+                "int_field": 1,
+                "str_field": "value",
+                "json_field": {"a": "b"},
+                "optional_field": None,
+                "noprompt_field": "noprompt_value",
+            }
         },
         "launch_mode": TEST_LAUNCH_MODE,
     }
@@ -58,11 +68,13 @@ def test_cli_mock_plugin(mock_plugins):
     assert TEST_LAUNCH_MODE in product_group.commands
 
     launcher_command = product_group.commands[TEST_LAUNCH_MODE]
-    assert len(launcher_command.params) == 4
+    assert len(launcher_command.params) == 6
     assert [p.name for p in launcher_command.params] == [
         "int_field",
         "str_field",
         "json_field",
+        "optional_field",
+        "noprompt_field",
         "overwrite_default",
     ]
 
@@ -81,10 +93,26 @@ def test_cli_mock_plugin(mock_plugins):
             ],
             [],
         ),
-        (["configure", "my_product", "my_launcher", "--str_field=value"], ["1", '{"a": "b"}']),
-        (["configure", "my_product", "my_launcher", "--int_field=1"], ["value", '{"a": "b"}']),
-        (["configure", "my_product", "my_launcher", '--json_field={"a": "b"}'], ["1", "value"]),
-        (["configure", "my_product", "my_launcher"], ["1", "value", '{"a": "b"}']),
+        (["configure", "my_product", "my_launcher", "--str_field=value"], ["1", '{"a": "b"}', ""]),
+        (["configure", "my_product", "my_launcher", "--int_field=1"], ["value", '{"a": "b"}', ""]),
+        (["configure", "my_product", "my_launcher", '--json_field={"a": "b"}'], ["1", "value", ""]),
+        (
+            [
+                "configure",
+                "my_product",
+                "my_launcher",
+            ],
+            ["1", "value", '{"a": "b"}', ""],
+        ),
+        (["configure", "my_product", "my_launcher"], ["1", "value", '{"a": "b"}', ""]),
+        (
+            ["configure", "my_product", "my_launcher", "--noprompt_field"],
+            ["noprompt_value", "1", "value", '{"a": "b"}', ""],
+        ),
+        (
+            ["configure", "my_product", "my_launcher", "--noprompt_field=noprompt_value"],
+            ["1", "value", '{"a": "b"}', ""],
+        ),
     ],
 )
 def test_run_cli(temp_config_file, mock_plugins, commands, prompts):
@@ -93,10 +121,10 @@ def test_run_cli(temp_config_file, mock_plugins, commands, prompts):
     result = runner.invoke(
         cli_command,
         commands,
-        input="\n".join(prompts) if prompts else None,
+        input=("\n".join(prompts) + "\n") if prompts else None,
     )
 
-    assert result.exit_code == 0
+    assert result.exit_code == 0, result.output
     check_result_config(temp_config_file, EXPECTED_CONFIG)
 
 

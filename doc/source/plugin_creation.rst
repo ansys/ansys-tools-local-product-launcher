@@ -1,4 +1,4 @@
-Creating a Launcher Plugin
+Creating a launcher plugin
 --------------------------
 
 This short how-to guide walks you through creating a plugin for the Local Product Launcher. The plugin launches Ansys Composite PrepPost (ACP) as a sub-process.
@@ -146,7 +146,7 @@ Finally, the ``_url`` attribute we stored in :meth:`start <.LauncherProtocol.sta
 
 Note that the ``urls`` return value should adhere to the schema defined in ``SERVER_SPEC``.
 
-Entry Point
+Entry point
 '''''''''''
 
 Having defined all the necessary components for a Local Product Launcher plugin, we now simply need to register the plugin. This is done through the Python `entrypoints <https://packaging.python.org/specifications/entry-points/>`_ mechanism.
@@ -232,7 +232,7 @@ The entry point itself has two parts:
 
 You need to re-install your package (even if installed with ``pip install -e``) for the entry points to update.
 
-CLI Defaults and Description
+CLI defaults and description
 ''''''''''''''''''''''''''''
 
 With the three parts outlined above, you've successfully created a Local Product Launcher plugin. :octicon:`rocket`
@@ -242,7 +242,7 @@ Finally, we can improve the usability of the command line by adding a default an
 To do so, we edit our ``DirectLaunchConfig`` class, using :py:func:`dataclasses.field` to enrich the ``binary_path``:
 
 * The default value is specified as the ``default`` argument.
-* The description is given in the ``metadata`` dictionary, using the special key :py:obj:`DOC_METADATA_KEY <.interface.DOC_METADATA_KEY>`.
+* The description is given in the ``metadata`` dictionary, using the special key :py:obj:`METADATA_KEY_DOC <.interface.METADATA_KEY_DOC>`.
 
 
 .. code:: python
@@ -251,7 +251,7 @@ To do so, we edit our ``DirectLaunchConfig`` class, using :py:func:`dataclasses.
     import dataclasses
     from typing import Union
 
-    from ansys.tools.local_product_launcher.interface import DOC_METADATA_KEY
+    from ansys.tools.local_product_launcher.interface import METADATA_KEY_DOC
     from ansys.tools.local_product_launcher.helpers.ansys_root import get_ansys_root
 
 
@@ -272,7 +272,7 @@ To do so, we edit our ``DirectLaunchConfig`` class, using :py:func:`dataclasses.
         binary_path: str = dataclasses.field(
             default=get_default_binary_path(),
             metadata={
-                DOC_METADATA_KEY: "Path to the ACP gRPC server executable."
+                METADATA_KEY_DOC: "Path to the ACP gRPC server executable."
             },
         )
 
@@ -280,3 +280,33 @@ To do so, we edit our ``DirectLaunchConfig`` class, using :py:func:`dataclasses.
 For the default value, we use the :func:`.get_ansys_root` helper to find the Ansys installation directory.
 
 Now, the user can see the description when running ``ansys-launcher configure ACP direct``, and simply accept the default value if they wish.
+
+.. note::
+
+    If the default value is ``None``, it will be converted to the string ``default`` for the command line interface. This
+    allows implementing more complicated default behaviors, that may not be expressible when the CLI is run.
+
+Hiding advanced options
+'''''''''''''''''''''''
+
+If your launcher plugin has advanced options, you can skip prompting the user for them by default. This is done by setting the special key :py:obj:`METADATA_KEY_NOPROMPT <.interface.METADATA_KEY_NOPROMPT>` to ``True`` in the ``metadata`` dictionary:
+
+
+.. code:: python
+
+    import dataclasses
+    from typing import Dict
+
+    from ansys.tools.local_product_launcher.interface import METADATA_KEY_NOPROMPT
+
+
+    @dataclasses.dataclass
+    class DirectLaunchConfig:
+        <...>
+        environment_variables: Dict[str, str] = field(
+            default={},
+            metadata={
+                METADATA_KEY_DOC: "Extra environment variables to define when launching the server.",
+                METADATA_KEY_NOPROMPT: True
+            }
+        )
