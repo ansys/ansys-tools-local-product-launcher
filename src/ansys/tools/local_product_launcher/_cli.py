@@ -13,7 +13,7 @@ from .config import (
     save_config,
     set_config_for,
 )
-from .interface import DOC_METADATA_KEY, LAUNCHER_CONFIG_T, LauncherProtocol
+from .interface import LAUNCHER_CONFIG_T, METADATA_KEY_DOC, METADATA_KEY_NOPROMPT, LauncherProtocol
 
 
 def format_prompt(*, field_name: str, description: Optional[str]) -> str:
@@ -26,6 +26,7 @@ def format_prompt(*, field_name: str, description: Optional[str]) -> str:
 
 
 _OVERWRITE_DEFAULT_FLAG_NAME = "overwrite_default"
+_DEFAULT_STR = "default"
 
 
 def get_subcommands_from_plugins(
@@ -44,23 +45,7 @@ def get_subcommands_from_plugins(
             )
             launch_mode_command = click.Command(launch_mode, callback=_config_writer_callback)
             for field in dataclasses.fields(launcher_config_kls):
-                description = field.metadata.get(DOC_METADATA_KEY, None)
-                if field.default is not dataclasses.MISSING:
-                    default = field.default
-                elif field.default_factory is not dataclasses.MISSING:
-                    default = field.default_factory()
-                else:
-                    default = None
-                option = click.Option(
-                    [f"--{field.name}"],
-                    prompt=format_prompt(
-                        field_name=field.name,
-                        description=description,
-                    ),
-                    help=description,
-                    default=default,
-                    type=python_type_to_option_type(field.type),
-                )
+                option = get_option_from_field(field)
                 launch_mode_command.params.append(option)
 
             extra_kwargs_overwrite_option = dict()
@@ -89,7 +74,10 @@ def get_subcommands_from_plugins(
 
 
 class JSONParamType(click.ParamType):
-    """Implements interpreting options as JSON."""
+    """Implements interpreting options as JSON.
+
+    An empty string is interpreted as None.
+    """
 
     name = "json"
 
@@ -99,17 +87,50 @@ class JSONParamType(click.ParamType):
             return None
         if not isinstance(value, str):
             return value
-        return json.loads(value)
+        if value == _DEFAULT_STR:
+            return None
+        try:
+            return json.loads(value)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Cannot decode JSON value '{value}'") from e
 
 
-def python_type_to_option_type(field_type: Type[Any]) -> Any:
-    """Get click option type from the dataclass field type."""
-    type_lookup = {
+def get_option_from_field(field: "dataclasses.Field[Any]") -> click.Option:
+    """Construct a click.Option from a dataclass field.
+
+    Convert the field type, default, and metadata to the corresponding
+    click.Option.
+    """
+    type_ = {
         int: int,
         str: str,
         bool: bool,
-    }
-    return type_lookup.get(field_type, JSONParamType())
+    }.get(field.type, JSONParamType())
+
+    if field.default is not dataclasses.MISSING:
+        default = field.default
+        if default is None:
+            default = _DEFAULT_STR
+            if not isinstance(type_, JSONParamType):
+                raise ValueError(f"Invalid default value 'None' for {type_} type.")
+    elif field.default_factory is not dataclasses.MISSING:
+        default = field.default_factory()
+    else:
+        default = None
+
+    description = field.metadata.get(METADATA_KEY_DOC, None)
+    prompt_required = not field.metadata.get(METADATA_KEY_NOPROMPT, False)
+    return click.Option(
+        [f"--{field.name}"],
+        prompt=format_prompt(
+            field_name=field.name,
+            description=description,
+        ),
+        help=description,
+        type=type_,
+        default=default,
+        prompt_required=prompt_required,
+    )
 
 
 def config_writer_callback_factory(
@@ -145,7 +166,7 @@ def build_cli(plugins: Dict[str, Dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
         Configure the options for a specific product and launch mode.
 
         The available products and launch modes are determined dynamically
-        from the intalled plugins.
+        from the installed plugins.
 
         To get a list of products:
 

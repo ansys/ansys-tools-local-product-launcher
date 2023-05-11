@@ -1,9 +1,5 @@
+import importlib.metadata
 from typing import Dict, Tuple, Type
-
-try:
-    import importlib.metadata as importlib_metadata  # type: ignore
-except ModuleNotFoundError:
-    import importlib_metadata  # type: ignore
 
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
 
@@ -37,9 +33,9 @@ def get_all_plugins() -> Dict[str, Dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]
     return res
 
 
-def _get_entry_points() -> Tuple[importlib_metadata.EntryPoint, ...]:
+def _get_entry_points() -> Tuple[importlib.metadata.EntryPoint, ...]:
     """Get all Local Product Launcher plugin entry points."""
     try:
-        return importlib_metadata.entry_points()[LAUNCHER_ENTRY_POINT]  # type: ignore
+        return importlib.metadata.entry_points()[LAUNCHER_ENTRY_POINT]  # type: ignore
     except KeyError:
         return tuple()

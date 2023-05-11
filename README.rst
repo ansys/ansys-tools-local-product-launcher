@@ -6,7 +6,7 @@ Local Product Launcher
    :target: https://docs.pyansys.com/
    :alt: PyAnsys
 
-.. |python| image:: https://img.shields.io/badge/Python-%3E%3D3.7-blue
+.. |python| image:: https://img.shields.io/badge/Python-%3E%3D3.8-blue
    :target: https://pypi.org/project/ansys-tools-local-product-launcher/
    :alt: Python
 
@@ -14,12 +14,12 @@ Local Product Launcher
    :target: https://pypi.org/project/ansys-tools-local-product-launcher
    :alt: PyPI
 
-.. |codecov| image:: https://codecov.io/gh/pyansys/ansys-tools-local-product-launcher/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/pyansys/ansys-tools-local-product-launcher
+.. |codecov| image:: https://codecov.io/gh/ansys-internal/ansys-tools-local-product-launcher/branch/main/graph/badge.svg
+   :target: https://codecov.io/gh/ansys-internal/ansys-tools-local-product-launcher
    :alt: Codecov
 
-.. |GH-CI| image:: https://github.com/pyansys/ansys-tools-local-product-launcher/actions/workflows/ci_cd.yml/badge.svg
-   :target: https://github.com/pyansys/ansys-tools-local-product-launcher/actions/workflows/ci_cd.yml
+.. |GH-CI| image:: https://github.com/ansys-internal/ansys-tools-local-product-launcher/actions/workflows/ci_cd.yml/badge.svg
+   :target: https://github.com/ansys-internal/ansys-tools-local-product-launcher/actions/workflows/ci_cd.yml
    :alt: GH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
@@ -86,7 +86,7 @@ Before contributing to the project, please refer to the `PyAnsys Developer's gui
 
     .. code:: bash
 
-        git clone https://github.com/pyansys/ansys-tools-local-product-launcher
+        git clone https://github.com/ansys-internal/ansys-tools-local-product-launcher
         cd ansys-tools-local-product-launcher
 
 #. Make sure you have the latest version of poetry:

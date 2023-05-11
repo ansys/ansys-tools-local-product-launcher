@@ -14,14 +14,21 @@ except ImportError:
 
 __all__ = [
     "LAUNCHER_CONFIG_T",
-    "DOC_METADATA_KEY",
+    "METADATA_KEY_DOC",
+    "METADATA_KEY_NOPROMPT",
     "DataclassProtocol",
     "LauncherProtocol",
     "ServerType",
 ]
 
-DOC_METADATA_KEY = "launcher_doc"
+METADATA_KEY_DOC = "launcher_doc"
 """Key used in the :py:class:`dataclasses.Field` ``metadata``, for the option description."""
+
+METADATA_KEY_NOPROMPT = "launcher_noprompt"
+"""
+Key used in the :py:class:`dataclasses.Field` ``metadata``, to skip prompting for
+the option by default.
+"""
 
 
 class DataclassProtocol(Protocol):
@@ -31,7 +38,9 @@ class DataclassProtocol(Protocol):
 
 
 LAUNCHER_CONFIG_T = TypeVar("LAUNCHER_CONFIG_T", bound=DataclassProtocol)
-"""Type variable for launcher configuration objects."""
+# This docstring is commented-out because numpydoc causes the documentation build to fail when
+# it is included.
+# """Type variable for launcher configuration objects."""
 
 
 class ServerType(Enum):
@@ -82,7 +91,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
 
     The configuration options which this launcher accepts, specified
     as a :py:func:`dataclass <dataclasses.dataclass>`. Note that the
-    ``default`` and ``metadata[DOC_METADATA_KEY]`` of the fields are
+    ``default`` and ``metadata[METADATA_KEY_DOC]`` of the fields are
     used in the configuration CLI, if available.
     """
 
