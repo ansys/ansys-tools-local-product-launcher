@@ -95,7 +95,7 @@ class JSONParamType(click.ParamType):
             raise ValueError(f"Cannot decode JSON value '{value}'") from e
 
 
-def get_option_from_field(field: dataclasses.Field[Any]) -> click.Option:
+def get_option_from_field(field: "dataclasses.Field[Any]") -> click.Option:
     """Construct a click.Option from a dataclass field.
 
     Convert the field type, default, and metadata to the corresponding
