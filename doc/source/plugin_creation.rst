@@ -251,13 +251,14 @@ To do so, we edit our ``DirectLaunchConfig`` class, using :py:func:`dataclasses.
     import dataclasses
     from typing import Union
 
+    from ansys.tools.path import get_available_ansys_installations
     from ansys.tools.local_product_launcher.interface import METADATA_KEY_DOC
-    from ansys.tools.local_product_launcher.helpers.ansys_root import get_ansys_root
 
 
     def get_default_binary_path() -> str:
         try:
-            ans_root = get_ansys_root()
+            installations = get_available_ansys_installations()
+            ans_root = installations[max(installations)]
             binary_path = os.path.join(ans_root, "ACP", "acp_grpcserver")
             if os.name == "nt":
                 binary_path += ".exe"
@@ -277,7 +278,7 @@ To do so, we edit our ``DirectLaunchConfig`` class, using :py:func:`dataclasses.
         )
 
 
-For the default value, we use the :func:`.get_ansys_root` helper to find the Ansys installation directory.
+For the default value, we use the :py:func:`get_available_ansys_installations <ansys.tools.path.get_available_ansys_installations>` helper to find the Ansys installation directory.
 
 Now, the user can see the description when running ``ansys-launcher configure ACP direct``, and simply accept the default value if they wish.
 
