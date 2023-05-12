@@ -54,10 +54,7 @@ class ProductInstance:
         """
         if not self.stopped:
             raise RuntimeError("Cannot start the server, it has already been started.")
-        self._finalizer = weakref.finalize(
-            self,
-            self._launcher.stop,
-        )
+        self._finalizer = weakref.finalize(self, self._launcher.stop, timeout=None)
         self._launcher.start()
         self._channels = dict()
         urls = self.urls
@@ -70,8 +67,15 @@ class ProductInstance:
             if server_type == ServerType.GRPC:
                 self._channels[key] = grpc.insecure_channel(urls[key])
 
-    def stop(self) -> None:
+    def stop(self, *, timeout: Optional[float] = None) -> None:
         """Stop the product instance.
+
+        Parameters
+        ----------
+        timeout :
+            Time in seconds after which the instance is forcefully stopped. Note
+            that not all launch methods may implement this parameter. If they
+            do not, the parameter is ignored.
 
         Raises
         ------
@@ -80,10 +84,18 @@ class ProductInstance:
         """
         if self.stopped:
             raise RuntimeError("Cannot stop the server, it has already been stopped.")
-        self._finalizer()
+        self._launcher.stop(timeout=timeout)
+        self._finalizer.detach()
 
-    def restart(self) -> None:
+    def restart(self, stop_timeout: Optional[float] = None) -> None:
         """Stop, then start the product instance.
+
+        Parameters
+        ----------
+        stop_timeout :
+            Time in seconds after which the instance is forcefully stopped. Note
+            that not all launch methods may implement this parameter. If they
+            do not, the parameter is ignored.
 
         Raises
         ------
@@ -94,7 +106,7 @@ class ProductInstance:
             the expected ones defined in the launcher's
             :attr:`.LauncherProtocol.SERVER_SPEC`.
         """
-        self.stop()
+        self.stop(timeout=stop_timeout)
         self.start()
 
     def check(self, timeout: Optional[float] = None) -> bool:

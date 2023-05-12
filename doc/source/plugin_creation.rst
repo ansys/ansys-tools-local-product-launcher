@@ -35,6 +35,7 @@ Next, we need to define the launcher itself. Below, you can see the full launche
 
 .. code:: python
 
+    from typing import Optional
     import subprocess
 
     from ansys.tools.local_product_launcher.interface import LauncherProtocol, ServerType
@@ -63,9 +64,13 @@ Next, we need to define the launcher itself. Below, you can see the full launche
                 text=True,
             )
 
-        def stop(self) -> None:
+        def stop(self, *, timeout: Optional[float]=None) -> None:
             self._process.terminate()
-            self._process.wait()
+            try:
+                self._process.wait(timeout=timeout)
+            except subprocess.TimeoutExpired:
+                self._process.kill()
+                self._process.wait()
 
         def check(self, timeout: Optional[float] = None) -> bool:
             channel = grpc.insecure_channel(self.urls[ServerKey.MAIN])
@@ -120,9 +125,13 @@ Next, we need to implement a way of stopping the process:
 
 .. code:: python
 
-    def stop(self) -> None:
+    def stop(self, *, timeout: Optional[float]=None) -> None:
         self._process.terminate()
-        self._process.wait()
+        try:
+            self._process.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            self._process.kill()
+            self._process.wait()
 
 If your product is prone to ignoring ``SIGTERM``, you might want to add a timeout to :py:meth:`.wait() <subprocess.Popen.wait>`, and re-try with :py:meth:`.kill() <subprocess.Popen.kill>` instead of :py:meth:`.terminate() <subprocess.Popen.terminate>`.
 

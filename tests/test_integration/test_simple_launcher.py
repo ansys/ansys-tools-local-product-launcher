@@ -37,6 +37,13 @@ def test_explicit_config():
     assert not server.check()
 
 
+def test_stop_with_timeout():
+    server = launch_product(PRODUCT_NAME, launch_mode=LAUNCH_MODE, config=SimpleLauncherConfig())
+    server.wait(timeout=10)
+    server.stop(timeout=1.0)
+    assert not server.check()
+
+
 def test_invalid_launch_mode_raises():
     with pytest.raises(KeyError):
         launch_product(

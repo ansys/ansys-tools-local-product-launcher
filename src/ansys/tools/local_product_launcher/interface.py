@@ -121,8 +121,17 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     def start(self) -> None:
         """Start the product instance."""
 
-    def stop(self) -> None:
-        """Tear down the product instance."""
+    def stop(self, *, timeout: Optional[float] = None) -> None:
+        """Tear down the product instance.
+
+        Parameters
+        ----------
+        timeout :
+            Time after which the instance can be forcefully stopped.
+            The timeout should be interpreted as a hint to the implementation.
+            It is not _required_ to trigger a force-shutdown, but the stop
+            _must_ return within a finite time.
+        """
 
     def check(self, *, timeout: Optional[float] = None) -> bool:
         """Check if the product instance is responding to requests.
@@ -130,7 +139,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
         Parameters
         ----------
         timeout :
-            Timeout in seconds for the
+            Timeout in seconds for the check.
             The timeout should be interpreted as a hint to the implementation.
             It is not _required_ to return within the given time, but the
             check _must_ return within a finite time (i.e., it must not
