@@ -8,6 +8,5 @@ Helpers for implementing a Local Product Launcher plugin.
 .. toctree::
     :maxdepth: 2
 
-    ansys_root
     grpc
     ports
