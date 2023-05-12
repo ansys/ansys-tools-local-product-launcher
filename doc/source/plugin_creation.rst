@@ -278,7 +278,7 @@ To do so, we edit our ``DirectLaunchConfig`` class, using :py:func:`dataclasses.
         )
 
 
-For the default value, we use the :func:`.get_ansys_root` helper to find the Ansys installation directory.
+For the default value, we use the :py:func:`get_available_ansys_installations <ansys.tools.path.get_available_ansys_installations>` helper to find the Ansys installation directory.
 
 Now, the user can see the description when running ``ansys-launcher configure ACP direct``, and simply accept the default value if they wish.
 
