@@ -49,9 +49,13 @@ class SimpleLauncher(LauncherProtocol[SimpleLauncherConfig]):
             text=True,
         )
 
-    def stop(self):
-        self._process.kill()  # to speed up tests, directly use 'SIGKILL'
-        self._process.wait()
+    def stop(self, *, timeout=None):
+        self._process.terminate()
+        try:
+            self._process.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            self._process.kill()
+            self._process.wait()
 
     def check(self, *, timeout: Optional[float] = None) -> bool:
         channel = grpc.insecure_channel(self.urls[SERVER_KEY])
