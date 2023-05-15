@@ -173,7 +173,7 @@ def save_config() -> None:
         file_path = _get_config_path()
         # Convert to JSON before saving; in this way, errors during
         # JSON encoding will not clobber the config file.
-        config_json = json.dumps(dataclasses.asdict(_CONFIG)["__root__"])
+        config_json = json.dumps(dataclasses.asdict(_CONFIG)["__root__"], indent=2)
         with open(file_path, "w") as out_f:
             out_f.write(config_json)
 
