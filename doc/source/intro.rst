@@ -11,7 +11,7 @@ Install the Local Product Launcher with:
 
     pip install ansys-tools-local-product-launcher
 
-We recommend using a `virtual environment <https://docs.python.org/3/library/venv.html>`_
+It is recommended to use a `virtual environment <https://docs.python.org/3/library/venv.html>`_
 to keep Python packages isolated from your system Python.
 
 
@@ -26,7 +26,7 @@ For example, assuming that the ``ACP`` plug-in is installed:
 
     ansys-launcher configure ACP direct
 
-The CLI prompts for the configuration options available for this launcher.
+The command line tool prompts for the configuration options available for this launcher.
 
 
 Launching

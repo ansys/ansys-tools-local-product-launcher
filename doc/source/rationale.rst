@@ -18,7 +18,7 @@ something like this:
 
 While this approach is reasonably simple to use, it has some disadvantages:
 
-1. It can be difficult to tell, from the keyword arguments, how the server will be launched.
+1. It can be difficult to tell, from the keyword arguments, how the server is launched.
 #. Non-standard launch parameters *always* need to be passed along to ``launch_myproduct``.
    This makes examples that are generated for example on a Continuous Integration machine
    non-tranferable: The user has to replace the launch parameters by what is applicable to
