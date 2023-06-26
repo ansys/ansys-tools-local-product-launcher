@@ -53,7 +53,7 @@ Documentation
 
 The documentation can be viewed online at https://local-product-launcher.tools.docs.pyansys.com.
 
-Getting Started
+Getting started
 ---------------
 
 Use the ``ansys-launcher`` command line interface to configure launcher settings for a specific product. Note that this requires a product plug-in to be installed.

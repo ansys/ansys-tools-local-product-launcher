@@ -1,4 +1,4 @@
-Port Management Helpers
+Port management helpers
 -----------------------
 
 .. currentmodule:: ansys.tools.local_product_launcher.helpers

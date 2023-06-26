@@ -1,5 +1,5 @@
-CLI Reference
-=============
+Command line reference
+======================
 
 The ``ansys-launcher`` command line utility can be used to edit the default
 launch configuration.

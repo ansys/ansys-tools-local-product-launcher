@@ -241,8 +241,8 @@ The entry point itself has two parts:
 
 You need to re-install your package (even if installed with ``pip install -e``) for the entry points to update.
 
-CLI defaults and description
-''''''''''''''''''''''''''''
+Command line defaults and description
+'''''''''''''''''''''''''''''''''''''
 
 With the three parts outlined above, you've successfully created a Local Product Launcher plugin. :octicon:`rocket`
 
