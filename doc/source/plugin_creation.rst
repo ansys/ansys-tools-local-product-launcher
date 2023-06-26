@@ -293,7 +293,7 @@ Now, the user can see the description when running ``ansys-launcher configure AC
 .. note::
 
     If the default value is ``None``, it is converted to the string ``default`` for the command line interface. This
-    allows implementing more complicated default behaviors, that may not be expressible when the CLI is run.
+    allows implementing more complicated default behaviors, that may not be expressible when the command-line tool is run.
 
 Hiding advanced options
 '''''''''''''''''''''''
