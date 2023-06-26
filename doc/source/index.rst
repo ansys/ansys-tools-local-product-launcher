@@ -23,19 +23,19 @@ A Python utility for launching Ansys products on the local machine, and configur
 .. grid:: 1 1 2 2
     :gutter: 2
 
-    .. grid-item-card:: :octicon:`rocket` Getting Started
+    .. grid-item-card:: :octicon:`rocket` Getting started
         :link: intro
         :link-type: doc
 
         Installation, configuration and basic usage.
 
-    .. grid-item-card:: :octicon:`plug` Creating a Launcher Plugin
+    .. grid-item-card:: :octicon:`plug` Creating a launcher plugin
         :link: plugin_creation
         :link-type: doc
 
         Integrating the Local Product Launcher for your product.
 
-    .. grid-item-card:: :octicon:`code` API Reference
+    .. grid-item-card:: :octicon:`code` API reference
         :link: api/index
         :link-type: doc
 

@@ -9,12 +9,12 @@ The Local Product Launcher defines the interface a plugin must satisfy, in the :
 
     The plugin business logic is kept minimal, to simplify the example.
 
-.. TODO: once merged to main, link to some real plugins in the note above.
+.. TODO: once merged to main, link to some real plugins in the preceding note.
 
 Configuration
 '''''''''''''
 
-To start, let's define the user-definable configuration for our launcher. Since ACP should be run as a sub-process, the path to the server binary needs to be defined.
+To start, you need to create the user-definable configuration for the launcher. Since ACP should be run as a sub-process, the path to the server binary needs to be defined.
 
 This configuration is defined as a :py:func:`dataclass <dataclasses.dataclass>`:
 
@@ -31,7 +31,7 @@ The configuration class defines a single option ``binary_path`` of type :py:clas
 Launcher
 ''''''''
 
-Next, we need to define the launcher itself. Below, you can see the full launcher code. There's quite a lot going on there, so each part is then discussed separately.
+Next, you need to define the launcher itself. The full launcher code is listed below. There's quite a lot going on there, so each part is then discussed separately.
 
 .. code:: python
 
@@ -81,9 +81,9 @@ Next, we need to define the launcher itself. Below, you can see the full launche
             return {"main": self._url}
 
 
-The launcher class inherits from ``LauncherProtocol[LauncherConfig]``. This isn't a requirement, but if we type-check our code with `mypy <https://mypy.readthedocs.io>`_ it can check that the :class:`.LauncherProtocol` interface is fulfilled.
+The launcher class inherits from ``LauncherProtocol[LauncherConfig]``. This isn't a requirement, but it means a type checker like `mypy <https://mypy.readthedocs.io>`_ can verify that the :class:`.LauncherProtocol` interface is fulfilled.
 
-Next, setting ``CONFIG_MODEL = DirectLauncherConfig`` connects the launcher to the configuration class defined above.
+Next, setting ``CONFIG_MODEL = DirectLauncherConfig`` connects the launcher to the configuration class.
 
 The subsequent line ``SERVER_SPEC = {"main": ServerType.GRPC}`` defines which kind of servers the product starts. Here, there's only a single server, which is accessible via gRPC. The keys in this dictionary can be chosen arbitrarily, but should be consistent across the launcher implementation.
 Ideally, you use the key to convey some meaning. For example, ``"main"`` could refer to the main interface to your product, and ``file_transfer`` to an additional service for file up-/download.
@@ -99,9 +99,9 @@ The ``__init__`` method
 
 must accept exactly one, keyword-only, argument ``config`` that contains the configuration instance.
 
-In this example, we simply store the configuration in the ``_config`` attribute. For ``_url`` and ``_process`` we simply declare their type, for the benefits of the type checker.
+In this example, the configuration is stored in the ``_config`` attribute. For ``_url`` and ``_process`` only the type is declared, for the benefits of the type checker.
 
-Now, we come to the meat of the launcher implementation:
+The core of the launcher implementation is in the ``start`` and ``stop`` methods:
 
 .. code:: python
 
@@ -118,10 +118,10 @@ Now, we come to the meat of the launcher implementation:
             text=True,
         )
 
-This :meth:`start<.LauncherProtocol.start>` method selects an available port using :func:`.find_free_ports`. It then starts the server as a sub-process. Note that here, we are simply discarding the server output and error. In a real launcher, we should give the option to redirect it, for example to a file.
-We also keep track of the URL and port on which the server should be accessible, in the ``_url`` attribute.
+This :meth:`start<.LauncherProtocol.start>` method selects an available port using :func:`.find_free_ports`. It then starts the server as a sub-process. Note that here, the server output is simply discarded. In a real launcher, the option to redirect it (for example to a file) should be added.
+The ``_url`` attribute keeps track of the URL and port on which the server should be accessible.
 
-Next, we need to implement a way of stopping the process:
+The `:meth:`start<.LauncherProtocol.stop>` method terminates the sub-process:
 
 .. code:: python
 
@@ -135,7 +135,7 @@ Next, we need to implement a way of stopping the process:
 
 If your product is prone to ignoring ``SIGTERM``, you might want to add a timeout to :py:meth:`.wait() <subprocess.Popen.wait>`, and re-try with :py:meth:`.kill() <subprocess.Popen.kill>` instead of :py:meth:`.terminate() <subprocess.Popen.terminate>`.
 
-We also need a way to check that the product has successfully launched. This is implemented in :meth:`check <.LauncherProtocol.check>`:
+Next, you need to provide a way to verify that the product has successfully launched. This is implemented in :meth:`check <.LauncherProtocol.check>`. Since the server implements gRPC health checking, the :func:`.check_grpc_health` helper can be used for this purpose:
 
 .. code:: python
 
@@ -143,9 +143,8 @@ We also need a way to check that the product has successfully launched. This is 
         channel = grpc.insecure_channel(self.urls["main"])
         return check_grpc_health(channel=channel, timeout=timeout)
 
-Since the server implements gRPC health checking, we can use the :func:`.check_grpc_health` helper for this purpose.
 
-Finally, the ``_url`` attribute we stored in :meth:`start <.LauncherProtocol.start>` needs to be made available, in the :attr:`urls <.LauncherProtocol.urls>` property:
+Finally, the ``_url`` attribute stored in :meth:`start <.LauncherProtocol.start>` needs to be made available, in the :attr:`urls <.LauncherProtocol.urls>` property:
 
 .. code:: python
 
@@ -158,7 +157,7 @@ Note that the ``urls`` return value should adhere to the schema defined in ``SER
 Entry point
 '''''''''''
 
-Having defined all the necessary components for a Local Product Launcher plugin, we now simply need to register the plugin. This is done through the Python `entrypoints <https://packaging.python.org/specifications/entry-points/>`_ mechanism.
+Having defined all the necessary components for a Local Product Launcher plugin, the plugin can now be registered to make it available. This is done through the Python `entrypoints <https://packaging.python.org/specifications/entry-points/>`_ mechanism.
 
 The entrypoint is defined in your package's build configuration. The exact syntax depends on which packaging tool you use:
 
@@ -241,14 +240,14 @@ The entry point itself has two parts:
 
 You need to re-install your package (even if installed with ``pip install -e``) for the entry points to update.
 
-CLI defaults and description
-''''''''''''''''''''''''''''
+Command line defaults and description
+'''''''''''''''''''''''''''''''''''''
 
-With the three parts outlined above, you've successfully created a Local Product Launcher plugin. :octicon:`rocket`
+With these three preceding parts, you've successfully created a Local Product Launcher plugin. :octicon:`rocket`
 
-Finally, we can improve the usability of the command line by adding a default and description to the configuration class.
+Finally, the usability of the command line can be improved by adding a default and description to the configuration class.
 
-To do so, we edit our ``DirectLaunchConfig`` class, using :py:func:`dataclasses.field` to enrich the ``binary_path``:
+To do so, edit the ``DirectLaunchConfig`` class, using :py:func:`dataclasses.field` to enrich the ``binary_path``:
 
 * The default value is specified as the ``default`` argument.
 * The description is given in the ``metadata`` dictionary, using the special key :py:obj:`METADATA_KEY_DOC <.interface.METADATA_KEY_DOC>`.
@@ -287,14 +286,14 @@ To do so, we edit our ``DirectLaunchConfig`` class, using :py:func:`dataclasses.
         )
 
 
-For the default value, we use the :py:func:`get_available_ansys_installations <ansys.tools.path.get_available_ansys_installations>` helper to find the Ansys installation directory.
+For the default value, use the :py:func:`get_available_ansys_installations <ansys.tools.path.get_available_ansys_installations>` helper to find the Ansys installation directory.
 
-Now, the user can see the description when running ``ansys-launcher configure ACP direct``, and simply accept the default value if they wish.
+Now, the user can see the description when running ``ansys-launcher configure ACP direct``, and accept the default value if they wish.
 
 .. note::
 
-    If the default value is ``None``, it will be converted to the string ``default`` for the command line interface. This
-    allows implementing more complicated default behaviors, that may not be expressible when the CLI is run.
+    If the default value is ``None``, it is converted to the string ``default`` for the command line interface. This
+    allows implementing more complicated default behaviors, that may not be expressible when the command-line tool is run.
 
 Hiding advanced options
 '''''''''''''''''''''''
