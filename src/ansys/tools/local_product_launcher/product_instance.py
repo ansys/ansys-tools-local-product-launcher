@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import time
-from typing import Any, Dict, Optional
+from typing import Any
 import weakref
 
 import grpc
@@ -26,8 +26,8 @@ class ProductInstance:
     def __init__(self, *, launcher: LauncherProtocol[LAUNCHER_CONFIG_T]):
         self._launcher = launcher
         self._finalizer: weakref.finalize
-        self._urls: Dict[str, str]
-        self._channels: Dict[str, grpc.Channel]
+        self._urls: dict[str, str]
+        self._channels: dict[str, grpc.Channel]
         self.start()
 
     def __enter__(self) -> ProductInstance:
@@ -67,7 +67,7 @@ class ProductInstance:
             if server_type == ServerType.GRPC:
                 self._channels[key] = grpc.insecure_channel(urls[key])
 
-    def stop(self, *, timeout: Optional[float] = None) -> None:
+    def stop(self, *, timeout: float | None = None) -> None:
         """Stop the product instance.
 
         Parameters
@@ -87,7 +87,7 @@ class ProductInstance:
         self._launcher.stop(timeout=timeout)
         self._finalizer.detach()
 
-    def restart(self, stop_timeout: Optional[float] = None) -> None:
+    def restart(self, stop_timeout: float | None = None) -> None:
         """Stop, then start the product instance.
 
         Parameters
@@ -109,7 +109,7 @@ class ProductInstance:
         self.stop(timeout=stop_timeout)
         self.start()
 
-    def check(self, timeout: Optional[float] = None) -> bool:
+    def check(self, timeout: float | None = None) -> bool:
         """Check if all servers are responding to requests.
 
         Parameters
@@ -149,7 +149,7 @@ class ProductInstance:
             raise RuntimeError(f"The product is not running after {timeout}s.")
 
     @property
-    def urls(self) -> Dict[str, str]:
+    def urls(self) -> dict[str, str]:
         """URL+port for the servers of the product instance."""
         return self._launcher.urls
 
@@ -164,6 +164,6 @@ class ProductInstance:
             return True
 
     @property
-    def channels(self) -> Dict[str, grpc.Channel]:
+    def channels(self) -> dict[str, grpc.Channel]:
         """Channels to the gRPC servers of the product instance."""
         return self._channels

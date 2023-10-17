@@ -5,12 +5,7 @@ and register it
 """
 
 from enum import Enum, auto
-from typing import Any, ClassVar, Dict, Optional, Type, TypeVar
-
-try:
-    from typing import Protocol
-except ImportError:
-    from typing_extensions import Protocol  # type: ignore
+from typing import Any, ClassVar, Optional, Protocol, TypeVar
 
 __all__ = [
     "LAUNCHER_CONFIG_T",
@@ -34,7 +29,7 @@ the option by default.
 class DataclassProtocol(Protocol):
     """Protocol class for Python dataclasses."""
 
-    __dataclass_fields__: ClassVar[Dict[str, Any]]
+    __dataclass_fields__: ClassVar[dict[str, Any]]
 
 
 LAUNCHER_CONFIG_T = TypeVar("LAUNCHER_CONFIG_T", bound=DataclassProtocol)
@@ -86,7 +81,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
         be an instance of ``CONFIG_MODEL``.
     """
 
-    CONFIG_MODEL: Type[LAUNCHER_CONFIG_T]
+    CONFIG_MODEL: type[LAUNCHER_CONFIG_T]
     """Defines the configuration options for the launcher.
 
     The configuration options which this launcher accepts, specified
@@ -95,7 +90,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     used in the configuration CLI, if available.
     """
 
-    SERVER_SPEC: Dict[str, ServerType]
+    SERVER_SPEC: dict[str, ServerType]
     """Defines the server type(s) that are started.
 
     For example,
@@ -152,7 +147,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
         """
 
     @property
-    def urls(self) -> Dict[str, str]:
+    def urls(self) -> dict[str, str]:
         """Provide the URLs on which the server is listening.
 
         The keys of the returned dictionary must correspond to the ones

@@ -11,7 +11,7 @@ import dataclasses
 import json
 import os
 import pathlib
-from typing import Any, Dict, Optional, Type, cast
+from typing import Any, Optional, cast
 
 import appdirs
 
@@ -33,12 +33,12 @@ _CONFIG_PATH_ENV_VAR_NAME = "ANSYS_LAUNCHER_CONFIG_PATH"
 @dataclasses.dataclass
 class _ProductConfig:
     launch_mode: str
-    configs: Dict[str, Any]
+    configs: dict[str, Any]
 
 
 @dataclasses.dataclass
 class _LauncherConfiguration:
-    __root__: Dict[str, _ProductConfig]
+    __root__: dict[str, _ProductConfig]
 
 
 _CONFIG: Optional[_LauncherConfiguration] = None
@@ -95,7 +95,7 @@ def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> Dataclas
         the launcher plugin.
     """
     launch_mode = get_launch_mode_for(product_name=product_name, launch_mode=launch_mode)
-    config_class: Type[DataclassProtocol] = get_config_model(
+    config_class: type[DataclassProtocol] = get_config_model(
         product_name=product_name, launch_mode=launch_mode
     )
     config_entry = _get_config()[product_name].configs[launch_mode]
@@ -178,7 +178,7 @@ def save_config() -> None:
             out_f.write(config_json)
 
 
-def _get_config() -> Dict[str, _ProductConfig]:
+def _get_config() -> dict[str, _ProductConfig]:
     global _CONFIG
     if _CONFIG is None:
         _CONFIG = _load_config()
@@ -189,7 +189,7 @@ def _load_config() -> _LauncherConfiguration:
     config_path = _get_config_path()
     if not config_path.exists():
         return _LauncherConfiguration(__root__={})
-    with open(config_path, "r") as in_f:
+    with open(config_path) as in_f:
         return _LauncherConfiguration(
             __root__={key: _ProductConfig(**val) for key, val in json.load(in_f).items()}
         )
