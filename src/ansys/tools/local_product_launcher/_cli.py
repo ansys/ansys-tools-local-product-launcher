@@ -1,7 +1,8 @@
+from collections.abc import Sequence
 import dataclasses
 import json
 import textwrap
-from typing import Any, Callable, Dict, List, Optional, Sequence, Type, cast
+from typing import Any, Callable, Optional, cast
 
 import click
 
@@ -30,10 +31,10 @@ _DEFAULT_STR = "default"
 
 
 def get_subcommands_from_plugins(
-    *, plugins: Dict[str, Dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
+    *, plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
 ) -> Sequence[click.Command]:
     """Construct 'configure' subcommands from the plugins."""
-    all_product_commands: List[click.Group] = []
+    all_product_commands: list[click.Group] = []
     for product_name, launch_mode_configs in plugins.items():
         product_command = click.Group(product_name)
         all_product_commands.append(product_command)
@@ -134,11 +135,11 @@ def get_option_from_field(field: "dataclasses.Field[Any]") -> click.Option:
 
 
 def config_writer_callback_factory(
-    launcher_config_kls: Type[LAUNCHER_CONFIG_T], product_name: str, launch_mode: str
+    launcher_config_kls: type[LAUNCHER_CONFIG_T], product_name: str, launch_mode: str
 ) -> Callable[..., None]:
     """Construct the callback for updating the config file."""
 
-    def _config_writer_callback(**kwargs: Dict[str, Any]) -> None:
+    def _config_writer_callback(**kwargs: dict[str, Any]) -> None:
         overwrite_default = cast(bool, kwargs.pop(_OVERWRITE_DEFAULT_FLAG_NAME, False))
         config = launcher_config_kls(**kwargs)
         set_config_for(
@@ -153,7 +154,7 @@ def config_writer_callback_factory(
     return _config_writer_callback
 
 
-def build_cli(plugins: Dict[str, Dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]) -> click.Group:
+def build_cli(plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]) -> click.Group:
     """Construct the CLI from the plugins."""
     _cli = click.Group()
 

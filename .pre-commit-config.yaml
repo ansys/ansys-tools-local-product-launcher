@@ -1,7 +1,13 @@
 repos:
 
+- repo: https://github.com/asottile/pyupgrade
+  rev: v3.15.0
+  hooks:
+  - id: pyupgrade
+    args: [--py39-plus]
+
 - repo: https://github.com/psf/black
-  rev: 23.3.0
+  rev: 23.9.1
   hooks:
   - id: black
 
@@ -11,17 +17,17 @@ repos:
   - id: isort
 
 - repo: https://github.com/pycqa/flake8
-  rev: 6.0.0
+  rev: 6.1.0
   hooks:
   - id: flake8
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.2.4
+  rev: v2.2.6
   hooks:
   - id: codespell
 
 - repo: https://github.com/python-poetry/poetry/
-  rev: '1.4.2'
+  rev: '1.6.0'
   hooks:
   - id: poetry-check
     name: "poetry: check pyproject.toml syntax"

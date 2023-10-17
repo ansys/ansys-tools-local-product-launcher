@@ -2,10 +2,9 @@
 
 from contextlib import ExitStack, closing
 import socket
-from typing import List
 
 
-def find_free_ports(num_ports: int = 1) -> List[int]:
+def find_free_ports(num_ports: int = 1) -> list[int]:
     """Find free ports on localhost.
 
     .. note::

@@ -6,7 +6,7 @@ Local Product Launcher
    :target: https://docs.pyansys.com/
    :alt: PyAnsys
 
-.. |python| image:: https://img.shields.io/badge/Python-%3E%3D3.8-blue
+.. |python| image:: https://img.shields.io/badge/Python-%3E%3D3.9-blue
    :target: https://pypi.org/project/ansys-tools-local-product-launcher/
    :alt: Python
 
@@ -134,7 +134,7 @@ order to guarantee project's integrity. The following environments commands are 
 - **tox -e style**: checks for coding style quality.
 - **tox -e py**: checks for unit tests.
 - **tox -e py-coverage**: checks for unit testing and code coverage.
-- **tox -e doc**: checs for documentation building process.
+- **tox -e doc**: checks for documentation building process.
 
 
 Raw testing

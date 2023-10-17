@@ -77,7 +77,7 @@ Next, you need to define the launcher itself. The full launcher code is listed b
             return check_grpc_health(channel=channel, timeout=timeout)
 
         @property
-        def urls(self) -> Dict[str, str]:
+        def urls(self) -> dict[str, str]:
             return {"main": self._url}
 
 
@@ -149,7 +149,7 @@ Finally, the ``_url`` attribute stored in :meth:`start <.LauncherProtocol.start>
 .. code:: python
 
     @property
-    def urls(self) -> Dict[str, str]:
+    def urls(self) -> dict[str, str]:
         return {"main": self._url}
 
 Note that the ``urls`` return value should adhere to the schema defined in ``SERVER_SPEC``.
@@ -304,7 +304,6 @@ If your launcher plugin has advanced options, you can skip prompting the user fo
 .. code:: python
 
     import dataclasses
-    from typing import Dict
 
     from ansys.tools.local_product_launcher.interface import METADATA_KEY_NOPROMPT
 
@@ -312,7 +311,7 @@ If your launcher plugin has advanced options, you can skip prompting the user fo
     @dataclasses.dataclass
     class DirectLaunchConfig:
         <...>
-        environment_variables: Dict[str, str] = field(
+        environment_variables: dict[str, str] = field(
             default={},
             metadata={
                 METADATA_KEY_DOC: "Extra environment variables to define when launching the server.",
