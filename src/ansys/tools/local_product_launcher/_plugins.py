@@ -1,5 +1,9 @@
 import importlib.metadata
 
+# Can be replaced with import from importlib.metadata when Python 3.9 is no
+# longer supported.
+from backports.entry_points_selectable import entry_points
+
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
 
 LAUNCHER_ENTRY_POINT = "ansys.tools.local_product_launcher.launcher"
@@ -35,6 +39,6 @@ def get_all_plugins() -> dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]
 def _get_entry_points() -> tuple[importlib.metadata.EntryPoint, ...]:
     """Get all Local Product Launcher plugin entry points."""
     try:
-        return importlib.metadata.entry_points()[LAUNCHER_ENTRY_POINT]  # type: ignore
+        return entry_points(group=LAUNCHER_ENTRY_POINT)  # type: ignore
     except KeyError:
         return tuple()
