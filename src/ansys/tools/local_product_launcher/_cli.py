@@ -31,6 +31,7 @@ import click
 from ._plugins import get_all_plugins
 from .config import (
     _get_config_path,
+    get_config_for,
     get_launch_mode_for,
     is_configured,
     save_config,
@@ -216,6 +217,45 @@ def build_cli(plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
 
     for subcommand in all_subcommands:
         configure.add_command(subcommand)
+
+    @_cli.command()
+    # @click.pass_context
+    def list_plugins() -> None:
+        """List the possible product / launch mode combinations."""
+        if not plugins:
+            click.echo("No plugins configured")
+            return
+        for product_name, launch_mode_configs in sorted(plugins.items()):
+            click.echo(f"{product_name}")
+            for launch_mode in sorted(launch_mode_configs.keys()):
+                click.echo(f"    {launch_mode}")
+            click.echo("")
+
+    @_cli.command()
+    def show_config() -> None:
+        """Show the current configuration."""
+        for product_name, launch_mode_configs in sorted(plugins.items()):
+            click.echo(f"{product_name}")
+            try:
+                default_launch_mode = get_launch_mode_for(product_name=product_name)
+                for launch_mode in sorted(launch_mode_configs.keys()):
+                    if launch_mode == default_launch_mode:
+                        click.echo(f"    {launch_mode} (default)")
+                    else:
+                        click.echo(f"    {launch_mode}")
+
+                    config = get_config_for(product_name=product_name, launch_mode=launch_mode)
+                    for field in dataclasses.fields(config):
+                        click.echo(f"        {field.name}: {getattr(config, field.name)}")
+            except KeyError:
+                click.echo("    No configuration set.")
+            click.echo("")
+
+    @_cli.command()
+    def show_config_path() -> None:
+        """Show the path to the configuration file."""
+        click.echo(_get_config_path())
+
     return _cli
 
 
