@@ -28,7 +28,7 @@ from typing import Any, Callable, Optional, cast
 
 import click
 
-from ._plugins import get_all_plugins
+from ._plugins import get_all_launcher_plugins
 from .config import (
     _get_config_path,
     get_config_for,
@@ -261,7 +261,7 @@ def build_cli(plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
 
 # Needs to be defined at the module level, since this is what the [tool.poetry.scripts]
 # entry point refers to.
-cli = build_cli(plugins=get_all_plugins())
+cli = build_cli(plugins=get_all_launcher_plugins())
 
 if __name__ == "__main__":
     cli()
