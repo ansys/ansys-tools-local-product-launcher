@@ -54,7 +54,7 @@ def monkeypatch_entrypoints_from_plugins(monkeypatch):
     def inner(target_plugins):
         monkeypatch.setattr(
             _plugins,
-            "_get_entry_points",
+            "_get_launcher_entry_points",
             partial(get_mock_entrypoints_from_plugins, target_plugins=target_plugins),
         )
 
