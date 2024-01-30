@@ -24,7 +24,7 @@
 
 from __future__ import annotations
 
-from ._plugins import get_launcher, get_product_instance_class
+from ._plugins import get_launcher
 from .config import get_config_for, get_launch_mode_for
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
 from .product_instance import ProductInstance
@@ -74,7 +74,4 @@ def launch_product(
             f"Incompatible config of type '{type(config)} supplied, "
             f"needs '{launcher_klass.CONFIG_MODEL}'."
         )
-    product_instance_cls = get_product_instance_class(
-        product_name=product_name, launch_mode=launch_mode
-    )
-    return product_instance_cls(launcher=launcher_klass(config=config))
+    return ProductInstance(launcher=launcher_klass(config=config))
