@@ -78,7 +78,7 @@ def monkeypatch_entrypoints(monkeypatch_entrypoints_from_plugins):
 
 
 def test_cli_structure():
-    command = _cli.build_cli(_plugins.get_all_launcher_plugins())
+    command = _cli.build_cli(_plugins.get_all_plugins())
     assert "configure" in command.commands
     configure_group = command.commands["configure"]
 
@@ -96,7 +96,7 @@ def test_cli_structure():
 
 
 def test_configure_single_product_launcher(temp_config_file):
-    cli_command = _cli.build_cli(_plugins.get_all_launcher_plugins())
+    cli_command = _cli.build_cli(_plugins.get_all_plugins())
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
@@ -116,7 +116,7 @@ def test_configure_single_product_launcher(temp_config_file):
 
 
 def test_configure_two_product_launchers(temp_config_file):
-    cli_command = _cli.build_cli(_plugins.get_all_launcher_plugins())
+    cli_command = _cli.build_cli(_plugins.get_all_plugins())
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
@@ -144,7 +144,7 @@ def test_configure_two_product_launchers(temp_config_file):
 
 
 def test_configure_two_product_launchers_overwrite(temp_config_file):
-    cli_command = _cli.build_cli(_plugins.get_all_launcher_plugins())
+    cli_command = _cli.build_cli(_plugins.get_all_plugins())
     runner = CliRunner()
     result = runner.invoke(
         cli_command,
@@ -172,7 +172,7 @@ def test_configure_two_product_launchers_overwrite(temp_config_file):
 
 
 def test_configure_two_products(temp_config_file):
-    cli_command = _cli.build_cli(_plugins.get_all_launcher_plugins())
+    cli_command = _cli.build_cli(_plugins.get_all_plugins())
     runner = CliRunner()
     result = runner.invoke(
         cli_command,

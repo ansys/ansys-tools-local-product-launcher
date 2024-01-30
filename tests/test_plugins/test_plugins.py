@@ -77,7 +77,7 @@ def monkeypatch_entrypoints(monkeypatch_entrypoints_from_plugins):
 
 
 def test_get_all_plugins(monkeypatch_entrypoints):
-    assert _plugins.get_all_launcher_plugins() == PLUGINS
+    assert _plugins.get_all_plugins() == PLUGINS
 
 
 @pytest.mark.parametrize(
