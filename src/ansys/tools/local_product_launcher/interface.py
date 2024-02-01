@@ -30,11 +30,12 @@ from enum import Enum, auto
 from typing import Any, ClassVar, Optional, Protocol, TypeVar
 
 __all__ = [
+    "DataclassProtocol",
+    "FALLBACK_LAUNCH_MODE_NAME",
     "LAUNCHER_CONFIG_T",
+    "LauncherProtocol",
     "METADATA_KEY_DOC",
     "METADATA_KEY_NOPROMPT",
-    "DataclassProtocol",
-    "LauncherProtocol",
     "ServerType",
 ]
 
@@ -46,6 +47,8 @@ METADATA_KEY_NOPROMPT = "launcher_noprompt"
 Key used in the :py:class:`dataclasses.Field` ``metadata``, to skip prompting for
 the option by default.
 """
+
+FALLBACK_LAUNCH_MODE_NAME = "__fallback__"
 
 
 class DataclassProtocol(Protocol):
