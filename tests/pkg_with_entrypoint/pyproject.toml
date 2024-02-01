@@ -19,3 +19,4 @@ python = ">=3.9,<4.0"
 
 [tool.poetry.plugins."ansys.tools.local_product_launcher.launcher"]
 "pkg_with_entrypoint.test_entry_point" = "pkg_with_entrypoint:Launcher"
+"pkg_with_entrypoint.__fallback__" = "pkg_with_entrypoint:Launcher"

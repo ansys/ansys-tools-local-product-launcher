@@ -19,12 +19,13 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
 from ansys.tools.local_product_launcher._plugins import (
     get_all_plugins,
     get_config_model,
     get_launcher,
 )
+from ansys.tools.local_product_launcher.config import get_config_for, get_launch_mode_for
+import pkg_with_entrypoint
 
 
 def test_plugin_found():
@@ -36,6 +37,18 @@ def test_plugin_found():
 def test_get_launcher():
     launcher = get_launcher(product_name="pkg_with_entrypoint", launch_mode="test_entry_point")
     assert launcher.__name__ == "Launcher"
+
+
+def test_fallback():
+    assert get_launch_mode_for(product_name="pkg_with_entrypoint") == "__fallback__"
+    assert (
+        get_config_for(product_name="pkg_with_entrypoint", launch_mode="__fallback__")
+        == pkg_with_entrypoint.LauncherConfig()
+    )
+    assert (
+        get_launcher(product_name="pkg_with_entrypoint", launch_mode="__fallback__").__name__
+        == "Launcher"
+    )
 
 
 def test_get_config_model():

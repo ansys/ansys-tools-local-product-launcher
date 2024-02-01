@@ -37,7 +37,7 @@ from typing import Any, Optional, cast
 
 import appdirs
 
-from ._plugins import get_config_model
+from ._plugins import get_config_model, get_fallback_launcher, has_fallback
 from .interface import LAUNCHER_CONFIG_T, DataclassProtocol
 
 __all__ = [
@@ -86,6 +86,8 @@ def get_launch_mode_for(*, product_name: str, launch_mode: Optional[str] = None)
     try:
         return _get_config()[product_name].launch_mode
     except KeyError as exc:
+        if has_fallback(product_name=product_name):
+            return "__fallback__"
         raise KeyError(f"No configuration defined for product name '{product_name}'") from exc
 
 
@@ -117,6 +119,8 @@ def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> Dataclas
         the launcher plugin.
     """
     launch_mode = get_launch_mode_for(product_name=product_name, launch_mode=launch_mode)
+    if launch_mode == "__fallback__":
+        return get_fallback_launcher(product_name=product_name).CONFIG_MODEL()
     config_class: type[DataclassProtocol] = get_config_model(
         product_name=product_name, launch_mode=launch_mode
     )

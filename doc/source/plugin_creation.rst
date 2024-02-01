@@ -295,6 +295,22 @@ Now, the user can see the description when running ``ansys-launcher configure AC
     If the default value is ``None``, it is converted to the string ``default`` for the command line interface. This
     allows implementing more complicated default behaviors, that may not be expressible when the command-line tool is run.
 
+Adding a fallback launch mode
+'''''''''''''''''''''''''''''
+
+If you want to provide a fallback launch mode that can be used without any configuration, you can add
+an entrypoint with the special name ``<product>.__fallback__``.
+
+For example, if we want the ``DirectLauncher`` to be the fallback for ACP, we can add the following entrypoint:
+
+.. code:: toml
+
+    [project.entry-points."ansys.tools.local_product_launcher.launcher"]
+    "ACP.__fallback__" = "<your.module.name>:DirectLauncher"
+
+The fallback launch mode is used with its default configuration. This means that the configuration class must have default values for all its fields.
+
+
 Hiding advanced options
 '''''''''''''''''''''''
 
