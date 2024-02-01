@@ -138,6 +138,9 @@ def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> Dataclas
 def is_configured(*, product_name: str, launch_mode: Optional[str] = None) -> bool:
     """Check if a configuration exists for the product / launch mode.
 
+    Note: if only the fallback launcher / configuration is available, this
+    method will return ``False``.
+
     Parameters
     ----------
     product_name :
@@ -147,7 +150,10 @@ def is_configured(*, product_name: str, launch_mode: Optional[str] = None) -> bo
         default launch mode is used.
     """
     try:
-        get_config_for(product_name=product_name, launch_mode=launch_mode)
+        launch_mode = get_launch_mode_for(product_name=product_name, launch_mode=launch_mode)
+        if launch_mode == FALLBACK_LAUNCH_MODE_NAME:
+            return False
+        _get_config()[product_name].configs[launch_mode]
         return True
     except KeyError:
         return False
