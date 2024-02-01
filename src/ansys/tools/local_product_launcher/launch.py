@@ -24,6 +24,8 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 from ._plugins import get_launcher
 from .config import get_config_for, get_launch_mode_for
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
@@ -62,9 +64,14 @@ def launch_product(
     """
     launch_mode = get_launch_mode_for(product_name=product_name, launch_mode=launch_mode)
 
-    launcher_klass: type[LauncherProtocol[LAUNCHER_CONFIG_T]] = get_launcher(
-        product_name=product_name,
-        launch_mode=launch_mode,
+    # The type of the CONFIG_MODEL is checked below, so here we can cast
+    # from type[LauncherProtocol[DataclassProtocol]] to type[LauncherProtocol[LAUNCHER_CONFIG_T]].
+    launcher_klass = cast(
+        type[LauncherProtocol[LAUNCHER_CONFIG_T]],
+        get_launcher(
+            product_name=product_name,
+            launch_mode=launch_mode,
+        ),
     )
 
     if config is None:
