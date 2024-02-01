@@ -29,7 +29,7 @@ from typing import Any
 # longer supported.
 from backports.entry_points_selectable import entry_points
 
-from .interface import DataclassProtocol, LauncherProtocol
+from .interface import FALLBACK_LAUNCH_MODE_NAME, DataclassProtocol, LauncherProtocol
 
 LAUNCHER_ENTRY_POINT = "ansys.tools.local_product_launcher.launcher"
 
@@ -51,11 +51,13 @@ def get_config_model(*, product_name: str, launch_mode: str) -> type[DataclassPr
     return get_launcher(product_name=product_name, launch_mode=launch_mode).CONFIG_MODEL
 
 
-def get_all_plugins() -> dict[str, dict[str, LauncherProtocol[Any]]]:
+def get_all_plugins(hide_fallback: bool = True) -> dict[str, dict[str, LauncherProtocol[Any]]]:
     """Get mapping {"<product_name>": {"<launch_mode>": Launcher}} containing all plugins."""
     res: dict[str, dict[str, LauncherProtocol[Any]]] = dict()
     for entry_point in _get_entry_points():
         product_name, launch_mode = entry_point.name.split(".")
+        if hide_fallback and launch_mode == FALLBACK_LAUNCH_MODE_NAME:
+            continue
         res.setdefault(product_name, dict())
         res[product_name][launch_mode] = entry_point.load()
     return res
@@ -65,14 +67,14 @@ def has_fallback(product_name: str) -> bool:
     """Return True if the given product has a fallback launcher."""
     for entry_point in _get_entry_points():
         ep_product_name, ep_launch_mode = entry_point.name.split(".")
-        if product_name == ep_product_name and ep_launch_mode == "__fallback__":
+        if product_name == ep_product_name and ep_launch_mode == FALLBACK_LAUNCH_MODE_NAME:
             return True
     return False
 
 
 def get_fallback_launcher(product_name: str) -> type[LauncherProtocol[DataclassProtocol]]:
     """Get the fallback launcher for a given product."""
-    ep_name = f"{product_name}.__fallback__"
+    ep_name = f"{product_name}.{FALLBACK_LAUNCH_MODE_NAME}"
     for entrypoint in _get_entry_points():
         if entrypoint.name == ep_name:
             return entrypoint.load()  # type: ignore
