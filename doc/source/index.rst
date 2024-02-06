@@ -9,10 +9,8 @@
     :maxdepth: 3
 
     intro
-    plugin_creation
+    user_guide/index
     api/index
-    cli
-    rationale
 
 
 Ansys Local Product Launcher
@@ -29,8 +27,14 @@ A Python utility for launching Ansys products on the local machine, and configur
 
         Installation, configuration and basic usage.
 
+    .. grid-item-card:: :octicon:`terminal` Command Line Reference
+        :link: user_guide/cli
+        :link-type: doc
+
+        Reference for the command line tool to configure the Local Product Launcher.
+
     .. grid-item-card:: :octicon:`plug` Creating a launcher plugin
-        :link: plugin_creation
+        :link: user_guide/plugin_creation
         :link-type: doc
 
         Integrating the Local Product Launcher for your product.
@@ -41,15 +45,9 @@ A Python utility for launching Ansys products on the local machine, and configur
 
         Reference for the public Python classes, methods and functions.
 
-    .. grid-item-card:: :octicon:`terminal` Command Line Reference
-        :link: cli
-        :link-type: doc
-
-        Reference for the command line tool to configure the Local Product Launcher.
-
     .. grid-item-card:: :octicon:`light-bulb` Rationale
         :columns: 12
-        :link: rationale
+        :link: user_guide/rationale
         :link-type: doc
 
         A look into why the Local Product Launcher was created.
