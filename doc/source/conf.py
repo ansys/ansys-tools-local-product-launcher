@@ -3,8 +3,7 @@
 from datetime import datetime
 import os
 
-from ansys_sphinx_theme import get_version_match
-from ansys_sphinx_theme import pyansys_logo_black as logo
+from ansys_sphinx_theme import ansys_favicon, get_version_match, pyansys_logo_black
 
 from ansys.tools.local_product_launcher import __version__
 
@@ -15,7 +14,8 @@ author = "ANSYS, Inc."
 release = version = __version__
 
 # Select desired logo, theme, and declare the html title
-html_logo = logo
+html_logo = pyansys_logo_black
+html_favicon = ansys_favicon
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "ansys-tools-local-product-launcher"
 
@@ -45,7 +45,6 @@ extensions = [
     "sphinx_autodoc_typehints",
     "numpydoc",
     "sphinx_copybutton",
-    "ansys_sphinx_theme",
     "sphinx_click",
     "sphinx_design",
 ]
