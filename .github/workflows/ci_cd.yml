@@ -85,6 +85,22 @@ jobs:
       - name: Test with tox
         # Only the tox environment specified in the tox.ini gh-actions is run
         run: tox
+      - name: "Upload coverage report (HTML)"
+        uses: actions/upload-artifact@v4
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == env.MAIN_PYTHON_VERSION
+        with:
+          name: coverage-report-html
+          path: htmlcov
+          retention-days: 7
+      # TODO: Uncomment once publicly released
+      #
+      # - name: "Upload coverage to Codecov"
+      #   uses: codecov/codecov-action@v4
+      #   if: matrix.os == 'ubuntu-latest' && matrix.python-version == env.MAIN_PYTHON_VERSION
+      #   env:
+      #     CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      #   with:
+      #     files: coverage.xml
 
   docs:
     name: Documentation
