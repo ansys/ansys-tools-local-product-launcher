@@ -125,10 +125,15 @@ def get_option_from_field(field: "dataclasses.Field[Any]") -> click.Option:
     Convert the field type, default, and metadata to the corresponding
     click.Option.
     """
+    # The annotations can be either a type or a string, depending on whether
+    # deferred evaluation is used.
     type_ = {
         int: int,
         str: str,
         bool: bool,
+        "int": int,
+        "str": str,
+        "bool": bool,
     }.get(field.type, JSONParamType())
 
     if field.default is not dataclasses.MISSING:
