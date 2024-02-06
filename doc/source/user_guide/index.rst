@@ -9,7 +9,7 @@ This section provides a general overview of the Local Product Launcher and how t
 
 .. toctree::
     :maxdepth: 2
-    :caption: Contents:
+    :caption: Contents
 
     cli
     plugin_creation

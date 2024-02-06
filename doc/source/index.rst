@@ -8,7 +8,6 @@
     :hidden:
     :maxdepth: 3
 
-    Local Product Launcher <self>
     intro
     user_guide/index
     api/index
