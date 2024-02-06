@@ -171,7 +171,7 @@ However, the recommended way of checking documentation integrity is using:
 
 .. code:: bash
 
-    tox -e doc && your_browser_name .tox/doc_out/index.html
+    tox -e doc && your_browser_name .tox/doc_out/html/index.html
 
 
 Distributing
