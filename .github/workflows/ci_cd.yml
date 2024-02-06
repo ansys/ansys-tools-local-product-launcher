@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  MAIN_PYTHON_VERSION: '3.9'
+  MAIN_PYTHON_VERSION: '3.12'
   DOCUMENTATION_CNAME: 'local-product-launcher.tools.docs.pyansys.com'
   PACKAGE_NAME: 'ansys-tools-local-product-launcher'
 
