@@ -83,7 +83,7 @@ show_missing = true
 convention = "numpy"
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.9"
 mypy_path = "$MYPY_CONFIG_FILE_DIR/src:$MYPY_CONFIG_FILE_DIR/tests"
 
 [[tool.mypy.overrides]]
