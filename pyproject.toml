@@ -6,21 +6,22 @@ build-backend = "poetry.core.masonry.api"
 # Check https://python-poetry.org/docs/pyproject/ for all available sections
 name = "ansys-tools-local-product-launcher"
 version = "0.1.dev0"
-description = "A utility for launching ansys products on the local machine"
+description = "A utility for launching Ansys products on a local machine"
 license = "MIT"
-authors = ["ANSYS, Inc. <ansys.support@ansys.com>"]
-maintainers = ["PyAnsys developers <pyansys.maintainers@ansys.com>"]
+authors = ["ANSYS, Inc. <pyansys.core@ansys.com>"]
+maintainers = ["ANSYS, Inc. <pyansys.core@ansys.com>"]
 readme = "README.rst"
 repository = "https://github.com/ansys-internal/ansys-tools-local-product-launcher"
 classifiers = [
     "Development Status :: 4 - Beta",
-    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-packages = [
-    { include = "ansys", from = "src" },
-]
+packages = [{ include = "ansys", from = "src" }]
 
 [tool.poetry.scripts]
 ansys-launcher = "ansys.tools.local_product_launcher._cli:cli"
@@ -60,7 +61,7 @@ optional = true
 [tool.poetry.group.test.dependencies]
 pytest = "^7.0"
 pytest-cov = "^4.0.0"
-pkg-with-entrypoint = {path = "tests/pkg_with_entrypoint"}
+pkg-with-entrypoint = { path = "tests/pkg_with_entrypoint" }
 
 [tool.black]
 line-length = 100
@@ -82,14 +83,9 @@ show_missing = true
 convention = "numpy"
 
 [tool.mypy]
-python_version = 3.9
+python_version = "3.12"
 mypy_path = "$MYPY_CONFIG_FILE_DIR/src:$MYPY_CONFIG_FILE_DIR/tests"
 
 [[tool.mypy.overrides]]
-module = [
-    "grpc.*",
-    "grpc_health.*",
-    "appdirs",
-    "pytest",
-]
+module = ["grpc.*", "grpc_health.*", "appdirs", "pytest"]
 ignore_missing_imports = true
