@@ -115,13 +115,24 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip poetry tox
-      - name: Generate the documentation with tox
+      - name: Generate the HTML documentation with tox
         run: tox -e doc
       - name: "Upload HTML Documentation"
         uses: actions/upload-artifact@v4
         with:
           name: documentation-html
-          path: .tox/doc_out/
+          path: .tox/doc_out/html/
+          retention-days: 7
+      - name: "Install OS packages for PDF"
+        run: |
+          sudo apt-get install latexmk texlive-latex-extra
+      - name: Generate the PDF documentation with tox
+        run: tox -e doc-linux-pdf
+      - name: "Upload PDF Documentation"
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation-pdf
+          path: .tox/doc_out/latex/ansys-tools-local-product-launcher.pdf
           retention-days: 7
 
   build:

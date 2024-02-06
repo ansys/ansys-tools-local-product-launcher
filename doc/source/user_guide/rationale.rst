@@ -51,8 +51,15 @@ Potential pitfalls
 
 As with any attempt to standardize:
 
-.. image:: https://imgs.xkcd.com/comics/standards.png
-    :alt: Standards (xkcd comic)
+.. only:: html
+
+   .. image:: https://imgs.xkcd.com/comics/standards.png
+      :alt: Standards (xkcd comic)
+
+
+.. only:: latex
+
+   See https://xkcd.com/927/
 
 
 Future avenues

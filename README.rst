@@ -6,7 +6,7 @@ Local Product Launcher
    :target: https://docs.pyansys.com/
    :alt: PyAnsys
 
-.. |python| image:: https://img.shields.io/badge/Python-%3E%3D3.9-blue
+.. |python| image:: https://img.shields.io/pypi/pyversions/ansys-tools-local-product-launcher?logo=pypi
    :target: https://pypi.org/project/ansys-tools-local-product-launcher/
    :alt: Python
 
@@ -171,7 +171,7 @@ However, the recommended way of checking documentation integrity is using:
 
 .. code:: bash
 
-    tox -e doc && your_browser_name .tox/doc_out/index.html
+    tox -e doc && your_browser_name .tox/doc_out/html/index.html
 
 
 Distributing
