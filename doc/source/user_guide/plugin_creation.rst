@@ -1,3 +1,5 @@
+.. _plugin_creation:
+
 Creating a launcher plugin
 --------------------------
 
