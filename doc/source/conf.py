@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 
 from ansys_sphinx_theme import ansys_favicon, get_version_match, pyansys_logo_black
+from sphinx_gallery.sorting import FileNameSortKey
 
 from ansys.tools.local_product_launcher import __version__
 
@@ -42,6 +43,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
+    "sphinx_gallery.gen_gallery",
     "sphinx_autodoc_typehints",
     "numpydoc",
     "sphinx_copybutton",
@@ -106,3 +108,28 @@ source_suffix = ".rst"
 
 # The master toctree document.
 master_doc = "index"
+
+# sphinx gallery options
+sphinx_gallery_conf = {
+    # convert rst to md for ipynb
+    "pypandoc": True,
+    # path to your examples scripts
+    "examples_dirs": ["../../examples/example_scripts"],
+    # path where to save gallery generated examples
+    "gallery_dirs": ["examples"],
+    # Pattern to search for example files
+    "filename_pattern": r"\.py",
+    # Remove the "Download all examples" button from the top level gallery
+    "download_all_examples": False,
+    # Sort gallery example by file name instead of number of lines (default)
+    "within_subsection_order": FileNameSortKey,
+    # directory where function granular galleries are stored
+    "backreferences_dir": None,
+    # Modules for which function level galleries are created.  In
+    "doc_module": "ansys-tools-local-product-launcher",
+    "promote_jupyter_magic": True,
+    "image_scrapers": ("matplotlib",),
+    "ignore_pattern": r"__init__\.py",
+    "thumbnail_size": (350, 350),
+    "copyfile_regex": r".*\.rst",
+}

@@ -156,6 +156,8 @@ Finally, the ``_url`` attribute stored in :meth:`start <.LauncherProtocol.start>
 
 Note that the ``urls`` return value should adhere to the schema defined in ``SERVER_SPEC``.
 
+.. _entrypoint:
+
 Entry point
 '''''''''''
 

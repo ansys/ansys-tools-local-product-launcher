@@ -4,6 +4,7 @@
 
     intro
     user_guide/index
+    examples/index
     api/index
 
 
@@ -20,6 +21,12 @@ A Python utility for launching Ansys products on the local machine, and configur
         :link-type: doc
 
         Installation, configuration and basic usage.
+
+    .. grid-item-card:: :octicon:`play` Examples
+        :link: examples/index
+        :link-type: doc
+
+        Demonstrates the use of the Local Product Launcher in various scenarios.
 
     .. grid-item-card:: :octicon:`terminal` Command Line Reference
         :link: user_guide/cli
@@ -40,7 +47,6 @@ A Python utility for launching Ansys products on the local machine, and configur
         Reference for the public Python classes, methods and functions.
 
     .. grid-item-card:: :octicon:`light-bulb` Rationale
-        :columns: 12
         :link: user_guide/rationale
         :link-type: doc
 
