@@ -20,36 +20,42 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from __future__ import annotations
-import os
+"""Example launcher plugin, controlling an HTTP server."""
 
-import sys
+from __future__ import annotations
+
 from dataclasses import dataclass, field
+import os
 import subprocess
+import sys
 
 import requests
 
-
-from ansys.tools.local_product_launcher.interface import LauncherProtocol, ServerType
 from ansys.tools.local_product_launcher.helpers.ports import find_free_ports
+from ansys.tools.local_product_launcher.interface import LauncherProtocol, ServerType
 
 
 # START_LAUNCHER_CONFIG
 @dataclass
 class LauncherConfig:
+    """Defines the configuration options for the HTTP server launcher."""
+
     directory: str = field(default=os.getcwd())
+
+
 # END_LAUNCHER_CONFIG
 
 
 # START_LAUNCHER_CLS
 class Launcher(LauncherProtocol[LauncherConfig]):
+    """Implements launching an HTTP server."""
+
     CONFIG_MODEL = LauncherConfig
     SERVER_SPEC = {"main": ServerType.GENERIC}
 
     def __init__(self, *, config: LauncherConfig):
         """Instantiate the HTTP server launcher."""
         self._config = config
-
 
     def start(self) -> None:
         """Start the HTTP server."""
@@ -69,7 +75,7 @@ class Launcher(LauncherProtocol[LauncherConfig]):
             text=True,
         )
 
-    def stop(self, *, timeout: float | None=None) -> None:
+    def stop(self, *, timeout: float | None = None) -> None:
         """Stop the HTTP server."""
         self._process.terminate()
         try:
@@ -91,5 +97,8 @@ class Launcher(LauncherProtocol[LauncherConfig]):
 
     @property
     def urls(self) -> dict[str, str]:
+        """Addresses on which the server is serving content."""
         return {"main": self._url}
+
+
 # END_LAUNCHER_CLS

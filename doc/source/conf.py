@@ -3,8 +3,8 @@
 from datetime import datetime
 import os
 
-from sphinx_gallery.sorting import FileNameSortKey
 from ansys_sphinx_theme import ansys_favicon, get_version_match, pyansys_logo_black
+from sphinx_gallery.sorting import FileNameSortKey
 
 from ansys.tools.local_product_launcher import __version__
 
@@ -43,7 +43,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
-    'sphinx_gallery.gen_gallery',
+    "sphinx_gallery.gen_gallery",
     "sphinx_autodoc_typehints",
     "numpydoc",
     "sphinx_copybutton",
@@ -131,5 +131,5 @@ sphinx_gallery_conf = {
     "image_scrapers": ("matplotlib",),
     "ignore_pattern": r"__init__\.py",
     "thumbnail_size": (350, 350),
-    'copyfile_regex': r'.*\.rst',
+    "copyfile_regex": r".*\.rst",
 }

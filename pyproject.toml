@@ -60,6 +60,7 @@ pypandoc-binary = "^1.12"
 pypandoc = "^1.12"
 requests = "^2.31.0"
 ipykernel = "^6.29.1"
+types-requests = "^2.31.0.20240125"
 
 [tool.poetry.group.test]
 optional = true
@@ -90,7 +91,7 @@ convention = "numpy"
 
 [tool.mypy]
 python_version = "3.9"
-mypy_path = "$MYPY_CONFIG_FILE_DIR/src:$MYPY_CONFIG_FILE_DIR/tests"
+mypy_path = "$MYPY_CONFIG_FILE_DIR/src:$MYPY_CONFIG_FILE_DIR/tests:$MYPY_CONFIG_FILE_DIR/examples/example_httpserver_plugin/src"
 
 [[tool.mypy.overrides]]
 module = ["grpc.*", "grpc_health.*", "appdirs", "pytest"]
