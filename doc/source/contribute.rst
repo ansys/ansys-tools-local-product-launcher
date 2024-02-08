@@ -137,7 +137,7 @@ The following commands can be used to build and check the package:
     poetry build
     twine check dist/*
 
-The preceeding commands create both a source distribution and a wheel file.
+The preceding commands create both a source distribution and a wheel file.
 
 Post issues
 -----------
