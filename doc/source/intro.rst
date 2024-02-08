@@ -9,7 +9,7 @@ how to configure launcher settings for a specific Ansys product and launch it.
 
 .. note::
     If you are interested in contributing to the codebase or documentation for
-    the Local Product Launcher, see `Contribute`_.
+    the Local Product Launcher, see :ref:`Contribute`.
 
 Installation
 ''''''''''''
