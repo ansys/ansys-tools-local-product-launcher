@@ -7,7 +7,7 @@ Contribute
 Overall guidance on contributing to a PyAnsys library appears in
 `Contributing <https://dev.docs.pyansys.com/how-to/contributing.html>`_
 in the *PyAnsys developer's guide*. Ensure that you are thoroughly familiar
-with this guide before attempting to contribute to PyHPS.
+with this guide before attempting to contribute to the Local Product Launcher.
  
 The following contribution information is specific to the Local Product Launcher.
 
@@ -30,7 +30,7 @@ and enhance the source:
 
       cd ansys-tools-local-product-launcher
 
-#. Make sure you have the latest version of poetry:
+#. Make sure you have the latest version of `Poetry`:
 
    .. code:: bash
 
@@ -38,7 +38,7 @@ and enhance the source:
       pipx ensurepath
       pipx install poetry
 
-#. Install the project and all its development dependencies using poetry, which takes
+#. Install the project and all its development dependencies using Poetry, which takes
    care of creating a clean virtual environment: 
 
    .. code:: bash
@@ -157,6 +157,7 @@ To reach the project support team, email `pyansys.core@ansys.com <pyansys.core@a
 .. _Flake8: https://flake8.pycqa.org/en/latest/
 .. _pytest: https://docs.pytest.org/en/stable/
 .. _pip: https://pypi.org/project/pip/
+.. _Poetry: https://python-poetry.org/
 .. _pre-commit: https://pre-commit.com/
 .. _Sphinx: https://www.sphinx-doc.org/en/master/
 .. _tox: https://tox.wiki/

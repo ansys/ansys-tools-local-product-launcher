@@ -33,7 +33,7 @@ def find_free_ports(num_ports: int = 1) -> list[int]:
 
         Because there is no way to reserve a port that would still allow
         a server to connect to it, there is no guarantee that the ports
-        are *still* free when it is eventually used.
+        are *still* free when eventually used.
 
     Parameters
     ----------

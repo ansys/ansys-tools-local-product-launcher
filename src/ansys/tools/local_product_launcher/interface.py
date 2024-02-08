@@ -135,7 +135,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     The :attr:`.ProductInstance.urls` attribute then has keys
     ``{"MAIN", "FILE_TRANSFER"}``, whereas the
     :attr:`.ProductInstance.channels` attribute has only the
-    ``"FILE_TRANSFER"`` key.
+    key ``"FILE_TRANSFER"``.
     """
 
     def __init__(self, *, config: LAUNCHER_CONFIG_T):

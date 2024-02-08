@@ -12,7 +12,7 @@
 Ansys Local Product Launcher
 ============================
 
-The Ansys Local Product Launcher is a Python utility for launching Ansys products on a local machine.
+The Ansys Local Product Launcher is a Python utility for launching Ansys products on a local machine
 and configuring their launch settings.
 
 .. grid:: 1 1 2 2

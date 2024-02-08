@@ -74,8 +74,8 @@ def get_launch_mode_for(*, product_name: str, launch_mode: Optional[str] = None)
     product_name :
         Product to retrieve the launch mode for.
     launch_mode :
-        Launch mode to use. The default is ``None``, which is the default launch mode.
-        If a launch mode is specified, this value is returned.
+        Launch mode to use. The default is ``None``, in which case the default
+        launch mode is used. If a launch mode is specified, this value is returned.
 
     Returns
     -------
@@ -185,8 +185,7 @@ def set_config_for(
         Configuration object.
     overwrite_default :
         Whether to change the default launch mode for the product
-        to the value specified for the ``launch_mode`` parameter. The
-        default is False.
+        to the value specified for the ``launch_mode`` parameter.
     """
     if is_configured(product_name=product_name):
         product_config = _get_config()[product_name]

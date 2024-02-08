@@ -46,7 +46,7 @@ def launch_product(
         Name of the product to launch.
     launch_mode :
         Launch mode to use. The default is ``None``, in which case
-        the default configured launched mode is used. Options available
+        the default launched mode is used. Options available
         depend on the launcher plugin.
     config :
         Configuration to use for launching the product. The default is
