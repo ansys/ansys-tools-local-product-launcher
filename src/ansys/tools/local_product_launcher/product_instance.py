@@ -34,6 +34,8 @@ from .interface import LAUNCHER_CONFIG_T, LauncherProtocol, ServerType
 
 __all__ = ["ProductInstance"]
 
+_GRPC_MAX_MESSAGE_LENGTH = 256 * 1024**2  # 256 MB
+
 
 class ProductInstance:
     """Wrapper to interact with the launched product instance.
@@ -87,7 +89,10 @@ class ProductInstance:
             )
         for key, server_type in self._launcher.SERVER_SPEC.items():
             if server_type == ServerType.GRPC:
-                self._channels[key] = grpc.insecure_channel(urls[key])
+                self._channels[key] = grpc.insecure_channel(
+                    urls[key],
+                    options=[("grpc.max_receive_message_length", _GRPC_MAX_MESSAGE_LENGTH)],
+                )
 
     def stop(self, *, timeout: float | None = None) -> None:
         """Stop the product instance.
