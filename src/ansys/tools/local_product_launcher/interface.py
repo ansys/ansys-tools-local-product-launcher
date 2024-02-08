@@ -22,8 +22,8 @@
 
 """Interface definitions for implementing a local product launcher.
 
-A plugin for the Local Product Launcher must implement the :class:`LauncherProtocol`,
-and register it
+A plugin for the Local Product Launcher must implement the :class:`LauncherProtocol`
+class and register it.
 """
 
 from enum import Enum, auto
@@ -40,11 +40,11 @@ __all__ = [
 ]
 
 METADATA_KEY_DOC = "launcher_doc"
-"""Key used in the :py:class:`dataclasses.Field` ``metadata``, for the option description."""
+"""Key used in the :py:class:`dataclasses.Field` ``metadata`` for the option description."""
 
 METADATA_KEY_NOPROMPT = "launcher_noprompt"
 """
-Key used in the :py:class:`dataclasses.Field` ``metadata``, to skip prompting for
+Key used in the :py:class:`dataclasses.Field` ``metadata`` to skip prompting for
 the option by default.
 """
 
@@ -52,7 +52,7 @@ FALLBACK_LAUNCH_MODE_NAME = "__fallback__"
 
 
 class DataclassProtocol(Protocol):
-    """Protocol class for Python dataclasses."""
+    """Provides the ``Protocol`` class for Python dataclasses."""
 
     __dataclass_fields__: ClassVar[dict[str, Any]]
 
@@ -66,22 +66,23 @@ LAUNCHER_CONFIG_T = TypeVar("LAUNCHER_CONFIG_T", bound=DataclassProtocol)
 class ServerType(Enum):
     """Defines which protocols the server supports.
 
-    The ``ServerType`` is used as values in :attr:`LauncherProtocol.SERVER_SPEC`,
-    to define the capabilities of the servers started with a given product and
+    The ``ServerType`` class is used as values in the :attr:`LauncherProtocol.SERVER_SPEC`
+    attribute to define the capabilities of the servers started with a given product and
     launch method.
     """
 
     GENERIC = auto()
     """Generic server, which responds at a given URL and port.
 
-    The generic server type can be used for any server, and does not
+    The generic server type can be used for any server. It does not
     include information about which protocol should be used.
     """
 
     GRPC = auto()
-    """Server which can be accessed via gRPC.
+    """Server that can be accessed via gRPC.
 
-    Servers of this type are accessible via :attr:`.ProductInstance.channels`.
+    Servers of this type are accessible via the :attr:`.ProductInstance.channels`
+    attribute.
     """
 
 
@@ -95,15 +96,15 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     class, for example ``MyLauncher(LauncherProtocol[MyConfigModel])``, and
     check the resulting code with `mypy <https://mypy.readthedocs.io>`_.
 
-    The ``__init__`` method should accept exactly one, keyword-only
-    parameter ``config``. Note that this is `not enforced by mypy
+    The ``__init__`` method should accept exactly one keyword-only
+    parameter: ``config``. Note that this is `not enforced by mypy
     <https://bugs.python.org/issue44807>`_.
 
     Parameters
     ----------
     config :
-        Configuration options used when starting the product. Must
-        be an instance of ``CONFIG_MODEL``.
+        Configuration options used to start the product. This parameter
+        must be an instance of ``CONFIG_MODEL``.
     """
 
     CONFIG_MODEL: type[LAUNCHER_CONFIG_T]
@@ -116,9 +117,13 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     """
 
     SERVER_SPEC: dict[str, ServerType]
-    """Defines the server type(s) that are started.
+    """Defines the server types that are started.
 
-    For example,
+    Examples
+    --------
+    This code defines a server that is accessible via a URL at the
+    ``"MAIN"`` key and a server accessible via gRPC at the
+    ``"FILE_TRANSFER"`` key.
 
     .. code:: python
 
@@ -127,11 +132,9 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
             "FILE_TRANSFER": ServerType.GRPC
         }
 
-    defines a server which is accessible via URL at the ``"MAIN"`` key,
-    and a server accessible via gRPC at the ``"FILE_TRANSFER"`` key.
-
-    The :attr:`.ProductInstance.urls` then has keys ``{"MAIN", "FILE_TRANSFER"}``,
-    whereas :meth:`.ProductInstance.channels` property only has the
+    The :attr:`.ProductInstance.urls` attribute then has keys
+    ``{"MAIN", "FILE_TRANSFER"}``, whereas the
+    :attr:`.ProductInstance.channels` attribute has only the
     ``"FILE_TRANSFER"`` key.
     """
 
@@ -142,15 +145,15 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
         """Start the product instance."""
 
     def stop(self, *, timeout: Optional[float] = None) -> None:
-        """Tear down the product instance.
+        """Stop the product instance.
 
         Parameters
         ----------
         timeout :
             Time after which the instance can be forcefully stopped.
             The timeout should be interpreted as a hint to the implementation.
-            It is not _required_ to trigger a force-shutdown, but the stop
-            _must_ return within a finite time.
+            It is *not required* to trigger a force-shutdown, but the stop
+            *must* return within a finite time.
         """
 
     def check(self, *, timeout: Optional[float] = None) -> bool:
@@ -161,9 +164,9 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
         timeout :
             Timeout in seconds for the check.
             The timeout should be interpreted as a hint to the implementation.
-            It is not _required_ to return within the given time, but the
-            check _must_ return within a finite time (i.e., it must not
-            hang indefinitely).
+            It is *not required* to return within the given time, but the
+            check *must* return within a finite time, meaning it must not
+            hang indefinitely.
 
         Returns
         -------
@@ -173,8 +176,8 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
 
     @property
     def urls(self) -> dict[str, str]:
-        """Provide the URLs on which the server is listening.
+        """Urls that the server is listening on.
 
-        The keys of the returned dictionary must correspond to the ones
-        defined in :attr:`.LauncherProtocol.SERVER_SPEC`.
+        The keys of the returned dictionary must correspond to the keys
+        defined in the :attr:`.LauncherProtocol.SERVER_SPEC` attribute.
         """

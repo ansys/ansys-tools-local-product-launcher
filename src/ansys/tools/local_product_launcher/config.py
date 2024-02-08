@@ -20,13 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""Tools for managing the Product Launcher configuration.
+"""Tools for managing Local Product Launcher configuration.
 
-Manage the default configuration for launching products. The configuration
-is loaded from / stored to a ``config.json`` file.
-By default, this file is located in the user config directory (platform-dependent).
-Its location can be specified explicitly with the ``ANSYS_LAUNCHER_CONFIG_PATH``
-environment variable.
+The methods in the ``config`` class manage the default configuration
+for launching products. The configuration is loaded from and stored to a
+``config.json`` file. By default, this file is located in the user configuration
+directory (platform-dependent). Its location can be specified explicitly
+with the ``ANSYS_LAUNCHER_CONFIG_PATH`` environment variable.
 """
 
 import dataclasses
@@ -72,14 +72,15 @@ def get_launch_mode_for(*, product_name: str, launch_mode: Optional[str] = None)
     Parameters
     ----------
     product_name :
-        The product whose launch mode  is retrieved.
+        Product to retrieve the launch mode for.
     launch_mode :
-        If not ``None``, this value is returned.
+        Launch mode to use. The default is ``None``, which is the default launch mode.
+        If a launch mode is specified, this value is returned.
 
     Returns
     -------
-    :
-        The launch mode for the product.
+    str or None
+        Launch mode for the product.
     """
     if launch_mode is not None:
         return launch_mode
@@ -88,27 +89,27 @@ def get_launch_mode_for(*, product_name: str, launch_mode: Optional[str] = None)
     except KeyError as exc:
         if has_fallback(product_name=product_name):
             return FALLBACK_LAUNCH_MODE_NAME
-        raise KeyError(f"No configuration defined for product name '{product_name}'") from exc
+        raise KeyError(f"No configuration is defined for product name '{product_name}'.") from exc
 
 
 def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> DataclassProtocol:
     """Get the configuration object for a (product, launch_mode) combination.
 
-    Retrieve the default configuration object for the product. If the
-    ``launch_mode`` is given, the configuration for that mode is returned.
-    Otherwise, the default launch mode configuration is returned.
+    Get the default configuration object for the product. If a
+    ``launch_mode`` parameter is given, the configuration for this mode is returned.
+    Otherwise, the configuration for the default launch mode is returned.
 
     Parameters
     ----------
     product_name :
-        The product whose configuration is returned.
+        Product to get the configuration for.
     launch_mode :
-        The launch mode whose configuration is returned.
+        Launch mode for the configuration.
 
     Returns
     -------
     :
-        The configuration object.
+        Configuration object.
 
     Raises
     ------
@@ -130,24 +131,24 @@ def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> Dataclas
     else:
         if not isinstance(config_entry, config_class):
             raise TypeError(
-                f"Configuration is of wrong type '{type(config_entry)}', should be '{config_class}'"
+                f"Configuration is wrong type '{type(config_entry)}'. Should be '{config_class}'."
             )
     return cast(DataclassProtocol, _get_config()[product_name].configs[launch_mode])
 
 
 def is_configured(*, product_name: str, launch_mode: Optional[str] = None) -> bool:
-    """Check if a configuration exists for the product / launch mode.
+    """Check if a configuration exists for the product/launch mode.
 
-    Note: if only the fallback launcher / configuration is available, this
-    method will return ``False``.
+    Note that if only the fallback launcher/configuration is available, this
+    method returns ``False``.
 
     Parameters
     ----------
     product_name :
-        The product whose configuration is checked.
+        Product whose configuration is checked.
     launch_mode :
-        The launch mode whose configuration is checked. If ``None``, the
-        default launch mode is used.
+        Launch mode whose configuration is checked. The default is ``None``,
+        in which case the default launch mode is used.
     """
     try:
         launch_mode = get_launch_mode_for(product_name=product_name, launch_mode=launch_mode)
@@ -170,20 +171,22 @@ def set_config_for(
 
     Update the configuration by setting the configuration for the
     given product and launch mode.
-    Note that this method only updates the in-memory configuration, and
-    does not store it to file.
+
+    This method only updates the in-memory configuration, and
+    it does not store it to a file.
 
     Parameters
     ----------
     product_name :
-        Name of the product whose configuration is updated.
+        Name of the product whose configuration to update.
     launch_mode :
-        Launch mode to which the configuration applies.
+        Launch mode that the configuration applies to.
     config :
-        The configuration object.
+        Configuration object.
     overwrite_default :
-        If ``True``, the default launch mode for the product is
-        changed to ``launch_mode``.
+        Whether to change the default launch mode for the product
+        to the value specified for the ``launch_mode`` parameter. The
+        default is False.
     """
     if is_configured(product_name=product_name):
         product_config = _get_config()[product_name]
@@ -197,9 +200,9 @@ def set_config_for(
 
 
 def save_config() -> None:
-    """Store the configuration to disk.
+    """Save the configuration to a file on disk.
 
-    Save the current in-memory configuration to the ``config.json`` file.
+    This method saves the current in-memory configuration to the ``config.json`` file.
     """
     if _CONFIG is not None:
         file_path = _get_config_path()

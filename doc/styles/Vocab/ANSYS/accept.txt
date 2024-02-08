@@ -8,3 +8,4 @@ isort
 plugin_creation
 pytest
 subprocess
+URLs

@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 """
-tools.
+Tools.
 
 local_product_launcher
 """
