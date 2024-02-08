@@ -1,9 +1,9 @@
 .. _cli:
 
-Command line reference
+Command-line interface
 ======================
 
-The ``ansys-launcher`` command line utility can be used to edit the default
+You use the ``ansys-launcher`` command-line interface to edit the default
 launch configuration.
 
 Configuration options for products are defined by each product plugin.

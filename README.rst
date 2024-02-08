@@ -31,168 +31,36 @@ Local Product Launcher
    :alt: Black
 
 
-A utility for launching Ansys products on the local machine.
-
-
-Installation
-------------
-
-Install the Local Product Launcher with:
-
-.. code::
-
-    pip install ansys-tools-local-product-launcher
-
-We recommend using a `virtual environment <https://docs.python.org/3/library/venv.html>`_
-to keep Python packages isolated from your system Python.
-
-For installing in development mode, see the `Development Setup`_ instructions below.
-
-Documentation
--------------
-
-The documentation can be viewed online at https://local-product-launcher.tools.docs.pyansys.com.
-
-Getting started
----------------
-
-Use the ``ansys-launcher`` command line interface to configure launcher settings for a specific product. Note that this requires a product plug-in to be installed.
-
-For example, assuming that the ``ACP`` plug-in is installed:
-
-.. code::
-
-    ansys-launcher configure ACP direct
-
-The CLI will prompt for the configuration options available for this launcher.
-
-To launch the product:
-
-.. code:: python
-
-    from ansys.tools.local_product_launcher import launch_product
-
-    server = launch_product("ACP")
-
-Development Setup
------------------
-
-Installing the Ansys Local Product Launcher in developer mode allows
-you to modify the source and enhance it.
-
-Before contributing to the project, please refer to the `PyAnsys Developer's guide`_. You need to follow these steps to set up your development environment:
-
-#. Start by cloning this repository, and entering the newly created directory:
-
-    .. code:: bash
-
-        git clone https://github.com/ansys-internal/ansys-tools-local-product-launcher
-        cd ansys-tools-local-product-launcher
-
-#. Make sure you have the latest version of poetry:
-
-    .. code:: bash
-
-        python -m pip install pipx
-        pipx ensurepath
-        pipx install poetry
-
-#. Install the project and all its development dependencies using poetry. This also takes care of creating a new virtual environment:
-
-    .. code:: bash
-
-        poetry install --with dev,test
-
-
-#. Activate your development virtual environment with:
-
-    .. code:: bash
-
-        poetry shell
-
-#. Finally, verify your development installation by running:
-
-    .. code:: bash
-
-        tox
-
-
-Testing
--------
-
-This project takes advantage of `tox`_. This tool allows to automate common
-development tasks (similar to Makefile) but it is oriented towards Python
-development.
-
-Using tox
-^^^^^^^^^
-
-As Makefile has rules, `tox`_ has environments. In fact, the tool creates its
-own virtual environment so anything being tested is isolated from the project in
-order to guarantee project's integrity. The following environments commands are provided:
-
-- **tox -e style**: checks for coding style quality.
-- **tox -e py**: checks for unit tests.
-- **tox -e py-coverage**: checks for unit testing and code coverage.
-- **tox -e doc**: checks for documentation building process.
-
-
-Raw testing
-^^^^^^^^^^^
-
-If required, you can always call the style commands (`black`_, `isort`_,
-`flake8`_...) or unit testing ones (`pytest`_) from the command line. However,
-this does not guarantee that your project is being tested in an isolated
-environment, which is the reason why tools like `tox`_ exist.
-
-
-A note on pre-commit
-^^^^^^^^^^^^^^^^^^^^
-
-The style checks take advantage of `pre-commit`_. Developers are not forced but
-encouraged to install this tool via:
-
-.. code:: bash
-
-    pre-commit install
-
-
-Documentation
--------------
-
-For building documentation, you can either run the usual rules provided in the
-`Sphinx`_ Makefile, such us:
-
-.. code:: bash
-
-    make -C doc/ html && your_browser_name doc/html/index.html
-
-However, the recommended way of checking documentation integrity is using:
-
-.. code:: bash
-
-    tox -e doc && your_browser_name .tox/doc_out/html/index.html
-
-
-Distributing
-------------
-
-The following commands can be used to build and check the package:
-
-.. code:: bash
-
-    poetry build
-    twine check dist/*
-
-This creates both a source distribution, and a wheel file.
-
-.. LINKS AND REFERENCES
-.. _black: https://github.com/psf/black
-.. _flake8: https://flake8.pycqa.org/en/latest/
-.. _isort: https://github.com/PyCQA/isort
-.. _pip: https://pypi.org/project/pip/
-.. _pre-commit: https://pre-commit.com/
-.. _PyAnsys Developer's guide: https://dev.docs.pyansys.com/
-.. _pytest: https://docs.pytest.org/en/stable/
-.. _Sphinx: https://www.sphinx-doc.org/en/master/
-.. _tox: https://tox.wiki/
+The Ansys Local Product Launcher is a utility for launching Ansys products on a local machine
+and configuring their launch settings.
+
+Documentation and issues
+-------------------------
+
+Documentation for the latest stable release of the Local Product Launcher is hosted at
+`Local Product Launcher documentation <https://local-product-launcher.tools.docs.pyansys.com>`_.
+
+
+The Local Product Launcher documentation contains these sections:
+
+- `Getting started <https://local-product-launcher.tools.docs.pyansys.com/version/dev/intro.html>`_:
+  Explains how to install the Local Product Launcher in user mode and then how
+  to configure launcher settings for a specific Ansys product and launch it.
+- `User guide<https://local-product-launcher.tools.docs.pyansys.com/version/dev/user_guide/index.html>`:
+  Provides an overview of the Local Product Launcher, explaining how to use the command-line
+  interface to configure launcher settings, how to create launcher plugins, and the rationale for
+  why this utility was created.
+- `Examples <https://local-product-launcher.tools.docs.pyansys.com/version/dev/examples/index.html>`_:
+  Provides examples of how to use the Local Product Launcher to launch a product on a local machine.
+- `API reference <https://local-product-launcher.tools.docs.pyansys.com/version/dev/api/index.html>`_:
+  Describes Local Product Launcher API endpoints so that you can understand how to interact with
+  them programmatically.
+- `Contribute <https://hps.docs.pyansys.com/version/dev/contribute.html>`_: Provides information
+  on how to install the Local Product Launcher in developer mode and make contributions
+  to the codebase and documentation.
+
+On the `Local Product Launcher Issues <https://github.com/ansys-internal/ansys-tools-local-product-launcher/issues>`_
+page, you can create issues to report bugs and request new features. On the `Discussions <https://discuss.ansys.com/>`_
+page on the Ansys Developer portal, you can post questions, share ideas, and get community feedback.
+
+To reach the project support team, email `pyansys.core@ansys.com <pyansys.core@ansys.com>`_.

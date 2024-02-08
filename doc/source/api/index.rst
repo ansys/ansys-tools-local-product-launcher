@@ -1,8 +1,8 @@
 API reference
 =============
 
-This section describes the API of the public Local Product Launcher classes,
-functions, and attributes.
+This section describes Local Product Launcher API endpoints so that you can
+understand how to interact with them programmatically.
 
 .. currentmodule:: ansys.tools.local_product_launcher
 

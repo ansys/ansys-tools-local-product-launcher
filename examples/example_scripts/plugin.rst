@@ -1,18 +1,18 @@
 HTTP Server launcher plugin
 ---------------------------
 
-This example shows the launcher plugin used to start the Python HTTP server. The full source
-is available in the `examples/example_httpserver_plugin directory <https://github.com/ansys-internal/ansys-tools-local-product-launcher/tree/main/examples/example_httpserver_plugin>`_
+This example shows the launcher plugin that is used to start the Python HTTP server.
+The full source is available in the `examples/example_httpserver_plugin directory <https://github.com/ansys-internal/ansys-tools-local-product-launcher/tree/main/examples/example_httpserver_plugin>`_
 on GitHub.
 
-Here, we will show some aspects of this code. The concepts behind this code are explained in
-the :ref:`plugin creation guide <plugin_creation>`.
+While this example explains some aspects of the code, for information on how
+to create a plugin for the Local Product Launcher, see :ref:`plugin_creation`.
 
 Launcher code
 ~~~~~~~~~~~~~
 
 The ``LauncherConfig`` class determines which options are available to the user when configuring the launcher. We expose
-a single option ``directory``, which determines which directory the server will serve files from.
+a single option ``directory``, which determines which directory the server is to serve files from.
 
 .. include:: ../../../examples/example_httpserver_plugin/src/example_httpserver_plugin/launcher.py
     :literal:
@@ -40,18 +40,16 @@ terminates.
 Entrypoint configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Besides the launcher code, the plugin needs to be registered by adding an entrypoint to
-the ``pyproject.toml`` file, as described in :ref:`the entrypoint section <entrypoint>`
-of the plugin creation guide. In this example, we use ``flit`` as a build tool, so the
-``pyproject.toml`` file looks like this:
-
+Besides the launcher code, the plugin must be registered by adding an entrypoint to
+the ``pyproject.toml`` file, as described in :ref:`entrypoint`. In this example,
+``flit`` is used as a build tool. Thus, the ``pyproject.toml`` file looks like this:
 
 .. include:: ../../../examples/example_httpserver_plugin/pyproject.toml
     :literal:
 
-Two entry points for the local product launcher are defined:
+Two entrypoints for the local product launcher are defined:
 
-- ``direct`` - a launch mode which can be configured by the user
-- ``__fallback__`` - a fallback mode which is used if no configuration is available
+- ``direct``: A launch mode that users can configure.
+- ``__fallback__``: A fallback mode that is used if no configuration is available.
 
-Both use the same launcher class.
+Both entrypoints use the same launcher class.

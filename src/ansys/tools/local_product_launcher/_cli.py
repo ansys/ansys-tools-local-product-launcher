@@ -56,7 +56,7 @@ _DEFAULT_STR = "default"
 def get_subcommands_from_plugins(
     *, plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
 ) -> Sequence[click.Command]:
-    """Construct 'configure' subcommands from the plugins."""
+    """Construct ``configure`` subcommands from the plugins."""
     all_product_commands: list[click.Group] = []
     for product_name, launch_mode_configs in plugins.items():
         product_command = click.Group(product_name)
@@ -100,13 +100,13 @@ def get_subcommands_from_plugins(
 class JSONParamType(click.ParamType):
     """Implements interpreting options as JSON.
 
-    An empty string is interpreted as None.
+    An empty string is interpreted as ``None``.
     """
 
     name = "json"
 
     def convert(self, value: Any, param: Any, ctx: Any) -> Any:
-        """Implement string to dict conversion."""
+        """Convert the string to a dictionary."""
         if value is None:
             return None
         if not isinstance(value, str):
@@ -165,7 +165,7 @@ def get_option_from_field(field: "dataclasses.Field[Any]") -> click.Option:
 def config_writer_callback_factory(
     launcher_config_kls: type[LAUNCHER_CONFIG_T], product_name: str, launch_mode: str
 ) -> Callable[..., None]:
-    """Construct the callback for updating the config file."""
+    """Construct the callback for updating the configuration file."""
 
     def _config_writer_callback(**kwargs: dict[str, Any]) -> None:
         overwrite_default = cast(bool, kwargs.pop(_OVERWRITE_DEFAULT_FLAG_NAME, False))
@@ -183,7 +183,7 @@ def config_writer_callback_factory(
 
 
 def build_cli(plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]) -> click.Group:
-    """Construct the CLI from the plugins."""
+    """Build the CLI from the plugins."""
     _cli = click.Group()
 
     all_subcommands = get_subcommands_from_plugins(plugins=plugins)
@@ -203,7 +203,7 @@ def build_cli(plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
 
             ansys-launcher configure
 
-        To get a list of launch mode for a given product:
+        To get a list of launch modes for a given product:
 
         .. code:: bash
 
@@ -218,7 +218,7 @@ def build_cli(plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
         """
         if ctx.invoked_subcommand is None:
             if not plugins:
-                click.echo("No plugins configured")
+                click.echo("No plugins are configured.")
 
     for subcommand in all_subcommands:
         configure.add_command(subcommand)
@@ -226,9 +226,9 @@ def build_cli(plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
     @_cli.command()
     # @click.pass_context
     def list_plugins() -> None:
-        """List the possible product / launch mode combinations."""
+        """List the possible product/launch mode combinations."""
         if not plugins:
-            click.echo("No plugins configured")
+            click.echo("No plugins are configured.")
             return
         for product_name, launch_mode_configs in sorted(plugins.items()):
             click.echo(f"{product_name}")
@@ -253,7 +253,7 @@ def build_cli(plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
                     for field in dataclasses.fields(config):
                         click.echo(f"        {field.name}: {getattr(config, field.name)}")
             except KeyError:
-                click.echo("    No configuration set.")
+                click.echo("No configuration is set.")
             click.echo("")
 
     @_cli.command()
@@ -265,7 +265,7 @@ def build_cli(plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
 
 
 # Needs to be defined at the module level, since this is what the [tool.poetry.scripts]
-# entry point refers to.
+# entrypoint refers to.
 cli = build_cli(plugins=get_all_plugins())
 
 if __name__ == "__main__":

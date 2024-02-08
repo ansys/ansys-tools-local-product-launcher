@@ -1,22 +1,24 @@
 .. _plugin_creation:
 
-Creating a launcher plugin
---------------------------
+Launcher plugin creation
+------------------------
 
-This short how-to guide walks you through creating a plugin for the Local Product Launcher. The plugin launches Ansys Composite PrepPost (ACP) as a sub-process.
+This page explains how to create a plugin for the Local Product Launcher. The plugin
+in the example launches Ansys Composite PrepPost (ACP) as a subprocess.
 
-The Local Product Launcher defines the interface a plugin must satisfy, in the :mod:`.interface` module.
+The Local Product Launcher defines the interface that a plugin must satisfy in the :mod:`.interface` module.
 
 .. note::
 
-    The plugin business logic is kept minimal, to simplify the example.
+    To simplify the example, the plugin business logic is kept minimal.
 
 .. TODO: once merged to main, link to some real plugins in the preceding note.
 
-Configuration
-'''''''''''''
+Create configuration
+''''''''''''''''''''
 
-To start, you need to create the user-definable configuration for the launcher. Since ACP should be run as a sub-process, the path to the server binary needs to be defined.
+To start, you must create the user-definable configuration for the launcher. Because
+ACP should be run as a subprocess, the path to the server binary must be defined.
 
 This configuration is defined as a :py:func:`dataclass <dataclasses.dataclass>`:
 
@@ -28,12 +30,13 @@ This configuration is defined as a :py:func:`dataclass <dataclasses.dataclass>`:
     class DirectLauncherConfig:
         binary_path: str
 
-The configuration class defines a single option ``binary_path`` of type :py:class:`str`.
+The configuration class defines a single ``binary_path`` option of type :py:class:`str`.
 
-Launcher
-''''''''
+Define launcher
+'''''''''''''''
 
-Next, you need to define the launcher itself. The full launcher code is listed below. There's quite a lot going on there, so each part is then discussed separately.
+Next, you must define the launcher itself. The full launcher code follows. Because
+there's quite a lot going on in this code, descriptions of each part are provided.
 
 .. code:: python
 
@@ -87,10 +90,15 @@ The launcher class inherits from ``LauncherProtocol[LauncherConfig]``. This isn'
 
 Next, setting ``CONFIG_MODEL = DirectLauncherConfig`` connects the launcher to the configuration class.
 
-The subsequent line ``SERVER_SPEC = {"main": ServerType.GRPC}`` defines which kind of servers the product starts. Here, there's only a single server, which is accessible via gRPC. The keys in this dictionary can be chosen arbitrarily, but should be consistent across the launcher implementation.
-Ideally, you use the key to convey some meaning. For example, ``"main"`` could refer to the main interface to your product, and ``file_transfer`` to an additional service for file up-/download.
+The subsequent line, ``SERVER_SPEC = {"main": ServerType.GRPC}``, defines which kind of servers the
+product starts. Here, there's only a single server, which is accessible via gRPC. The keys in this
+dictionary can be chosen arbitrarily, but they should be consistent across the launcher implementation.
+Ideally, you use the key to convey some meaning. For example, ``"main"`` could refer to the main interface
+to your product and ``file_transfer`` could refer to an additional service for file upload and download.
 
-The ``__init__`` method
+The ``__init__`` method must accept exactly one keyword-only argument, ``config``, which contains the
+configuration instance. In this example, the configuration is stored in the ``_config`` attribute.
+For the ``_url`` and ``_process`` attributes, only the type is declared for the benefits of the type checker
 
 .. code:: python
 
@@ -99,11 +107,7 @@ The ``__init__`` method
         self._url: str
         self._process: subprocess.Popen[str]
 
-must accept exactly one, keyword-only, argument ``config`` that contains the configuration instance.
-
-In this example, the configuration is stored in the ``_config`` attribute. For ``_url`` and ``_process`` only the type is declared, for the benefits of the type checker.
-
-The core of the launcher implementation is in the ``start`` and ``stop`` methods:
+The core of the launcher implementation is in the ``start()`` and ``stop()`` methods:
 
 .. code:: python
 
@@ -120,10 +124,11 @@ The core of the launcher implementation is in the ``start`` and ``stop`` methods
             text=True,
         )
 
-This :meth:`start<.LauncherProtocol.start>` method selects an available port using :func:`.find_free_ports`. It then starts the server as a sub-process. Note that here, the server output is simply discarded. In a real launcher, the option to redirect it (for example to a file) should be added.
-The ``_url`` attribute keeps track of the URL and port on which the server should be accessible.
+This :meth:`start()<.LauncherProtocol.start>` method selects an available port using the
+:func:`.find_free_ports` function. It then starts the server as a subprocess. Note that here, the server output is simply discarded. In a real launcher, the option to redirect it (for example to a file) should be added.
+The ``_url`` attribute keeps track of the URL and port that the server should be accessible on.
 
-The `:meth:`start<.LauncherProtocol.stop>` method terminates the sub-process:
+The :meth:`start()<.LauncherProtocol.stop>` method terminates the subprocess:
 
 .. code:: python
 
@@ -135,9 +140,14 @@ The `:meth:`start<.LauncherProtocol.stop>` method terminates the sub-process:
             self._process.kill()
             self._process.wait()
 
-If your product is prone to ignoring ``SIGTERM``, you might want to add a timeout to :py:meth:`.wait() <subprocess.Popen.wait>`, and re-try with :py:meth:`.kill() <subprocess.Popen.kill>` instead of :py:meth:`.terminate() <subprocess.Popen.terminate>`.
+If your product is prone to ignoring ``SIGTERM``, you might want to add a timeout to the
+:py:meth:`.wait() <subprocess.Popen.wait>` method and retry with the
+:py:meth:`.kill() <subprocess.Popen.kill>` method instead of the
+:py:meth:`.terminate() <subprocess.Popen.terminate>` method.
 
-Next, you need to provide a way to verify that the product has successfully launched. This is implemented in :meth:`check <.LauncherProtocol.check>`. Since the server implements gRPC health checking, the :func:`.check_grpc_health` helper can be used for this purpose:
+Next, you must provide a way to verify that the product has successfully launched. This is implemented
+in the :meth:`check <.LauncherProtocol.check>`. Because the server implements gRPC health checking, the
+:func:`.check_grpc_health` helper can be used for this purpose:
 
 .. code:: python
 
@@ -146,7 +156,8 @@ Next, you need to provide a way to verify that the product has successfully laun
         return check_grpc_health(channel=channel, timeout=timeout)
 
 
-Finally, the ``_url`` attribute stored in :meth:`start <.LauncherProtocol.start>` needs to be made available, in the :attr:`urls <.LauncherProtocol.urls>` property:
+Finally, the ``_url`` attribute stored in the :meth:`start() <.LauncherProtocol.start>` method must
+be made available in the :attr:`urls <.LauncherProtocol.urls>` property:
 
 .. code:: python
 
@@ -154,16 +165,19 @@ Finally, the ``_url`` attribute stored in :meth:`start <.LauncherProtocol.start>
     def urls(self) -> dict[str, str]:
         return {"main": self._url}
 
-Note that the ``urls`` return value should adhere to the schema defined in ``SERVER_SPEC``.
+Note that the return value for the ``urls`` property should adhere to the schema defined in ``SERVER_SPEC``.
 
 .. _entrypoint:
 
-Entry point
-'''''''''''
+Register entrypoint
+'''''''''''''''''''
 
-Having defined all the necessary components for a Local Product Launcher plugin, the plugin can now be registered to make it available. This is done through the Python `entrypoints <https://packaging.python.org/specifications/entry-points/>`_ mechanism.
+Having defined all the necessary components for a Local Product Launcher plugin, you can now register the
+plugin, which makes it available. You do this through the Python `entrypoints <https://packaging.python.org/specifications/entry-points/>`_
+mechanism.
 
-The entrypoint is defined in your package's build configuration. The exact syntax depends on which packaging tool you use:
+You define the entrypoint in your package's build configuration. The exact syntax depends on which
+packaging tool you use:
 
 .. .. grid:: 1
 ..     :gutter: 3
@@ -174,14 +188,14 @@ The entrypoint is defined in your package's build configuration. The exact synta
 
         Setuptools can accept its configuration in one of three ways. Choose the one that applies to your project:
 
-        In ``pyproject.toml``:
+        In a ``pyproject.toml`` file:
 
         .. code:: toml
 
             [project.entry-points."ansys.tools.local_product_launcher.launcher"]
             "ACP.direct" = "<your.module.name>:DirectLauncher"
 
-        In ``setup.cfg``:
+        In a ``setup.cfg`` file:
 
         .. code:: cfg
 
@@ -189,7 +203,7 @@ The entrypoint is defined in your package's build configuration. The exact synta
             ansys.tools.local_product_launcher.launcher =
                 ACP.direct = <your.module.name>:DirectLauncher
 
-        In ``setup.py``:
+        In a ``setup.py`` file:
 
         .. code:: python
 
@@ -205,53 +219,56 @@ The entrypoint is defined in your package's build configuration. The exact synta
             )
 
 
-        See the `setuptools documentation <https://setuptools.pypa.io/en/latest/userguide/entry_point.html#entry-points-for-plugins>`_ for more information.
+        For more information, see the `setuptools documentation <https://setuptools.pypa.io/en/latest/userguide/entry_point.html#entry-points-for-plugins>`_.
 
     .. tab-item:: flit
 
-        In ``pyproject.toml``:
+        In a ``pyproject.toml`` file:
 
         .. code:: toml
 
             [project.entry-points."ansys.tools.local_product_launcher.launcher"]
             "ACP.direct" = "<your.module.name>:DirectLauncher"
 
-        See `the flit documentation <https://flit.pypa.io/en/stable/pyproject_toml.html#pyproject-project-entrypoints>`_ for more information.
+        For more information, see the `flit documentation <https://flit.pypa.io/en/stable/pyproject_toml.html#pyproject-project-entrypoints>`_.
 
     .. tab-item:: poetry
 
-        In ``pyproject.toml``:
+        In a ``pyproject.toml`` file:
 
         .. code:: toml
 
             [tool.poetry.plugins."ansys.tools.local_product_launcher.launcher"]
             "ACP.direct" = "<your.module.name>:DirectLauncher"
 
-        See the `poetry documentation <https://python-poetry.org/docs/pyproject#plugins>`_ for more information.
+        For more information, see the `poetry documentation <https://python-poetry.org/docs/pyproject#plugins>`_.
 
-In all cases ``ansys.tools.local_product_launcher.launcher`` is an identifier specifying that the entry point defines a Local Product Launcher plugin. It must be kept the same.
+In all cases, ``ansys.tools.local_product_launcher.launcher`` is an identifier specifying that the entrypoint defines a Local Product Launcher plugin. It must be kept the same.
 
-The entry point itself has two parts:
+The entrypoint itself has two parts:
 
-- The entry point name ``ACP.direct`` consists of two parts: ``ACP`` is the product name, and ``direct`` is the launch mode identifier. The name must be of this format, and contain exactly one dot ``.`` separating the two parts.
-- The entry point value ``<your.module.name>:DirectLauncher`` defines where the launcher implementation is located. In other words
+- The entrypoint name ``ACP.direct`` consists of two parts: ``ACP`` is the product name, and
+  ``direct`` is the launch mode identifier. The name must be of this format and contain exactly
+  one dot ``.`` separating the two parts.
+- The entrypoint value ``<your.module.name>:DirectLauncher`` defines where the launcher
+  implementation is located. In other words, it must load the launcher class:
 
   .. code:: python
 
       from <your.module.name> import DirectLauncher
 
-  must load the launcher class.
+  
+For the entrypoints to update, you must re-install your package (even if it was installed with ``pip install -e``).
 
-You need to re-install your package (even if installed with ``pip install -e``) for the entry points to update.
+Add command-line default and description
+''''''''''''''''''''''''''''''''''''''''
 
-Command line defaults and description
-'''''''''''''''''''''''''''''''''''''
+With the three preceding parts, you've successfully created a Local Product Launcher plugin. :octicon:`rocket`
 
-With these three preceding parts, you've successfully created a Local Product Launcher plugin. :octicon:`rocket`
+You can now improve the usability of the command line by adding a default and description to the configuration class.
 
-Finally, the usability of the command line can be improved by adding a default and description to the configuration class.
-
-To do so, edit the ``DirectLaunchConfig`` class, using :py:func:`dataclasses.field` to enrich the ``binary_path``:
+To do so, edit the ``DirectLaunchConfig`` class, using the :py:func:`dataclasses.field` function to enrich
+the ``binary_path``:
 
 * The default value is specified as the ``default`` argument.
 * The description is given in the ``metadata`` dictionary, using the special key :py:obj:`METADATA_KEY_DOC <.interface.METADATA_KEY_DOC>`.
@@ -290,22 +307,26 @@ To do so, edit the ``DirectLaunchConfig`` class, using :py:func:`dataclasses.fie
         )
 
 
-For the default value, use the :py:func:`get_available_ansys_installations <ansys.tools.path.get_available_ansys_installations>` helper to find the Ansys installation directory.
+For the default value, use the :py:func:`get_available_ansys_installations <ansys.tools.path.get_available_ansys_installations>`
+helper to find the Ansys installation directory.
 
-Now, the user can see the description when running ``ansys-launcher configure ACP direct``, and accept the default value if they wish.
+Now, when running ``ansys-launcher configure ACP direct``, users can see and accept the default
+value if they want.
 
 .. note::
 
-    If the default value is ``None``, it is converted to the string ``default`` for the command line interface. This
-    allows implementing more complicated default behaviors, that may not be expressible when the command-line tool is run.
+    If the default value is ``None``, it is converted to the string ``default`` for the
+    command-line interface. This allows implementing more complicated default behaviors
+    that may not be expressible when the command-line interface is run.
 
-Adding a fallback launch mode
-'''''''''''''''''''''''''''''
+Add a fallback launch mode
+'''''''''''''''''''''''''''
 
 If you want to provide a fallback launch mode that can be used without any configuration, you can add
 an entrypoint with the special name ``<product>.__fallback__``.
 
-For example, if we want the ``DirectLauncher`` to be the fallback for ACP, we can add the following entrypoint:
+For example, if you wanted the ``DirectLauncher`` to be the fallback for ACP, you could add this
+entrypoint:
 
 .. code:: toml
 
@@ -315,11 +336,12 @@ For example, if we want the ``DirectLauncher`` to be the fallback for ACP, we ca
 The fallback launch mode is used with its default configuration. This means that the configuration class must have default values for all its fields.
 
 
-Hiding advanced options
-'''''''''''''''''''''''
+Hide advanced options
+'''''''''''''''''''''
 
-If your launcher plugin has advanced options, you can skip prompting the user for them by default. This is done by setting the special key :py:obj:`METADATA_KEY_NOPROMPT <.interface.METADATA_KEY_NOPROMPT>` to ``True`` in the ``metadata`` dictionary:
-
+If your launcher plugin has advanced options, you can skip prompting the user for them by default.
+This is done by setting the special key :py:obj:`METADATA_KEY_NOPROMPT <.interface.METADATA_KEY_NOPROMPT>`
+to ``True`` in the ``metadata`` dictionary:
 
 .. code:: python
 
