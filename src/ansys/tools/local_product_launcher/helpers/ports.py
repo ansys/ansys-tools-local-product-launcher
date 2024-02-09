@@ -27,18 +27,18 @@ import socket
 
 
 def find_free_ports(num_ports: int = 1) -> list[int]:
-    """Find free ports on localhost.
+    """Find free ports on the localhost.
 
     .. note::
 
-        Since there is no way to reserve a port that would still allow
+        Because there is no way to reserve a port that would still allow
         a server to connect to it, there is no guarantee that the ports
-        are *still* free when it is eventually used.
+        are *still* free when eventually used.
 
     Parameters
     ----------
     num_ports :
-        The number of free ports to obtain.
+        Number of free ports to obtain.
     """
     port_list = []
     with ExitStack() as context_stack:

@@ -21,13 +21,13 @@
 # SOFTWARE.
 
 """
-Choosing configuration at runtime
----------------------------------
+Choose configuration at runtime
+-------------------------------
 
 """
 
 # %%
-# Import the necessary modules
+# Import the necessary modules.
 
 import os
 
@@ -39,18 +39,18 @@ from ansys.tools.local_product_launcher import launch_product
 # Default configuration
 # ~~~~~~~~~~~~~~~~~~~~~
 #
-# First, let's launch the product without any configuration. This will fall back
+# First, launch the product without any configuration. This falls back
 # to the default configuration.
 
 product_instance = launch_product(product_name="example_httpserver")
 product_instance.urls
 
 # %%
-# To ensure the server is running, we can use the ``wait`` method.
+# To ensure that the server is running, use the ``wait()`` method.
 product_instance.wait(timeout=5)
 
 # %%
-# Let's retrieve the content of the server's main page. This simply serves
+# Retrieve the content of the server's main page. This simply serves
 # a list of files in the directory where the server was launched.
 
 import requests
@@ -62,8 +62,9 @@ print(res.content.decode("utf-8"))
 # Custom configuration
 # ~~~~~~~~~~~~~~~~~~~~
 #
-# Now, let's try to launch the product with a custom configuration. This is done
-# by passing the ``config`` and ``launch_mode`` arguments to the :func:`.launch_product`.
+# Now, try to launch the product with a custom configuration. This is done
+# by passing the ``config`` and ``launch_mode`` arguments to the :func:`.launch_product`
+# function.
 
 directory = os.path.join(os.getcwd(), "..")
 product_instance = launch_product(
@@ -75,31 +76,31 @@ product_instance.urls
 
 
 # %%
-# Again, let's ensure the server is running.
+# Again, ensure that the server is running.
 product_instance.wait(timeout=5)
 
 # %%
-# And get the content of the main page.
+# Get the content of the main page.
 
 full_url = f"http://{product_instance.urls['main']}"
 res = requests.get(full_url)
 print(res.content.decode("utf-8"))
 
 # %%
-# We can see that the server is now showing the files from the parent directory.
+# You can see that the server is now showing the files from the parent directory.
 
 # %%
 # Teardown
 # ~~~~~~~~
 #
-# We can manually stop the server using the :meth:`stop <.ProductInstance.stop>` method.
-# Alternatively,  the server will be stopped when all references to ``product_instance``
+# You can manually stop the server using the :meth:`stop() <.ProductInstance.stop>` method.
+# Alternatively,  the server is stopped when all references to ``product_instance``
 # are deleted.
 
 product_instance.stop()
 
 # %%
-# To ensure the server is down, we can try to access the main page again.
+# To ensure that the server is down, try to access the main page again.
 
 try:
     requests.get(full_url)

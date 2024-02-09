@@ -64,7 +64,7 @@ def get_all_plugins(hide_fallback: bool = True) -> dict[str, dict[str, LauncherP
 
 
 def has_fallback(product_name: str) -> bool:
-    """Return True if the given product has a fallback launcher."""
+    """Return ``True`` if the given product has a fallback launcher."""
     for entry_point in _get_entry_points():
         ep_product_name, ep_launch_mode = entry_point.name.split(".")
         if product_name == ep_product_name and ep_launch_mode == FALLBACK_LAUNCH_MODE_NAME:
@@ -83,7 +83,7 @@ def get_fallback_launcher(product_name: str) -> type[LauncherProtocol[DataclassP
 
 
 def _get_entry_points() -> tuple[importlib.metadata.EntryPoint, ...]:
-    """Get all Local Product Launcher plugin entry points for launchers."""
+    """Get all Local Product Launcher plugin entrypoints for launchers."""
     try:
         return entry_points(group=LAUNCHER_ENTRY_POINT)  # type: ignore
     except KeyError:

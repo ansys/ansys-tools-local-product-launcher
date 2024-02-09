@@ -1,7 +1,9 @@
 Examples
 --------
 
-For the examples below, we use Python's built-in ``http.server`` as the application to be launched.
+This section provides examples of how to use the Local Product Launcher to launch a product on
+a local machine. For these examples, the Python's built-in ``http.server`` is the application that is
+launched.
 
 .. toctree::
     :maxdepth: 2

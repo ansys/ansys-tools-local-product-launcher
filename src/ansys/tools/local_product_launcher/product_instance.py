@@ -38,12 +38,12 @@ _GRPC_MAX_MESSAGE_LENGTH = 256 * 1024**2  # 256 MB
 
 
 class ProductInstance:
-    """Wrapper to interact with the launched product instance.
+    """Provides a wrapper for interacting with the launched product instance.
 
-    Allows stopping / starting the product instance, and provides access
-    to its server URLs / channels.
+    This class allows stopping and starting of the product instance. It also
+    provides access to its server URLs/channels.
 
-    The :class:`ProductInstance` can be used as a context manager, stopping
+    The :class:`ProductInstance` class can be used as a context manager, stopping
     the instance when exiting the context.
     """
 
@@ -57,7 +57,7 @@ class ProductInstance:
     def __enter__(self) -> ProductInstance:
         """Enter the context manager defined by the product instance."""
         if self.stopped:
-            raise RuntimeError("The product instance is stopped, cannot enter context.")
+            raise RuntimeError("The product instance is stopped. Cannot enter context.")
         return self
 
     def __exit__(self, *exc: Any) -> None:
@@ -74,10 +74,10 @@ class ProductInstance:
         RuntimeError
             If the URLs exposed by the started instance do not match
             the expected ones defined in the launcher's
-            :attr:`.LauncherProtocol.SERVER_SPEC`.
+            :attr:`.LauncherProtocol.SERVER_SPEC` attribute.
         """
         if not self.stopped:
-            raise RuntimeError("Cannot start the server, it has already been started.")
+            raise RuntimeError("Cannot start the server. It has already been started.")
         self._finalizer = weakref.finalize(self, self._launcher.stop, timeout=None)
         self._launcher.start()
         self._channels = dict()
@@ -85,7 +85,7 @@ class ProductInstance:
         if urls.keys() != self._launcher.SERVER_SPEC.keys():
             raise RuntimeError(
                 f"The URL keys '{urls.keys()}' provided by the launcher "
-                f"do not match the SERVER_SPEC keys '{self._launcher.SERVER_SPEC.keys()}'"
+                f"do not match the SERVER_SPEC keys '{self._launcher.SERVER_SPEC.keys()}'."
             )
         for key, server_type in self._launcher.SERVER_SPEC.items():
             if server_type == ServerType.GRPC:
@@ -100,9 +100,9 @@ class ProductInstance:
         Parameters
         ----------
         timeout :
-            Time in seconds after which the instance is forcefully stopped. Note
-            that not all launch methods may implement this parameter. If they
-            do not, the parameter is ignored.
+            Time in seconds after which the instance is forcefully stopped.
+            Not all launch methods implement this parameter. If the parameter
+            is not implemented, it is ignored.
 
         Raises
         ------
@@ -110,19 +110,19 @@ class ProductInstance:
             If the instance is already in the stopped state.
         """
         if self.stopped:
-            raise RuntimeError("Cannot stop the server, it has already been stopped.")
+            raise RuntimeError("Cannot stop the server. It has already been stopped.")
         self._launcher.stop(timeout=timeout)
         self._finalizer.detach()
 
     def restart(self, stop_timeout: float | None = None) -> None:
-        """Stop, then start the product instance.
+        """Stop and then start the product instance.
 
         Parameters
         ----------
         stop_timeout :
-            Time in seconds after which the instance is forcefully stopped. Note
-            that not all launch methods may implement this parameter. If they
-            do not, the parameter is ignored.
+            Time in seconds after which the instance is forcefully stopped.
+            Not all launch methods implement this parameter. If the parameter
+            is not implemented, it is ignored.
 
         Raises
         ------
@@ -131,7 +131,7 @@ class ProductInstance:
         RuntimeError
             If the URLs exposed by the started instance do not match
             the expected ones defined in the launcher's
-            :attr:`.LauncherProtocol.SERVER_SPEC`.
+            :attr:`.LauncherProtocol.SERVER_SPEC` attribute.
         """
         self.stop(timeout=stop_timeout)
         self.start()
@@ -142,8 +142,8 @@ class ProductInstance:
         Parameters
         ----------
         timeout :
-            Time to wait for the servers to respond, in seconds. Note that
-            there is no guarantee that ``check`` returns within this time.
+            Time in seconds to wait for the servers to respond. There
+            is no guarantee that the ``check()`` method returns within this time.
             Instead, this parameter is used as a hint to the launcher implementation.
         """
         return self._launcher.check(timeout=timeout)
@@ -151,18 +151,18 @@ class ProductInstance:
     def wait(self, timeout: float) -> None:
         """Wait for all servers to respond.
 
-        Repeatedly checks if the server(s) are running, returning as soon
+        This method repeatedly checks if the servers are running, returning as soon
         as they are all ready.
 
         Parameters
         ----------
         timeout :
-            Wait time before raising an exception.
+            Wait time in seconds before raising an exception.
 
         Raises
         ------
         RuntimeError
-            In case the server still has not responded after ``timeout`` seconds.
+            If the server still has not responded after ``timeout`` seconds.
         """
         start_time = time.time()
         while time.time() - start_time <= timeout:
@@ -177,12 +177,12 @@ class ProductInstance:
 
     @property
     def urls(self) -> dict[str, str]:
-        """URL+port for the servers of the product instance."""
+        """URL and port for the servers of the product instance."""
         return self._launcher.urls
 
     @property
     def stopped(self) -> bool:
-        """Specify whether the product instance is currently stopped."""
+        """Flag indicating if the product instance is currently stopped."""
         try:
             return not self._finalizer.alive
         # If the server has never been started, the '_finalizer' attribute

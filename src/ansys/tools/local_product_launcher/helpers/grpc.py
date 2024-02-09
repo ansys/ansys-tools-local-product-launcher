@@ -37,12 +37,12 @@ def check_grpc_health(channel: grpc.Channel, timeout: Optional[float] = None) ->
     channel :
         Channel to the gRPC server.
     timeout :
-        Timeout for the gRPC health check request.
+        Timeout in seconds for the gRPC health check request.
 
     Returns
     -------
     :
-        ``True`` if the health check succeeded, otherwise ``False``.
+        ``True`` if the health check succeeds, ``False`` otherwise.
     """
     try:
         res = HealthStub(channel).Check(

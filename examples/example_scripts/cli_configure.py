@@ -21,32 +21,29 @@
 # SOFTWARE.
 
 """
-Configuring the launcher from the command line
-----------------------------------------------
+Configure the launcher from the command line
+--------------------------------------------
 
-In this example, the ``example_httpserver`` plugin is configured from the command line.
+This example shows how to configure the ``example_httpserver`` plugin from the command line.
+It consists mostly of command-line interactions. With the exception of interactive commands,
+this example can be run when downloaded as a Jupyter notebook. The interactive commands and
+their outputs are simply shown as text.
 
-
-.. note::
-
-    This example consists mostly of command-line interactions. With the exception of
-    interactive commands, it can be run when downloaded as Jupiter notebook.
-    The interactive commands and their outputs are simply shown as text.
-
-The configuration contains only a single value ``directory`` which specifies the
-directory from which the HTTP server will serve files.
+The configuration contains only a single value, ``directory``, which specifies the
+where the HTTP server is to serve files from.
 
 """
 
 # %%
-# To see the list of launch modes for the ``example_httpserver`` product, run:
+# To see the list of launch modes for the ``example_httpserver`` product, run
+# this code:
 #
 # .. code-block:: bash
 #
 #   %%bash
 #   ansys-launcher configure example_httpserver
 #
-# The output will be:
+# Here is the output:
 #
 # ::
 #
@@ -62,13 +59,14 @@ directory from which the HTTP server will serve files.
 # Interactive configuration
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# To interactively specify the available configuration options, run:
+# To interactively specify the available configuration options, run
+# this command:
 #
 # .. code-block:: bash
 #
 #   ansys-launcher configure example_httpserver direct
 #
-# Which may result in a session like:
+# The preceding command might result in a session like this:
 #
 # ::
 #
@@ -81,7 +79,7 @@ directory from which the HTTP server will serve files.
 # Non-interactive configuration
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Alternatively, the configuration can be specified fully from the command line (non-interactively):
+# Alternatively, you can specify the configuration fully from the command line (non-interactively):
 #
 # .. code-block:: bash
 #
