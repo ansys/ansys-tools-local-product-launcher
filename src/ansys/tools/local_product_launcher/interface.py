@@ -176,7 +176,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
 
     @property
     def urls(self) -> dict[str, str]:
-        """Urls that the server is listening on.
+        """Dictionary of URLs that the server is listening on.
 
         The keys of the returned dictionary must correspond to the keys
         defined in the :attr:`.LauncherProtocol.SERVER_SPEC` attribute.
