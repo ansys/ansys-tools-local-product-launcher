@@ -249,11 +249,15 @@ def build_cli(plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
                     else:
                         click.echo(f"    {launch_mode}")
 
-                    config = get_config_for(product_name=product_name, launch_mode=launch_mode)
+                    try:
+                        config = get_config_for(product_name=product_name, launch_mode=launch_mode)
+                    except KeyError:
+                        click.echo("        No configuration is set.")
+                        continue
                     for field in dataclasses.fields(config):
                         click.echo(f"        {field.name}: {getattr(config, field.name)}")
             except KeyError:
-                click.echo("No configuration is set.")
+                click.echo("    No configuration is set.")
             click.echo("")
 
     @_cli.command()
