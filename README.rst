@@ -46,7 +46,7 @@ The Local Product Launcher documentation contains these sections:
 - `Getting started <https://local-product-launcher.tools.docs.pyansys.com/version/dev/intro.html>`_:
   Explains how to install the Local Product Launcher in user mode and then how
   to configure launcher settings for a specific Ansys product and launch it.
-- `User guide<https://local-product-launcher.tools.docs.pyansys.com/version/dev/user_guide/index.html>`:
+- `User guide <https://local-product-launcher.tools.docs.pyansys.com/version/dev/user_guide/index.html>`:
   Provides an overview of the Local Product Launcher, explaining how to use the command-line
   interface to configure launcher settings, how to create launcher plugins, and the rationale for
   why this utility was created.
@@ -55,7 +55,7 @@ The Local Product Launcher documentation contains these sections:
 - `API reference <https://local-product-launcher.tools.docs.pyansys.com/version/dev/api/index.html>`_:
   Describes Local Product Launcher API endpoints so that you can understand how to interact with
   them programmatically.
-- `Contribute <https://hps.docs.pyansys.com/version/dev/contribute.html>`_: Provides information
+- `Contribute <https://local-product-launcher.tools.docs.pyansys.com/version/dev/contribute.html>`_: Provides information
   on how to install the Local Product Launcher in developer mode and make contributions
   to the codebase and documentation.
 

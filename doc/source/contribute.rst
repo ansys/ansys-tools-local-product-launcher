@@ -30,7 +30,7 @@ and enhance the source:
 
       cd ansys-tools-local-product-launcher
 
-#. Make sure you have the latest version of `Poetry`:
+#. Make sure you have the latest version of `Poetry`_:
 
    .. code:: bash
 
@@ -130,7 +130,7 @@ However, the recommended way of checking documentation integrity is to use
 Distributing
 ------------
 
-The following commands can be used to build and check the package:
+The following commands can be used to build and verify the package:
 
 .. code:: bash
 

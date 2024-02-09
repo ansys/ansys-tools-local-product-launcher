@@ -1,5 +1,5 @@
-Use the HTTP Server launcher plugin
------------------------------------
+Define the HTTP Server launcher plugin
+--------------------------------------
 
 This example shows the launcher plugin that is used to start the Python HTTP server.
 The full source is available in the `examples/example_httpserver_plugin directory <https://github.com/ansys-internal/ansys-tools-local-product-launcher/tree/main/examples/example_httpserver_plugin>`_

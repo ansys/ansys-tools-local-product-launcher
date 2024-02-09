@@ -320,7 +320,7 @@ value if they want.
     that may not be expressible when the command-line interface is run.
 
 Add a fallback launch mode
-'''''''''''''''''''''''''''
+''''''''''''''''''''''''''
 
 If you want to provide a fallback launch mode that can be used without any configuration, you can add
 an entrypoint with the special name ``<product>.__fallback__``.

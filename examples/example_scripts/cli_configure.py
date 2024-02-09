@@ -26,7 +26,7 @@ Configure the launcher from the command line
 
 This example shows how to configure the ``example_httpserver`` plugin from the command line.
 It consists mostly of command-line interactions. With the exception of interactive commands,
-this example can be run when downloaded as a Jupiter notebook. The interactive commands and
+this example can be run when downloaded as a Jupyter notebook. The interactive commands and
 their outputs are simply shown as text.
 
 The configuration contains only a single value, ``directory``, which specifies the
