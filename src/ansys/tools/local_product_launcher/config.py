@@ -120,11 +120,25 @@ def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> Dataclas
         the launcher plugin.
     """
     launch_mode = get_launch_mode_for(product_name=product_name, launch_mode=launch_mode)
+
+    # Handle the case where the fallback launcher is used
     if launch_mode == FALLBACK_LAUNCH_MODE_NAME:
         return get_fallback_launcher(product_name=product_name).CONFIG_MODEL()
     config_class: type[DataclassProtocol] = get_config_model(
         product_name=product_name, launch_mode=launch_mode
     )
+    # Handle the case where the launch mode is specified, but not configured
+    if not is_configured(product_name=product_name, launch_mode=launch_mode):
+        try:
+            config_entry = config_class()
+        except TypeError as exc:
+            raise RuntimeError(
+                f"Launch mode '{launch_mode}' for product '{product_name}' "
+                f"does not have a default configuration, and is not configured."
+            ) from exc
+        return config_entry
+
+    # Handle the regular (configured) case
     config_entry = _get_config()[product_name].configs[launch_mode]
     if isinstance(config_entry, dict):
         _get_config()[product_name].configs[launch_mode] = config_class(**config_entry)
