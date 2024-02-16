@@ -13,6 +13,6 @@ This section provides an overview of the Local Product Launcher and how to use i
     :maxdepth: 2
     :caption: Contents
 
+    rationale
     cli
     plugin_creation
-    rationale
