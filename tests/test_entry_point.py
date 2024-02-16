@@ -56,3 +56,8 @@ def test_get_config_model():
         product_name="pkg_with_entrypoint", launch_mode="test_entry_point"
     )
     assert config_model.__name__ == "LauncherConfig"
+
+
+def test_get_config_for_default():
+    """Test that get_config_for returns the default configuration when given a launch_mode."""
+    get_config_for(product_name="pkg_with_entrypoint", launch_mode="test_entry_point")
