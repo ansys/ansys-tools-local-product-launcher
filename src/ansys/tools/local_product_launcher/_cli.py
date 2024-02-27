@@ -219,6 +219,8 @@ def build_cli(plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
         if ctx.invoked_subcommand is None:
             if not plugins:
                 click.echo("No plugins are configured.")
+            else:
+                click.echo(ctx.get_help())
 
     for subcommand in all_subcommands:
         configure.add_command(subcommand)
