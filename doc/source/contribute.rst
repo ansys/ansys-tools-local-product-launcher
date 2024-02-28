@@ -22,7 +22,7 @@ and enhance the source:
 
    .. code:: bash
 
-      git clone https://github.com/ansys-internal/ansys-tools-local-product-launcher
+      git clone https://github.com/ansys/ansys-tools-local-product-launcher
 
 #. Access the directory where you have cloned the repository:
 
@@ -141,7 +141,7 @@ The preceding commands create both a source distribution and a wheel file.
 
 Post issues
 -----------
-Use the `Local Product Launcher Issues <https://github.com/ansys-internal/ansys-tools-local-product-launcher/issues>`_
+Use the `Local Product Launcher Issues <https://github.com/ansys/ansys-tools-local-product-launcher/issues>`_
 page to report bugs and request new features. When possible, use the issue
 templates provided. If your issue does not fit into one of these templates,
 click the link for opening a blank issue.
