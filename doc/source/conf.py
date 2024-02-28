@@ -24,7 +24,7 @@ html_short_title = html_title = "ansys-tools-local-product-launcher"
 cname = os.environ.get("DOCUMENTATION_CNAME", "local-product-launcher.tools.docs.pyansys.com")
 """The canonical name of the webpage hosting the documentation."""
 html_theme_options = {
-    "github_url": "https://github.com/ansys-internal/ansys-tools-local-product-launcher",
+    "github_url": "https://github.com/ansys/ansys-tools-local-product-launcher",
     "show_prev_next": False,
     "show_breadcrumbs": True,
     "additional_breadcrumbs": [

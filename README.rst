@@ -14,12 +14,12 @@ Local Product Launcher
    :target: https://pypi.org/project/ansys-tools-local-product-launcher
    :alt: PyPI
 
-.. |codecov| image:: https://codecov.io/gh/ansys-internal/ansys-tools-local-product-launcher/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/ansys-internal/ansys-tools-local-product-launcher
+.. |codecov| image:: https://codecov.io/gh/ansys/ansys-tools-local-product-launcher/branch/main/graph/badge.svg
+   :target: https://codecov.io/gh/ansys/ansys-tools-local-product-launcher
    :alt: Codecov
 
-.. |GH-CI| image:: https://github.com/ansys-internal/ansys-tools-local-product-launcher/actions/workflows/ci_cd.yml/badge.svg
-   :target: https://github.com/ansys-internal/ansys-tools-local-product-launcher/actions/workflows/ci_cd.yml
+.. |GH-CI| image:: https://github.com/ansys/ansys-tools-local-product-launcher/actions/workflows/ci_cd.yml/badge.svg
+   :target: https://github.com/ansys/ansys-tools-local-product-launcher/actions/workflows/ci_cd.yml
    :alt: GH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
@@ -59,7 +59,7 @@ The Local Product Launcher documentation contains these sections:
   on how to install the Local Product Launcher in developer mode and make contributions
   to the codebase and documentation.
 
-On the `Local Product Launcher Issues <https://github.com/ansys-internal/ansys-tools-local-product-launcher/issues>`_
+On the `Local Product Launcher Issues <https://github.com/ansys/ansys-tools-local-product-launcher/issues>`_
 page, you can create issues to report bugs and request new features. On the `Discussions <https://discuss.ansys.com/>`_
 page on the Ansys Developer portal, you can post questions, share ideas, and get community feedback.
 
