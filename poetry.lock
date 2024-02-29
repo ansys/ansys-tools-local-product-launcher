@@ -624,6 +624,7 @@ develop = true
 
 [package.dependencies]
 ansys-tools-local-product-launcher = "*"
+requests = "*"
 
 [package.source]
 type = "directory"
