@@ -121,6 +121,7 @@ jobs:
           retention-days: 7
       - name: "Install OS packages for PDF"
         run: |
+          sudo apt-get update
           sudo apt-get install latexmk texlive-latex-extra
       - name: Generate the PDF documentation with tox
         run: tox -e doc-linux-pdf
