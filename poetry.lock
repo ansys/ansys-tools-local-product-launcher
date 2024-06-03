@@ -27,13 +27,13 @@ files = [
 
 [[package]]
 name = "ansys-sphinx-theme"
-version = "0.16.2"
+version = "0.16.5"
 description = "A theme devised by ANSYS, Inc. for Sphinx documentation."
 optional = false
 python-versions = "<4,>=3.9"
 files = [
-    {file = "ansys_sphinx_theme-0.16.2-py3-none-any.whl", hash = "sha256:ae381c759ede33e4fbe22fdb8d6fc13d97c3597e5c8bea34b7bc58a80de3199b"},
-    {file = "ansys_sphinx_theme-0.16.2.tar.gz", hash = "sha256:a1f75be9f2805f1de6700406e4273ef1a4c3c537ae54eea38fdfd6a600db293e"},
+    {file = "ansys_sphinx_theme-0.16.5-py3-none-any.whl", hash = "sha256:3546b1a9fde6aebbe5d1a762470248d1e3a24d70c26c6eb334d6a9f1b986e5c9"},
+    {file = "ansys_sphinx_theme-0.16.5.tar.gz", hash = "sha256:21e23524e92be937b8e6b2efc1eaa6b1afa3d500d48d4260ef4596337fdc7732"},
 ]
 
 [package.dependencies]
@@ -43,8 +43,8 @@ pydata-sphinx-theme = ">=0.14,<0.15"
 Sphinx = ">=4.2.0"
 
 [package.extras]
-autoapi = ["sphinx-autoapi (==3.1.0)", "sphinx-design (==0.5.0)", "sphinx-jinja (==2.0.2)"]
-doc = ["PyGitHub (==2.3.0)", "Sphinx (==7.3.7)", "numpydoc (==1.7.0)", "requests (==2.32.2)", "sphinx-copybutton (==0.5.2)", "sphinx-design (==0.5.0)", "sphinx-jinja (==2.0.2)", "sphinx-notfound-page (==1.0.1)"]
+autoapi = ["sphinx-autoapi (==3.1.1)", "sphinx-design (==0.6.0)", "sphinx-jinja (==2.0.2)"]
+doc = ["PyGitHub (==2.3.0)", "Sphinx (==7.3.7)", "numpydoc (==1.7.0)", "requests (==2.32.2)", "sphinx-copybutton (==0.5.2)", "sphinx-design (==0.6.0)", "sphinx-jinja (==2.0.2)", "sphinx-notfound-page (==1.0.2)"]
 
 [[package]]
 name = "appdirs"
@@ -800,17 +800,17 @@ protobuf = ["grpcio-tools (>=1.64.0)"]
 
 [[package]]
 name = "grpcio-health-checking"
-version = "1.63.0"
+version = "1.64.0"
 description = "Standard Health Checking Service for gRPC"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "grpcio_health_checking-1.63.0-py3-none-any.whl", hash = "sha256:ebd4ea09aeb6ef314da86b784d2423705f378cbbfff7be7091bce29602614a54"},
-    {file = "grpcio_health_checking-1.63.0.tar.gz", hash = "sha256:43b90ad740ae6c5655b95fe2a054d1cc05b77a1c50363540963b3b750356ab50"},
+    {file = "grpcio_health_checking-1.64.0-py3-none-any.whl", hash = "sha256:dc0a86edd8204bce11e1434d1c74b1246f4276e985e2b21287a9df515ee95415"},
+    {file = "grpcio_health_checking-1.64.0.tar.gz", hash = "sha256:26dac0e7a1ea804402d32eb3539db2d95af6ee25b13984f90435949b2a1855dc"},
 ]
 
 [package.dependencies]
-grpcio = ">=1.63.0"
+grpcio = ">=1.64.0"
 protobuf = ">=5.26.1,<6.0dev"
 
 [[package]]
@@ -2068,13 +2068,13 @@ cffi = {version = "*", markers = "implementation_name == \"pypy\""}
 
 [[package]]
 name = "requests"
-version = "2.32.2"
+version = "2.32.3"
 description = "Python HTTP for Humans."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "requests-2.32.2-py3-none-any.whl", hash = "sha256:fc06670dd0ed212426dfeb94fc1b983d917c4f9847c863f313c9dfaaffb7c23c"},
-    {file = "requests-2.32.2.tar.gz", hash = "sha256:dd951ff5ecf3e3b3aa26b40703ba77495dab41da839ae72ef3c8e5d8e2433289"},
+    {file = "requests-2.32.3-py3-none-any.whl", hash = "sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6"},
+    {file = "requests-2.32.3.tar.gz", hash = "sha256:55365417734eb18255590a9ff9eb97e9e1da868d4ccd6402399eaf68af20a760"},
 ]
 
 [package.dependencies]
@@ -2465,13 +2465,13 @@ files = [
 
 [[package]]
 name = "types-requests"
-version = "2.32.0.20240523"
+version = "2.32.0.20240602"
 description = "Typing stubs for requests"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "types-requests-2.32.0.20240523.tar.gz", hash = "sha256:26b8a6de32d9f561192b9942b41c0ab2d8010df5677ca8aa146289d11d505f57"},
-    {file = "types_requests-2.32.0.20240523-py3-none-any.whl", hash = "sha256:f19ed0e2daa74302069bbbbf9e82902854ffa780bc790742a810a9aaa52f65ec"},
+    {file = "types-requests-2.32.0.20240602.tar.gz", hash = "sha256:3f98d7bbd0dd94ebd10ff43a7fbe20c3b8528acace6d8efafef0b6a184793f06"},
+    {file = "types_requests-2.32.0.20240602-py3-none-any.whl", hash = "sha256:ed3946063ea9fbc6b5fc0c44fa279188bae42d582cb63760be6cb4b9d06c3de8"},
 ]
 
 [package.dependencies]
