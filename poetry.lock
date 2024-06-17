@@ -800,17 +800,17 @@ protobuf = ["grpcio-tools (>=1.64.1)"]
 
 [[package]]
 name = "grpcio-health-checking"
-version = "1.64.0"
+version = "1.64.1"
 description = "Standard Health Checking Service for gRPC"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "grpcio_health_checking-1.64.0-py3-none-any.whl", hash = "sha256:dc0a86edd8204bce11e1434d1c74b1246f4276e985e2b21287a9df515ee95415"},
-    {file = "grpcio_health_checking-1.64.0.tar.gz", hash = "sha256:26dac0e7a1ea804402d32eb3539db2d95af6ee25b13984f90435949b2a1855dc"},
+    {file = "grpcio_health_checking-1.64.1-py3-none-any.whl", hash = "sha256:c6f1baf007462bfa70e0ac1b600bc1c2c91c143f20b7edd8324544c2ec77be75"},
+    {file = "grpcio_health_checking-1.64.1.tar.gz", hash = "sha256:552389f3f263df6a7f53cb24f28a631a584a30721f9f4329d2715953e197e3db"},
 ]
 
 [package.dependencies]
-grpcio = ">=1.64.0"
+grpcio = ">=1.64.1"
 protobuf = ">=5.26.1,<6.0dev"
 
 [[package]]
