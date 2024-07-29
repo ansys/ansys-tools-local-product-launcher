@@ -800,17 +800,17 @@ protobuf = ["grpcio-tools (>=1.65.1)"]
 
 [[package]]
 name = "grpcio-health-checking"
-version = "1.64.1"
+version = "1.65.1"
 description = "Standard Health Checking Service for gRPC"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "grpcio_health_checking-1.64.1-py3-none-any.whl", hash = "sha256:c6f1baf007462bfa70e0ac1b600bc1c2c91c143f20b7edd8324544c2ec77be75"},
-    {file = "grpcio_health_checking-1.64.1.tar.gz", hash = "sha256:552389f3f263df6a7f53cb24f28a631a584a30721f9f4329d2715953e197e3db"},
+    {file = "grpcio_health_checking-1.65.1-py3-none-any.whl", hash = "sha256:bf185cd001baf60b3ff08c747edc5d24b2e27538a60e552a69ca40b62f13599f"},
+    {file = "grpcio_health_checking-1.65.1.tar.gz", hash = "sha256:ae5f209110cb2dd385331a989ab63548efc0bdf8468cd8f5677fbd8022973876"},
 ]
 
 [package.dependencies]
-grpcio = ">=1.64.1"
+grpcio = ">=1.65.1"
 protobuf = ">=5.26.1,<6.0dev"
 
 [[package]]
@@ -1627,13 +1627,13 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "pre-commit"
-version = "3.7.1"
+version = "3.8.0"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "pre_commit-3.7.1-py2.py3-none-any.whl", hash = "sha256:fae36fd1d7ad7d6a5a1c0b0d5adb2ed1a3bda5a21bf6c3e5372073d7a11cd4c5"},
-    {file = "pre_commit-3.7.1.tar.gz", hash = "sha256:8ca3ad567bc78a4972a3f1a477e94a79d4597e8140a6e0b651c5e33899c3654a"},
+    {file = "pre_commit-3.8.0-py2.py3-none-any.whl", hash = "sha256:9a90a53bf82fdd8778d58085faf8d83df56e40dfe18f45b19446e26bf1b3a63f"},
+    {file = "pre_commit-3.8.0.tar.gz", hash = "sha256:8bb6494d4a20423842e198980c9ecf9f96607a07ea29549e180eef9ae80fe7af"},
 ]
 
 [package.dependencies]
