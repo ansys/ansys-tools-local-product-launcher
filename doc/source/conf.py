@@ -4,7 +4,6 @@ from datetime import datetime
 import os
 
 from ansys_sphinx_theme import ansys_favicon, get_version_match
-from sphinx_gallery.sorting import FileNameSortKey
 
 from ansys.tools.local_product_launcher import __version__
 
@@ -118,18 +117,18 @@ sphinx_gallery_conf = {
     # path where to save gallery generated examples
     "gallery_dirs": ["examples"],
     # Pattern to search for example files
-    "filename_pattern": r"\.py",
+    "filename_pattern": "\\.py",
     # Remove the "Download all examples" button from the top level gallery
     "download_all_examples": False,
     # Sort gallery example by file name instead of number of lines (default)
-    "within_subsection_order": FileNameSortKey,
+    "within_subsection_order": "FileNameSortKey",
     # directory where function granular galleries are stored
     "backreferences_dir": None,
     # Modules for which function level galleries are created.  In
     "doc_module": "ansys-tools-local-product-launcher",
     "promote_jupyter_magic": True,
     "image_scrapers": ("matplotlib",),
-    "ignore_pattern": r"__init__\.py",
+    "ignore_pattern": "__init__\\.py",
     "thumbnail_size": (350, 350),
-    "copyfile_regex": r".*\.rst",
+    "copyfile_regex": ".*\\.rst",
 }
