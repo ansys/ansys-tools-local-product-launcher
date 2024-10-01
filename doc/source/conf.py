@@ -3,8 +3,7 @@
 from datetime import datetime
 import os
 
-from ansys_sphinx_theme import ansys_favicon, get_version_match, pyansys_logo_black
-from sphinx_gallery.sorting import FileNameSortKey
+from ansys_sphinx_theme import ansys_favicon, get_version_match
 
 from ansys.tools.local_product_launcher import __version__
 
@@ -15,7 +14,6 @@ author = "ANSYS, Inc."
 release = version = __version__
 
 # Select desired logo, theme, and declare the html title
-html_logo = pyansys_logo_black
 html_favicon = ansys_favicon
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "ansys-tools-local-product-launcher"
@@ -24,6 +22,7 @@ html_short_title = html_title = "ansys-tools-local-product-launcher"
 cname = os.environ.get("DOCUMENTATION_CNAME", "local-product-launcher.tools.docs.pyansys.com")
 """The canonical name of the webpage hosting the documentation."""
 html_theme_options = {
+    "logo": "pyansys",
     "github_url": "https://github.com/ansys/ansys-tools-local-product-launcher",
     "show_prev_next": False,
     "show_breadcrumbs": True,
@@ -118,18 +117,18 @@ sphinx_gallery_conf = {
     # path where to save gallery generated examples
     "gallery_dirs": ["examples"],
     # Pattern to search for example files
-    "filename_pattern": r"\.py",
+    "filename_pattern": "\\.py",
     # Remove the "Download all examples" button from the top level gallery
     "download_all_examples": False,
     # Sort gallery example by file name instead of number of lines (default)
-    "within_subsection_order": FileNameSortKey,
+    "within_subsection_order": "FileNameSortKey",
     # directory where function granular galleries are stored
     "backreferences_dir": None,
     # Modules for which function level galleries are created.  In
     "doc_module": "ansys-tools-local-product-launcher",
     "promote_jupyter_magic": True,
     "image_scrapers": ("matplotlib",),
-    "ignore_pattern": r"__init__\.py",
+    "ignore_pattern": "__init__\\.py",
     "thumbnail_size": (350, 350),
-    "copyfile_regex": r".*\.rst",
+    "copyfile_regex": ".*\\.rst",
 }
