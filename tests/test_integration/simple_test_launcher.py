@@ -24,7 +24,6 @@ import dataclasses
 import pathlib
 import subprocess
 import sys
-from typing import Optional
 
 import grpc
 
@@ -79,7 +78,7 @@ class SimpleLauncher(LauncherProtocol[SimpleLauncherConfig]):
             self._process.kill()
             self._process.wait()
 
-    def check(self, *, timeout: Optional[float] = None) -> bool:
+    def check(self, *, timeout: float | None = None) -> bool:
         channel = grpc.insecure_channel(self.urls[SERVER_KEY])
         return check_grpc_health(channel, timeout=timeout)
 

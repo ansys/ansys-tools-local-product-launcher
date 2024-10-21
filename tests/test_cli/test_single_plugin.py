@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 from dataclasses import dataclass, field
-from typing import Optional
 
 from click.testing import CliRunner
 import pytest
@@ -36,7 +35,7 @@ class MockConfig:
     int_field: int
     str_field: str
     json_field: dict[str, str]
-    optional_field: Optional[str] = None
+    optional_field: str | None = None
     noprompt_field: str = field(
         metadata={interface.METADATA_KEY_NOPROMPT: True}, default="noprompt_value"
     )
