@@ -3,7 +3,7 @@
 from datetime import datetime
 import os
 
-from ansys_sphinx_theme import ansys_favicon, get_version_match, pyansys_logo_black
+from ansys_sphinx_theme import ansys_favicon, get_version_match
 
 from ansys.tools.local_product_launcher import __version__
 
@@ -14,7 +14,6 @@ author = "ANSYS, Inc."
 release = version = __version__
 
 # Select desired logo, theme, and declare the html title
-html_logo = pyansys_logo_black
 html_favicon = ansys_favicon
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "ansys-tools-local-product-launcher"
@@ -23,6 +22,7 @@ html_short_title = html_title = "ansys-tools-local-product-launcher"
 cname = os.environ.get("DOCUMENTATION_CNAME", "local-product-launcher.tools.docs.pyansys.com")
 """The canonical name of the webpage hosting the documentation."""
 html_theme_options = {
+    "logo": "pyansys",
     "github_url": "https://github.com/ansys/ansys-tools-local-product-launcher",
     "show_prev_next": False,
     "show_breadcrumbs": True,
