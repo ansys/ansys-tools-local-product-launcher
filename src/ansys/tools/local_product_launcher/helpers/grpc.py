@@ -22,14 +22,12 @@
 
 """Helpers for interacting with gRPC servers."""
 
-from typing import Optional
-
 import grpc
 from grpc_health.v1.health_pb2 import HealthCheckRequest, HealthCheckResponse
 from grpc_health.v1.health_pb2_grpc import HealthStub
 
 
-def check_grpc_health(channel: grpc.Channel, timeout: Optional[float] = None) -> bool:
+def check_grpc_health(channel: grpc.Channel, timeout: float | None = None) -> bool:
     """Check that a gRPC server is responding to health check requests.
 
     Parameters

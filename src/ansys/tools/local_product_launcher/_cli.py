@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 import dataclasses
 import json
 import textwrap
-from typing import Any, Callable, Optional, cast
+from typing import Any, cast
 
 import click
 
@@ -40,7 +40,7 @@ from .config import (
 from .interface import LAUNCHER_CONFIG_T, METADATA_KEY_DOC, METADATA_KEY_NOPROMPT, LauncherProtocol
 
 
-def format_prompt(*, field_name: str, description: Optional[str]) -> str:
+def format_prompt(*, field_name: str, description: str | None) -> str:
     """Get the formatted prompt string from its field name and description."""
     prompt = f"\n{field_name}:"
     if description is not None:

@@ -27,7 +27,7 @@ class and register it.
 """
 
 from enum import Enum, auto
-from typing import Any, ClassVar, Optional, Protocol, TypeVar
+from typing import Any, ClassVar, Protocol, TypeVar
 
 __all__ = [
     "DataclassProtocol",
@@ -144,7 +144,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
     def start(self) -> None:
         """Start the product instance."""
 
-    def stop(self, *, timeout: Optional[float] = None) -> None:
+    def stop(self, *, timeout: float | None = None) -> None:
         """Stop the product instance.
 
         Parameters
@@ -156,7 +156,7 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
             *must* return within a finite time.
         """
 
-    def check(self, *, timeout: Optional[float] = None) -> bool:
+    def check(self, *, timeout: float | None = None) -> bool:
         """Check if the product instance is responding to requests.
 
         Parameters
