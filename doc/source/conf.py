@@ -24,7 +24,7 @@ cname = os.environ.get("DOCUMENTATION_CNAME", "local-product-launcher.tools.docs
 html_theme_options = {
     "logo": "pyansys",
     "github_url": "https://github.com/ansys/ansys-tools-local-product-launcher",
-    "show_prev_next": False,
+    "show_prev_next": True,
     "show_breadcrumbs": True,
     "additional_breadcrumbs": [
         ("PyAnsys", "https://docs.pyansys.com/"),
