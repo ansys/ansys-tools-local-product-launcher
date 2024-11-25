@@ -31,13 +31,13 @@ files = [
 
 [[package]]
 name = "ansys-sphinx-theme"
-version = "1.2.1"
+version = "1.2.2"
 description = "A theme devised by ANSYS, Inc. for Sphinx documentation."
 optional = false
 python-versions = "<4,>=3.10"
 files = [
-    {file = "ansys_sphinx_theme-1.2.1-py3-none-any.whl", hash = "sha256:b133ce7b94ef50c6043ee088fe32ed222774eb0af178fc5c07c960941c027360"},
-    {file = "ansys_sphinx_theme-1.2.1.tar.gz", hash = "sha256:9eacd4a242ca1747b61e930b6e134f4659b198ac61bc4290ccd0c461cbae5549"},
+    {file = "ansys_sphinx_theme-1.2.2-py3-none-any.whl", hash = "sha256:c1ea0dc37ce4263946514b4d11d59bca1ae8ddf3a79081be1a415146a4df9f90"},
+    {file = "ansys_sphinx_theme-1.2.2.tar.gz", hash = "sha256:2e640ee9a6466bd8de1de007037d29e3f0205c2e7ff98b1999fa2e228fa77983"},
 ]
 
 [package.dependencies]
@@ -874,17 +874,17 @@ protobuf = ["grpcio-tools (>=1.68.0)"]
 
 [[package]]
 name = "grpcio-health-checking"
-version = "1.67.1"
+version = "1.68.0"
 description = "Standard Health Checking Service for gRPC"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "grpcio_health_checking-1.67.1-py3-none-any.whl", hash = "sha256:93753da5062152660aef2286c9b261e07dd87124a65e4dc9fbd47d1ce966b39d"},
-    {file = "grpcio_health_checking-1.67.1.tar.gz", hash = "sha256:ca90fa76a6afbb4fda71d734cb9767819bba14928b91e308cffbb0c311eb941e"},
+    {file = "grpcio_health_checking-1.68.0-py3-none-any.whl", hash = "sha256:fa05463b9900910fb2950c81cf6b523e26fcc1aeece9ddba408d6f5be4835216"},
+    {file = "grpcio_health_checking-1.68.0.tar.gz", hash = "sha256:10064d39cf7307320f5768678fe5631f2eda93ba265b7c1d1e239e4145f3e8d0"},
 ]
 
 [package.dependencies]
-grpcio = ">=1.67.1"
+grpcio = ">=1.68.0"
 protobuf = ">=5.26.1,<6.0dev"
 
 [[package]]
@@ -2605,13 +2605,13 @@ urllib3 = ">=2"
 
 [[package]]
 name = "types-setuptools"
-version = "75.5.0.20241116"
+version = "75.5.0.20241122"
 description = "Typing stubs for setuptools"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "types-setuptools-75.5.0.20241116.tar.gz", hash = "sha256:b6939ffdbc50ffdc0bcfbf14f7a6de1ddc5510906c1ca2bd62c23646e5798b1a"},
-    {file = "types_setuptools-75.5.0.20241116-py3-none-any.whl", hash = "sha256:1144b2ab8fa986061f963391fdbde16df20582e3cc39c94340e71aa61cc7203f"},
+    {file = "types_setuptools-75.5.0.20241122-py3-none-any.whl", hash = "sha256:d69c445f7bdd5e49d1b2441aadcee1388febcc9ad9d9d5fd33648b555e0b1c31"},
+    {file = "types_setuptools-75.5.0.20241122.tar.gz", hash = "sha256:196aaf1811cbc1c77ac1d4c4879d5308b6fdf426e56b73baadbca2a1827dadef"},
 ]
 
 [[package]]
