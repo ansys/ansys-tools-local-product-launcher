@@ -33,7 +33,7 @@ import dataclasses
 import json
 import os
 import pathlib
-from typing import Any, Optional, cast
+from typing import Any, cast
 
 import appdirs
 
@@ -63,10 +63,10 @@ class _LauncherConfiguration:
     __root__: dict[str, _ProductConfig]
 
 
-_CONFIG: Optional[_LauncherConfiguration] = None
+_CONFIG: _LauncherConfiguration | None = None
 
 
-def get_launch_mode_for(*, product_name: str, launch_mode: Optional[str] = None) -> str:
+def get_launch_mode_for(*, product_name: str, launch_mode: str | None = None) -> str:
     """Get the default launch mode configured for a product.
 
     Parameters
@@ -92,7 +92,7 @@ def get_launch_mode_for(*, product_name: str, launch_mode: Optional[str] = None)
         raise KeyError(f"No configuration is defined for product name '{product_name}'.") from exc
 
 
-def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> DataclassProtocol:
+def get_config_for(*, product_name: str, launch_mode: str | None) -> DataclassProtocol:
     """Get the configuration object for a (product, launch_mode) combination.
 
     Get the default configuration object for the product. If a
@@ -150,7 +150,7 @@ def get_config_for(*, product_name: str, launch_mode: Optional[str]) -> Dataclas
     return cast(DataclassProtocol, _get_config()[product_name].configs[launch_mode])
 
 
-def is_configured(*, product_name: str, launch_mode: Optional[str] = None) -> bool:
+def is_configured(*, product_name: str, launch_mode: str | None = None) -> bool:
     """Check if a configuration exists for the product/launch mode.
 
     Note that if only the fallback launcher/configuration is available, this
