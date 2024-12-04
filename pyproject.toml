@@ -65,8 +65,8 @@ types-requests = ">=2.31.0.20240125"
 optional = true
 
 [tool.poetry.group.test.dependencies]
-pytest = "^7.0"
-pytest-cov = "^4.0.0"
+pytest = ">=7.0"
+pytest-cov = ">=4.0.0"
 pkg-with-entrypoint = { path = "tests/pkg_with_entrypoint" }
 
 [tool.black]
