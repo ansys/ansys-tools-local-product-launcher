@@ -3,8 +3,7 @@
 from datetime import datetime
 import os
 
-from ansys_sphinx_theme import ansys_favicon, get_version_match, pyansys_logo_black
-from sphinx_gallery.sorting import FileNameSortKey
+from ansys_sphinx_theme import ansys_favicon, get_version_match
 
 from ansys.tools.local_product_launcher import __version__
 
@@ -15,7 +14,6 @@ author = "ANSYS, Inc."
 release = version = __version__
 
 # Select desired logo, theme, and declare the html title
-html_logo = pyansys_logo_black
 html_favicon = ansys_favicon
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "ansys-tools-local-product-launcher"
@@ -24,14 +22,15 @@ html_short_title = html_title = "ansys-tools-local-product-launcher"
 cname = os.environ.get("DOCUMENTATION_CNAME", "local-product-launcher.tools.docs.pyansys.com")
 """The canonical name of the webpage hosting the documentation."""
 html_theme_options = {
+    "logo": "pyansys",
     "github_url": "https://github.com/ansys/ansys-tools-local-product-launcher",
-    "show_prev_next": False,
+    "show_prev_next": True,
     "show_breadcrumbs": True,
     "additional_breadcrumbs": [
         ("PyAnsys", "https://docs.pyansys.com/"),
     ],
     "switcher": {
-        "json_url": f"https://{cname}/release/versions.json",
+        "json_url": f"https://{cname}/versions.json",
         "version_match": get_version_match(__version__),
     },
     "check_switcher": False,
@@ -122,7 +121,7 @@ sphinx_gallery_conf = {
     # Remove the "Download all examples" button from the top level gallery
     "download_all_examples": False,
     # Sort gallery example by file name instead of number of lines (default)
-    "within_subsection_order": FileNameSortKey,
+    "within_subsection_order": "FileNameSortKey",
     # directory where function granular galleries are stored
     "backreferences_dir": None,
     # Modules for which function level galleries are created.  In

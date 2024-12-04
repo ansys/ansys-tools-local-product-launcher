@@ -23,11 +23,8 @@
 from __future__ import annotations
 
 import importlib.metadata
+from importlib.metadata import entry_points
 from typing import Any
-
-# Can be replaced with import from importlib.metadata when Python 3.9 is no
-# longer supported.
-from backports.entry_points_selectable import entry_points
 
 from .interface import FALLBACK_LAUNCH_MODE_NAME, DataclassProtocol, LauncherProtocol
 
