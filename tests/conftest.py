@@ -37,7 +37,7 @@ def reset_config():
 
 
 def get_mock_entrypoints_from_plugins(
-    target_plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]]
+    target_plugins: dict[str, dict[str, LauncherProtocol[LAUNCHER_CONFIG_T]]],
 ):
     res = []
     for product_name, launchers in target_plugins.items():

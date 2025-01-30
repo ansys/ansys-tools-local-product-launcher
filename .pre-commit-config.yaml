@@ -1,18 +1,18 @@
 repos:
 
 - repo: https://github.com/asottile/pyupgrade
-  rev: v3.18.0
+  rev: v3.19.1
   hooks:
   - id: pyupgrade
     args: [--py310-plus]
 
 - repo: https://github.com/psf/black
-  rev: 24.10.0
+  rev: 25.1.0
   hooks:
   - id: black
 
 - repo: https://github.com/pycqa/isort
-  rev: 5.13.2
+  rev: 6.0.0
   hooks:
   - id: isort
 
@@ -22,7 +22,7 @@ repos:
   - id: flake8
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.3.0
+  rev: v2.4.1
   hooks:
   - id: codespell
     additional_dependencies: ["tomli"] # needed to parse pyproject.toml
@@ -48,7 +48,7 @@ repos:
     exclude: "^(tests/|examples/example_scripts/)"
 
 - repo: https://github.com/ansys/pre-commit-hooks
-  rev: v0.4.3
+  rev: v0.5.1
   hooks:
   - id: add-license-headers
     args: ["--start_year", "2022"]
