@@ -257,7 +257,7 @@ The entrypoint itself has two parts:
 
       from <your.module.name> import DirectLauncher
 
-  
+
 For the entrypoints to update, you must re-install your package (even if it was installed with ``pip install -e``).
 
 Add command-line default and description
@@ -307,7 +307,7 @@ the ``binary_path``:
         )
 
 
-For the default value, use the :py:func:`get_available_ansys_installations <ansys.tools.path.get_available_ansys_installations>`
+For the default value, use the :py:func:`get_available_ansys_installations <path.get_available_ansys_installations>`
 helper to find the Ansys installation directory.
 
 Now, when running ``ansys-launcher configure ACP direct``, users can see and accept the default
