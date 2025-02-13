@@ -29,6 +29,7 @@ from typing import Any
 import weakref
 
 import grpc
+from typing_extensions import Self
 
 from .interface import LAUNCHER_CONFIG_T, LauncherProtocol, ServerType
 
@@ -49,7 +50,7 @@ class ProductInstance:
 
     def __init__(self, *, launcher: LauncherProtocol[LAUNCHER_CONFIG_T]):
         self._launcher = launcher
-        self._finalizer: weakref.finalize
+        self._finalizer: weakref.finalize[Any, Self]
         self._urls: dict[str, str]
         self._channels: dict[str, grpc.Channel]
         self.start()
@@ -64,7 +65,7 @@ class ProductInstance:
         """Stop the product instance when exiting a context manager."""
         self.stop()
 
-    def start(self) -> None:
+    def start(self: Self) -> None:
         """Start the product instance.
 
         Raises
