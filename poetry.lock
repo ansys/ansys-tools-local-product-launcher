@@ -33,14 +33,14 @@ files = [
 
 [[package]]
 name = "ansys-sphinx-theme"
-version = "1.3.3"
+version = "1.4.2"
 description = "A theme devised by ANSYS, Inc. for Sphinx documentation."
 optional = false
 python-versions = "<4,>=3.10"
 groups = ["dev"]
 files = [
-    {file = "ansys_sphinx_theme-1.3.3-py3-none-any.whl", hash = "sha256:cd831d2e439690505837e1268e722ab4c56de56f7225b749718b63d406f3cf06"},
-    {file = "ansys_sphinx_theme-1.3.3.tar.gz", hash = "sha256:635377b17e6049026712eacc5e6b3c95913690460848d1c4f92dc2a0f36fa964"},
+    {file = "ansys_sphinx_theme-1.4.2-py3-none-any.whl", hash = "sha256:ed6d57a1025910b26e52ba8ac2bf192cae71e37646f89f8cae5f8507e6359fd2"},
+    {file = "ansys_sphinx_theme-1.4.2.tar.gz", hash = "sha256:9e58fc700578933afad441c7c6da5a1808f5267156b143cac9fe12c91a77749d"},
 ]
 
 [package.dependencies]
@@ -48,12 +48,12 @@ importlib-metadata = ">=4.0"
 Jinja2 = ">=3.1.2"
 pdf2image = ">=1.17.0"
 pydata-sphinx-theme = ">=0.15.4,<0.17"
-Sphinx = ">=4.2.0"
+Sphinx = ">=6.1.0"
 
 [package.extras]
-autoapi = ["astroid (>=3.0,<4.0)", "sphinx-autoapi (==3.4.0)", "sphinx-design (==0.6.1)", "sphinx-jinja (==2.0.2)"]
+autoapi = ["astroid (>=3.0,<4.0)", "sphinx-autoapi (==3.6.0)", "sphinx-design (==0.6.1)", "sphinx-jinja (==2.0.2)"]
 changelog = ["PyYAML (==6.0.2)", "sphinx-design (==0.6.1)"]
-doc = ["Pillow (>=9.0)", "PyGitHub (==2.6.1)", "PyYAML (==6.0.2)", "Sphinx (==8.1.3)", "jupytext (==1.16.6)", "nbsphinx (==0.9.6)", "notebook (==7.3.2)", "numpydoc (==1.8.0)", "pandas (==2.2.3)", "pyvista[jupyter] (==0.44.2)", "requests (==2.32.3)", "sphinx-autoapi (==3.4.0)", "sphinx-copybutton (==0.5.2)", "sphinx-design (==0.6.1)", "sphinx-gallery (==0.18.0)", "sphinx-jinja (==2.0.2)", "sphinx-notfound-page (==1.1.0)"]
+doc = ["Pillow (>=9.0)", "PyGitHub (==2.6.1)", "PyYAML (==6.0.2)", "jupytext (==1.16.7)", "nbsphinx (==0.9.7)", "notebook (==7.3.3)", "numpydoc (==1.8.0)", "pandas (==2.2.3)", "plotly (==6.0.1)", "pyvista[jupyter] (==0.44.2)", "requests (==2.32.3)", "sphinx-autoapi (==3.6.0)", "sphinx-copybutton (==0.5.2)", "sphinx-design (==0.6.1)", "sphinx-gallery (==0.19.0)", "sphinx-jinja (==2.0.2)", "sphinx-notfound-page (==1.1.0)", "sphinx-theme-builder[cli] (==0.2.0b2)", "tox (==4.24.2)"]
 
 [[package]]
 name = "appdirs"
@@ -2685,14 +2685,14 @@ files = [
 
 [[package]]
 name = "types-requests"
-version = "2.32.0.20250306"
+version = "2.32.0.20250328"
 description = "Typing stubs for requests"
 optional = false
 python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "types_requests-2.32.0.20250306-py3-none-any.whl", hash = "sha256:25f2cbb5c8710b2022f8bbee7b2b66f319ef14aeea2f35d80f18c9dbf3b60a0b"},
-    {file = "types_requests-2.32.0.20250306.tar.gz", hash = "sha256:0962352694ec5b2f95fda877ee60a159abdf84a0fc6fdace599f20acb41a03d1"},
+    {file = "types_requests-2.32.0.20250328-py3-none-any.whl", hash = "sha256:72ff80f84b15eb3aa7a8e2625fffb6a93f2ad5a0c20215fc1dcfa61117bcb2a2"},
+    {file = "types_requests-2.32.0.20250328.tar.gz", hash = "sha256:c9e67228ea103bd811c96984fac36ed2ae8da87a36a633964a21f199d60baf32"},
 ]
 
 [package.dependencies]
@@ -2700,14 +2700,14 @@ urllib3 = ">=2"
 
 [[package]]
 name = "types-setuptools"
-version = "76.0.0.20250313"
+version = "78.1.0.20250329"
 description = "Typing stubs for setuptools"
 optional = false
 python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "types_setuptools-76.0.0.20250313-py3-none-any.whl", hash = "sha256:bf454b2a49b8cfd7ebcf5844d4dd5fe4c8666782df1e3663c5866fd51a47460e"},
-    {file = "types_setuptools-76.0.0.20250313.tar.gz", hash = "sha256:b2be66f550f95f3cad2a7d46177b273c7e9c80df7d257fa57addbbcfc8126a9e"},
+    {file = "types_setuptools-78.1.0.20250329-py3-none-any.whl", hash = "sha256:ea47eab891afb506f470eee581dcde44d64dc99796665da794da6f83f50f6776"},
+    {file = "types_setuptools-78.1.0.20250329.tar.gz", hash = "sha256:31e62950c38b8cc1c5114b077504e36426860a064287cac11b9666ab3a483234"},
 ]
 
 [package.dependencies]
