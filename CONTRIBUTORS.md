@@ -6,8 +6,6 @@
 
 ## Individual Contributors
 
-* [Dominik Gresch](https://github.com/greschd)
+* [Kathy Pippert](https://github.com/PipKat)
 * [Ludovic Steinbach](https://github.com/ludovicsteinbach)
 * [Roberto Pastor Muela](https://github.com/RobPasMue)
-* [Jorge Martínez](https://github.com/jorgepiloto)
-* [Kathy Pippert](https://github.com/PipKat)
