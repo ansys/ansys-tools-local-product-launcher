@@ -83,17 +83,21 @@ class ProductInstance:
         self._launcher.start()
         self._channels = dict()
         urls = self.urls
-        if urls.keys() != self._launcher.SERVER_SPEC.keys():
-            raise RuntimeError(
-                f"The URL keys '{urls.keys()}' provided by the launcher "
-                f"do not match the SERVER_SPEC keys '{self._launcher.SERVER_SPEC.keys()}'."
-            )
+
+        transport_options_map = self._launcher.transport_options
         for key, server_type in self._launcher.SERVER_SPEC.items():
             if server_type == ServerType.GRPC:
-                self._channels[key] = grpc.insecure_channel(
-                    urls[key],
-                    options=[("grpc.max_receive_message_length", _GRPC_MAX_MESSAGE_LENGTH)],
+                self._channels[key] = transport_options_map[key].create_channel(
+                    grpc_options=[("grpc.max_receive_message_length", _GRPC_MAX_MESSAGE_LENGTH)],
                 )
+            elif server_type == ServerType.GENERIC:
+                if key not in urls:
+                    raise RuntimeError(
+                        f"The URL for the generic server with key '{key}' was not provided "
+                        "by the launcher."
+                    )
+            else:
+                raise RuntimeError(f"Unsupported server type: {server_type}")
 
     def stop(self, *, timeout: float | None = None) -> None:
         """Stop the product instance.
@@ -178,7 +182,11 @@ class ProductInstance:
 
     @property
     def urls(self) -> dict[str, str]:
-        """URL and port for the servers of the product instance."""
+        """URL and port for the servers of the product instance.
+
+        Only generic server types are listed, gRPC servers should be accessed
+        via the :attr:`.channels` property.
+        """
         return self._launcher.urls
 
     @property
