@@ -65,7 +65,6 @@ LAUNCHER_CONFIG_T = TypeVar("LAUNCHER_CONFIG_T", bound=DataclassProtocol)
 # """Type variable for launcher configuration objects."""
 
 
-
 class ServerType(Enum):
     """Defines which protocols the server supports.
 

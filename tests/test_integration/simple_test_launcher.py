@@ -65,9 +65,7 @@ class SimpleLauncher(LauncherProtocol[SimpleLauncherConfig]):
             self._transport_options.uds_dir = self._tmp_dir.name
 
         self._uds_dir = self._transport_options.uds_dir
-        self._uds_file = (
-            pathlib.Path(self._transport_options.uds_dir) / "simple_test_service.sock"
-        )
+        self._uds_file = pathlib.Path(self._transport_options.uds_dir) / "simple_test_service.sock"
         self._url = f"unix:{self._uds_file}"
 
     def start(self):

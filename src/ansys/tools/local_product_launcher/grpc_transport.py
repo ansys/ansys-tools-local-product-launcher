@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""Defines options for connecting to a gRPC server."""
+
 from abc import ABC, abstractmethod
 from dataclasses import asdict, dataclass
 import enum
@@ -83,13 +85,14 @@ class TransportOptionsBase(ABC):
         """Transport mode."""
         return self._MODE
 
-    def create_channel(self, **extra_kwargs) -> grpc.Channel:
+    def create_channel(self, **extra_kwargs: Any) -> grpc.Channel:
         """Create a gRPC channel using the transport options.
 
         Parameters
         ----------
         extra_kwargs :
             Extra keyword arguments to pass to the channel creation function.
+
         Returns
         -------
         :
