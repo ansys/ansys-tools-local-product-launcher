@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 # Check https://python-poetry.org/docs/pyproject/ for all available sections
 name = "ansys-tools-local-product-launcher"
-version = "0.2.dev0"
+version = "0.2.0"
 description = "A utility for launching Ansys products on a local machine"
 license = "MIT"
 authors = ["ANSYS, Inc. <pyansys.core@ansys.com>"]
