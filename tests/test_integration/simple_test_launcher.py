@@ -24,11 +24,10 @@ import dataclasses
 import pathlib
 import subprocess
 import sys
+import tempfile
 
-import grpc
-
+from ansys.tools.local_product_launcher.grpc_transport import UDSOptions
 from ansys.tools.local_product_launcher.helpers.grpc import check_grpc_health
-from ansys.tools.local_product_launcher.helpers.ports import find_free_ports
 from ansys.tools.local_product_launcher.interface import (
     METADATA_KEY_DOC,
     LauncherProtocol,
@@ -45,6 +44,9 @@ class SimpleLauncherConfig:
         default=str(SCRIPT_PATH),
         metadata={METADATA_KEY_DOC: "Location of the server Python script."},
     )
+    transport_options = UDSOptions(
+        uds_service="simple_test_service",
+    )
 
 
 class SimpleLauncher(LauncherProtocol[SimpleLauncherConfig]):
@@ -53,17 +55,25 @@ class SimpleLauncher(LauncherProtocol[SimpleLauncherConfig]):
 
     def __init__(self, *, config: SimpleLauncherConfig):
         self._script_path = config.script_path
+        self._transport_options = config.transport_options
+        if self._transport_options.mode != "uds":
+            raise ValueError("Only UDS transport mode is supported by SimpleLauncher.")
         self._process: subprocess.Popen[str]
         self._url: str
+        if self._transport_options.uds_dir is None:
+            self._tmp_dir = tempfile.TemporaryDirectory()
+            self._transport_options.uds_dir = self._tmp_dir.name
+
+        self._uds_dir = self._transport_options.uds_dir
+        self._uds_file = pathlib.Path(self._transport_options.uds_dir) / "simple_test_service.sock"
+        self._url = f"unix:{self._uds_file}"
 
     def start(self):
-        port = find_free_ports()[0]
-        self._url = f"localhost:{port}"
         self._process = subprocess.Popen(
             [
                 sys.executable,
                 self._script_path,
-                str(port),
+                str(self._uds_dir),
             ],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
@@ -77,11 +87,14 @@ class SimpleLauncher(LauncherProtocol[SimpleLauncherConfig]):
         except subprocess.TimeoutExpired:
             self._process.kill()
             self._process.wait()
+        # If the server failed to so, remove the UDS file. Graceful
+        # shutdown on Windows does not appear to work reliably.
+        self._uds_file.unlink(missing_ok=True)
 
     def check(self, *, timeout: float | None = None) -> bool:
-        channel = grpc.insecure_channel(self.urls[SERVER_KEY])
+        channel = self._transport_options.create_channel()
         return check_grpc_health(channel, timeout=timeout)
 
     @property
-    def urls(self):
-        return {SERVER_KEY: self._url}
+    def transport_options(self):
+        return {SERVER_KEY: self._transport_options}

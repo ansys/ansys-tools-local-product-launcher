@@ -28,7 +28,7 @@ local_product_launcher
 
 import importlib.metadata
 
-from . import config, helpers, interface, product_instance
+from . import config, grpc_transport, helpers, interface, product_instance
 from .launch import launch_product
 
 __version__ = importlib.metadata.version(__name__.replace(".", "-"))
@@ -39,4 +39,5 @@ __all__ = [
     "config",
     "product_instance",
     "launch_product",
+    "grpc_transport",
 ]

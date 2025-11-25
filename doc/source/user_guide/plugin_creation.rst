@@ -307,8 +307,8 @@ the ``binary_path``:
         )
 
 
-For the default value, use the :py:func:`get_available_ansys_installations <path.get_available_ansys_installations>`
-helper to find the Ansys installation directory.
+For the default value, use the ``get_available_ansys_installations`` helper to find the Ansys
+installation directory.
 
 Now, when running ``ansys-launcher configure ACP direct``, users can see and accept the default
 value if they want.

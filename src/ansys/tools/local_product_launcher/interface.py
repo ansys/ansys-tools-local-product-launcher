@@ -29,6 +29,8 @@ class and register it.
 from enum import Enum, auto
 from typing import Any, ClassVar, Protocol, TypeVar
 
+from .grpc_transport import TransportOptionsType
+
 __all__ = [
     "DataclassProtocol",
     "FALLBACK_LAUNCH_MODE_NAME",
@@ -179,5 +181,26 @@ class LauncherProtocol(Protocol[LAUNCHER_CONFIG_T]):
         """Dictionary of URLs that the server is listening on.
 
         The keys of the returned dictionary must correspond to the keys
-        defined in the :attr:`.LauncherProtocol.SERVER_SPEC` attribute.
+        defined in the :attr:`.LauncherProtocol.SERVER_SPEC` attribute
+        which have the value :attr:`ServerType.GENERIC`.
         """
+        if any(val == ServerType.GENERIC for val in self.SERVER_SPEC.values()):
+            raise NotImplementedError(
+                "LauncherProtocol.urls must be implemented if any " "generic servers are started."
+            )
+        return {}
+
+    @property
+    def transport_options(self) -> dict[str, TransportOptionsType]:
+        """Dictionary of transport options for the gRPC servers started.
+
+        The keys of the returned dictionary must correspond to the keys
+        defined in the :attr:`.LauncherProtocol.SERVER_SPEC` attribute
+        which have the value :attr:`ServerType.GRPC`.
+        """
+        if any(val == ServerType.GRPC for val in self.SERVER_SPEC.values()):
+            raise NotImplementedError(
+                "LauncherProtocol.transport_options must be implemented "
+                "if any gRPC servers are started."
+            )
+        return {}
