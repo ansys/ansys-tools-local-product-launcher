@@ -28,6 +28,7 @@ ansys-launcher = "ansys.tools.local_product_launcher._cli:cli"
 
 
 [tool.poetry.dependencies]
+python = ">=3.10,<4.0"
 ansys-tools-common = ">=0.1.0"
 
 [tool.poetry.group.dev]
