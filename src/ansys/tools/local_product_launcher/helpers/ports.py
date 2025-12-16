@@ -20,30 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""Helpers for managing port assignment."""
+import warnings
 
-from contextlib import ExitStack, closing
-import socket
-
-
-def find_free_ports(num_ports: int = 1) -> list[int]:
-    """Find free ports on the localhost.
-
-    .. note::
-
-        Because there is no way to reserve a port that would still allow
-        a server to connect to it, there is no guarantee that the ports
-        are *still* free when eventually used.
-
-    Parameters
-    ----------
-    num_ports :
-        Number of free ports to obtain.
-    """
-    port_list = []
-    with ExitStack() as context_stack:
-        for _ in range(num_ports):
-            sock = context_stack.enter_context(closing(socket.socket()))
-            sock.bind(("", 0))
-            port_list.append(sock.getsockname()[1])
-    return port_list
+warnings.warn(
+    "This module is deprecated and will no longer be maintained. "
+    "Functionality from this module has been migrated to ``ansys-tools-common``. "
+    "Please consider migrating to ``ansys-tools-common``. "
+    "For more information check https://github.com/ansys/ansys-tools-local-product-launcher/issues/264",
+    DeprecationWarning,
+)
+from ansys.tools.common.launcher.helpers.ports import *

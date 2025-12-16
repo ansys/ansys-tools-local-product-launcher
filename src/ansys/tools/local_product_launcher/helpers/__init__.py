@@ -22,6 +22,16 @@
 
 """Helper modules for implementing Local Product Launcher plugins."""
 
-from . import grpc, ports
+import warnings
+warnings.warn(
+    "This module is deprecated and will no longer be maintained. "
+    "Functionality from this module has been migrated to ``ansys-tools-common``. "
+    "Please consider migrating to ``ansys-tools-common``. "
+    "For more information check https://github.com/ansys/ansys-tools-local-product-launcher/issues/264",
+    DeprecationWarning,
+)
+
+
+from ansys.tools.common.launcher.helper import grpc, ports
 
 __all__ = ["grpc", "ports"]

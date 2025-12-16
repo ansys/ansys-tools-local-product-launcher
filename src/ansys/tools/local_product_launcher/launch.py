@@ -19,67 +19,14 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import warnings
 
-"""Defines a function for launching Ansys products."""
+warnings.warn(
+    "This module is deprecated and will no longer be maintained. "
+    "Functionality from this module has been migrated to ``ansys-tools-common``. "
+    "Please consider migrating to ``ansys-tools-common``. "
+    "For more information check https://github.com/ansys/ansys-tools-local-product-launcher/issues/264",
+    DeprecationWarning,
+)
 
-from __future__ import annotations
-
-from typing import cast
-
-from ._plugins import get_launcher
-from .config import get_config_for, get_launch_mode_for
-from .interface import LAUNCHER_CONFIG_T, LauncherProtocol
-from .product_instance import ProductInstance
-
-
-def launch_product(
-    product_name: str,
-    *,
-    launch_mode: str | None = None,
-    config: LAUNCHER_CONFIG_T | None = None,
-) -> ProductInstance:
-    """Launch a product instance.
-
-    Parameters
-    ----------
-    product_name :
-        Name of the product to launch.
-    launch_mode :
-        Launch mode to use. The default is ``None``, in which case
-        the default launched mode is used. Options available
-        depend on the launcher plugin.
-    config :
-        Configuration to use for launching the product. The default is
-        ``None``, in which case the default configuration is used.
-
-    Returns
-    -------
-    :
-        Object that can be used to interact with the started product.
-
-    Raises
-    ------
-    TypeError
-        If the type of the configuration object does not match the type
-        requested by the launcher plugin.
-    """
-    launch_mode = get_launch_mode_for(product_name=product_name, launch_mode=launch_mode)
-
-    # The type of the CONFIG_MODEL is checked below, so here we can cast
-    # from type[LauncherProtocol[DataclassProtocol]] to type[LauncherProtocol[LAUNCHER_CONFIG_T]].
-    launcher_klass = cast(
-        type[LauncherProtocol[LAUNCHER_CONFIG_T]],
-        get_launcher(
-            product_name=product_name,
-            launch_mode=launch_mode,
-        ),
-    )
-
-    if config is None:
-        config = get_config_for(product_name=product_name, launch_mode=launch_mode)  # type: ignore
-    if not isinstance(config, launcher_klass.CONFIG_MODEL):
-        raise TypeError(
-            f"Incompatible config of type '{type(config)} is supplied. "
-            f"It needs '{launcher_klass.CONFIG_MODEL}'."
-        )
-    return ProductInstance(launcher=launcher_klass(config=config))
+from ansys.tools.common.launcher.launch import *
