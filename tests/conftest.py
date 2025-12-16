@@ -58,6 +58,7 @@ def monkeypatch_entrypoints_from_plugins(monkeypatch):
         # Also patch the underlying module that _plugins imports from
         try:
             import ansys.tools.common.launcher._plugins as common_plugins
+
             monkeypatch.setattr(common_plugins, "_get_entry_points", mock_fn)
         except ImportError:
             # If ansys-tools-common is not installed, the local patch should be sufficient

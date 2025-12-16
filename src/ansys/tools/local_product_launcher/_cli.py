@@ -22,7 +22,6 @@
 
 import warnings
 
-
 warnings.warn(
     "This library is deprecated and will no longer be maintained. "
     "Functionality from this library has been migrated to ``ansys-tools-common``. "
