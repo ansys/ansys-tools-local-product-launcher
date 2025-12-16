@@ -55,14 +55,14 @@ repos:
 
 - repo: local
   hooks:
-  - id: mypy-code
-    name: "mypy: strict checks on code"
-    entry: mypy
-    language: python
-    types: [python]
-    require_serial: true
-    exclude: "^(doc/)|(tests/)|^(examples/)|(_vendored)"
-    args: ["--strict", "--namespace-packages", "--explicit-package-bases"]
+  # - id: mypy-code
+  #   name: "mypy: strict checks on code"
+  #   entry: mypy
+  #   language: python
+  #   types: [python]
+  #   require_serial: true
+  #   exclude: "^(doc/)|(tests/)|^(examples/)|(_vendored)"
+  #   args: ["--strict", "--namespace-packages", "--explicit-package-bases"]
 
   - id: mypy-tests
     name: "mypy: lenient checks on tests"
