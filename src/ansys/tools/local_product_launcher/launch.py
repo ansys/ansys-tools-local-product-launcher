@@ -19,14 +19,17 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+"""Defines a function for launching Ansys products."""
+
 import warnings
 
 warnings.warn(
     "This module is deprecated and will no longer be maintained. "
     "Functionality from this module has been migrated to ``ansys-tools-common``. "
     "Please consider migrating to ``ansys-tools-common``. "
-    "For more information check https://github.com/ansys/ansys-tools-local-product-launcher/issues/264",
+    "For more information check "
+    "https://github.com/ansys/ansys-tools-local-product-launcher/issues/264",
     DeprecationWarning,
 )
 
-from ansys.tools.common.launcher.launch import *
+from ansys.tools.common.launcher.launch import *  # noqa

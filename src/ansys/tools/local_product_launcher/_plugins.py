@@ -1,4 +1,4 @@
-# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2022 - 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -26,8 +26,9 @@ warnings.warn(
     "This module is deprecated and will no longer be maintained. "
     "Functionality from this module has been migrated to ``ansys-tools-common``. "
     "Please consider migrating to ``ansys-tools-common``. "
-    "For more information check https://github.com/ansys/ansys-tools-path/issues/341",
+    "For more information check "
+    "https://github.com/ansys/ansys-tools-local-product-launcher/issues/264",
     DeprecationWarning,
 )
 
-from ansys.tools.common.launcher._plugins import *
+from ansys.tools.common.launcher._plugins import *  # noqa

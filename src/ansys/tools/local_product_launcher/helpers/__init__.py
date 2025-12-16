@@ -23,6 +23,7 @@
 """Helper modules for implementing Local Product Launcher plugins."""
 
 import warnings
+
 warnings.warn(
     "This module is deprecated and will no longer be maintained. "
     "Functionality from this module has been migrated to ``ansys-tools-common``. "

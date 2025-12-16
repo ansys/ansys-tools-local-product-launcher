@@ -20,19 +20,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from ansys.tools.common.launcher._cli import build_cli
-
 import warnings
+
+from ansys.tools.common.launcher._cli import build_cli
 
 warnings.warn(
     "This library is deprecated and will no longer be maintained. "
     "Functionality from this library has been migrated to ``ansys-tools-common``. "
     "Please consider migrating to ``ansys-tools-common``. "
-    "For more information check https://github.com/ansys/ansys-tools-local-product-launcher/issues/264",
+    "For more information check "
+    "https://github.com/ansys/ansys-tools-local-product-launcher/issues/264",
     DeprecationWarning,
 )
 
 cli = build_cli()
 if __name__ == "__main__":
     cli()
-    
