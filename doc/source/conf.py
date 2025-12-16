@@ -57,6 +57,26 @@ intersphinx_mapping = {
     "ansys-tools-common": ("https://common.tools.docs.pyansys.com/version/stable", None),
 }
 
+# nitpick exceptions
+nitpick_ignore = [
+    (
+        "py:class",
+        "ansys.tools.local_product_launcher.interface.LAUNCHER_CONFIG_T",
+    ),  # TypeVar, not a class
+    # References that may not resolve due to migration to ansys-tools-common
+    ("py:class", "LauncherProtocol"),
+    ("py:class", "ProductInstance"),
+    ("py:func", "launch_product"),
+    ("py:meth", "ProductInstance.stop"),
+    ("py:meth", "LauncherProtocol.start"),
+    ("py:meth", "LauncherProtocol.stop"),
+    ("py:meth", "LauncherProtocol.check"),
+    ("py:func", "find_free_ports"),
+    ("py:func", "check_grpc_health"),
+    ("py:attr", "LauncherProtocol.urls"),
+    ("py:obj", "interface.METADATA_KEY_DOC"),
+    ("py:obj", "interface.METADATA_KEY_NOPROMPT"),
+]
 
 nitpick_ignore_regex = []
 
