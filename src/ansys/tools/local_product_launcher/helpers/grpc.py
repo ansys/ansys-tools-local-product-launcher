@@ -32,4 +32,4 @@ warnings.warn(
     DeprecationWarning,
 )
 
-from ansys.tools.common.launcher.helperss.grpc import *  # noqa
+from ansys.tools.common.launcher.helpers.grpc import *  # noqa
