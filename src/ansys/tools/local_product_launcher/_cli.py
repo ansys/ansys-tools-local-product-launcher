@@ -22,7 +22,6 @@
 
 import warnings
 
-from ansys.tools.common.launcher._cli import build_cli
 
 warnings.warn(
     "This library is deprecated and will no longer be maintained. "
@@ -33,6 +32,9 @@ warnings.warn(
     DeprecationWarning,
 )
 
-cli = build_cli()  # noqa
+from ansys.tools.common.launcher._cli import build_cli
+from ansys.tools.common.launcher._plugins import get_all_plugins
+
+cli = build_cli(plugins=get_all_plugins())  # noqa
 if __name__ == "__main__":
     cli()

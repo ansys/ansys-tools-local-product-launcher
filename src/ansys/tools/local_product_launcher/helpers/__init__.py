@@ -33,6 +33,6 @@ warnings.warn(
 )
 
 
-from ansys.tools.common.launcher.helper import grpc, ports  # noqa
+from ansys.tools.common.launcher.helpers import grpc, ports  # noqa
 
 __all__ = ["grpc", "ports"]

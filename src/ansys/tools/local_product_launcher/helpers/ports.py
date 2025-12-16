@@ -31,4 +31,4 @@ warnings.warn(
     "https://github.com/ansys/ansys-tools-local-product-launcher/issues/264",
     DeprecationWarning,
 )
-from ansys.tools.common.launcher.helpers.ports import *  # noqa
+from ansys.tools.common.launcher.helperss.ports import *  # noqa
