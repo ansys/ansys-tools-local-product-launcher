@@ -13,4 +13,5 @@ understand how to interact with them programmatically.
     product_instance
     interface
     config
+    grpc_transport
     helpers/index

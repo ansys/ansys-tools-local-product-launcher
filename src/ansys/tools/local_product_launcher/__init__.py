@@ -49,4 +49,5 @@ __all__ = [
     "config",
     "product_instance",
     "launch_product",
+    "grpc_transport",
 ]
