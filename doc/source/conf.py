@@ -54,7 +54,6 @@ extensions = [
 intersphinx_mapping = {
     "python": ("https://docs.python.org/dev", None),
     "grpc": ("https://grpc.github.io/grpc/python/", None),
-    "ansys-tools-common": ("https://common.tools.docs.pyansys.com/version/stable", None),
 }
 
 # nitpick exceptions
