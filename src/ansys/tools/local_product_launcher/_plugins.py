@@ -32,3 +32,4 @@ warnings.warn(
 )
 
 from ansys.tools.common.launcher._plugins import *  # noqa
+from ansys.tools.common.launcher._plugins import _get_entry_points  # noqa
