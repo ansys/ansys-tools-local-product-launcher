@@ -33,6 +33,6 @@ warnings.warn(
     DeprecationWarning,
 )
 
-cli = build_cli()
+cli = build_cli()  # noqa
 if __name__ == "__main__":
     cli()
