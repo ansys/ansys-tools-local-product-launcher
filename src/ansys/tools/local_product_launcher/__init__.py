@@ -38,7 +38,7 @@ warnings.warn(
 
 import importlib.metadata
 
-from ansys.tools.common.launcher import config, helpers, interface, product_instance
+from ansys.tools.common.launcher import config, helpers, interface, product_instance, grpc_transport
 from ansys.tools.common.launcher.launch import launch_product
 
 __version__ = importlib.metadata.version(__name__.replace(".", "-"))
