@@ -1,0 +1,611 @@
+[
+    {
+        "objectID": "index",
+        "href": "index.html#ansys-local-product-launcher",
+        "title": "Ansys Local Product Launcher",
+        "section": "Ansys Local Product Launcher",
+        "text": "The Ansys Local Product Launcher is a Python utility for launching Ansys products on a local machine\nand configuring their launch settings.\nExplains how to install the Local Product Launcher in user mode and then how\nto configure launcher settings for a specific product and launch it.\nProvides an overview of the Local Product Launcher, explaining how to use the command-line\ninterface to configure launcher settings, how to create launcher plugins, and the rationale for\nwhy this utility was created.\nUnderstand the Local Product Launcher API endpoints, their capabilities,\nand how to interact with them programmatically.\nProvides examples of how to use the Local Product Launcher to launch a product on a local machine.\nExplains how to install the Local Product Launcher in developer mode and make contributions\nto the codebase and documentation.\nAnsys Local Product Launcher"
+    },
+    {
+        "objectID": "api/helpers/ports",
+        "href": "api/helpers/ports.html#port-management-helpers",
+        "title": "Port management helpers",
+        "section": "Port management helpers",
+        "text": "Helpers for managing port assignment.\nFind free ports on the localhost.\nBecause there is no way to reserve a port that would still allow\na server to connect to it, there is no guarantee that the ports\nare still free when eventually used.\nnum_ports (int, default: 1) – Number of free ports to obtain.\nlist[int]\nPort management helpers\nint\n1\nlist\nint"
+    },
+    {
+        "objectID": "api/helpers/ports",
+        "href": "api/helpers/ports.html#ansys.tools.local_product_launcher.helpers.ports.find_free_ports",
+        "title": "Port management helpers > Port management helpers > find_free_ports",
+        "section": "Port management helpers > find_free_ports",
+        "text": "ansys.tools.local_product_launcher.helpers.ports.find_free_ports(num_ports=1)\n\nFind free ports on the localhost.\n\nBecause there is no way to reserve a port that would still allow\na server to connect to it, there is no guarantee that the ports\nare still free when eventually used.\n\nParameters\n\nnum_ports (int, default: 1) – Number of free ports to obtain.\n\nReturn type\n\nlist[int]\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "user_guide/index",
+        "href": "user_guide/index.html#user-guide",
+        "title": "User guide",
+        "section": "User guide",
+        "text": "This section provides an overview of the Local Product Launcher and how to use it.\nThe rationale page provides a high-level overview of the problem that the\nLocal Product Launcher solves.\nThe cli page describes the command-line interface.\nThe plugin_creation page describes how to create a launcher plugin to extend\nthe Local Product Launcher for use with another Ansys product.\nUser guide"
+    },
+    {
+        "objectID": "examples/plugin",
+        "href": "examples/plugin.html#define-the-http-server-launcher-plugin",
+        "title": "Define the HTTP Server launcher plugin",
+        "section": "Define the HTTP Server launcher plugin",
+        "text": "This example shows the launcher plugin that is used to start the Python HTTP server.\nThe full source is available in the examples/example_httpserver_plugin directory\non GitHub.\nWhile this example explains some aspects of the code, for information on how\nto create a plugin for the Local Product Launcher, see plugin_creation.\nDefine the HTTP Server launcher plugin"
+    },
+    {
+        "objectID": "examples/plugin",
+        "href": "examples/plugin.html#launcher-code",
+        "title": "Define the HTTP Server launcher plugin > Launcher code",
+        "section": "Launcher code",
+        "text": "The LauncherConfig class determines which options are available to the user when configuring the launcher. It exposes\na single option directory, which determines which directory the server is to serve files from.\nThe Launcher class actually starts the server. It needs to fulfill the interface defined by the\nLauncherProtocol class. Namely, this interface consists of these endpoints:\nThe start and stop methods for starting and stopping the server.\nThe check method for checking if the server is running.\nThe urls property for getting the URLs that the the server is serving requests on.\nThe local product launcher uses this minimal interface to construct a ProductInstance class,\nwhich adds some additional functionality on top. For example, the ProductInstance class automatically\nstops the server when the Python process terminates.\nLauncher code\nLauncherConfig\ndirectory\nLauncher\nLauncherProtocol\nstart\nstop\ncheck\nurls\nProductInstance\nProductInstance"
+    },
+    {
+        "objectID": "examples/plugin",
+        "href": "examples/plugin.html#entrypoint-configuration",
+        "title": "Define the HTTP Server launcher plugin > Entrypoint configuration",
+        "section": "Entrypoint configuration",
+        "text": "Besides the launcher code, the plugin must be registered by adding an entrypoint to\nthe pyproject.toml file, as described in entrypoint. In this example,\nflit is used as a build tool. Thus, the pyproject.toml file looks like this:\nTwo entrypoints for the local product launcher are defined:\ndirect: A launch mode that users can configure.\n__fallback__: A fallback mode that is used if no configuration is available.\nBoth entrypoints use the same launcher class.\nEntrypoint configuration\npyproject.toml\nflit\npyproject.toml\ndirect\n__fallback__"
+    },
+    {
+        "objectID": "api/config",
+        "href": "api/config.html#configuration-management",
+        "title": "Configuration management",
+        "section": "Configuration management",
+        "text": "Tools for managing Local Product Launcher configuration.\nThe methods in the config class manage the default configuration\nfor launching products. The configuration is loaded from and stored to a\nconfig.json file. By default, this file is located in the user configuration\ndirectory (platform-dependent). Its location can be specified explicitly\nwith the ANSYS_LAUNCHER_CONFIG_PATH environment variable.\nGet the configuration object for a (product, launch_mode) combination.\nGet the default configuration object for the product. If a\nlaunch_mode parameter is given, the configuration for this mode is returned.\nOtherwise, the configuration for the default launch mode is returned.\nproduct_name (str) – Product to get the configuration for.\nlaunch_mode (str | None) – Launch mode for the configuration.\nDataclassProtocol\nConfiguration object.\nKeyError – If the requested configuration does not exist.\nTypeError – If the configuration type does not match the type specified by\nthe launcher plugin.\nGet the default launch mode configured for a product.\nproduct_name (str) – Product to retrieve the launch mode for.\nlaunch_mode (str | None, default: None) – Launch mode to use. The default is None, in which case the default\nlaunch mode is used. If a launch mode is specified, this value is returned.\nLaunch mode for the product.\nstr or None\nCheck if a configuration exists for the product/launch mode.\nNote that if only the fallback launcher/configuration is available, this\nmethod returns False.\nproduct_name (str) – Product whose configuration is checked.\nlaunch_mode (str | None, default: None) – Launch mode whose configuration is checked. The default is None,\nin which case the default launch mode is used.\nbool\nSave the configuration to a file on disk.\nThis method saves the current in-memory configuration to the config.json file.\nNone\nSet the configuration for a given product and launch mode.\nUpdate the configuration by setting the configuration for the\ngiven product and launch mode.\nThis method only updates the in-memory configuration, and\nit does not store it to a file.\nproduct_name (str) – Name of the product whose configuration to update.\nlaunch_mode (str) – Launch mode that the configuration applies to.\nconfig (TypeVar(LAUNCHER_CONFIG_T, bound= DataclassProtocol)) – Configuration object.\noverwrite_default (bool, default: False) – Whether to change the default launch mode for the product\nto the value specified for the launch_mode parameter.\nNone\nConfiguration management\nconfig\nconfig.json\nANSYS_LAUNCHER_CONFIG_PATH\nlaunch_mode\nstr\nstr\nNone\nDataclassProtocol\nstr\nstr\nNone\nNone\nNone\nFalse\nstr\nstr\nNone\nNone\nNone\nbool\nconfig.json\nNone\nstr\nstr\nTypeVar\nLAUNCHER_CONFIG_T\nDataclassProtocol\nbool\nFalse\nlaunch_mode\nNone"
+    },
+    {
+        "objectID": "api/config",
+        "href": "api/config.html#ansys.tools.local_product_launcher.config.get_config_for",
+        "title": "Configuration management > Configuration management > get_config_for",
+        "section": "Configuration management > get_config_for",
+        "text": "ansys.tools.local_product_launcher.config.get_config_for(*, product_name, launch_mode)\n\nGet the configuration object for a (product, launch_mode) combination.\n\nGet the default configuration object for the product. If a\nlaunch_mode parameter is given, the configuration for this mode is returned.\nOtherwise, the configuration for the default launch mode is returned.\n\nParameters\n\nproduct_name (str) – Product to get the configuration for.\n\nlaunch_mode (str | None) – Launch mode for the configuration.\n\nReturn type\n\nDataclassProtocol\n\nReturns\n\nConfiguration object.\n\nRaises\n\nKeyError – If the requested configuration does not exist.\n\nTypeError – If the configuration type does not match the type specified by\nthe launcher plugin.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/config",
+        "href": "api/config.html#ansys.tools.local_product_launcher.config.get_launch_mode_for",
+        "title": "Configuration management > Configuration management > get_launch_mode_for",
+        "section": "Configuration management > get_launch_mode_for",
+        "text": "ansys.tools.local_product_launcher.config.get_launch_mode_for(*, product_name, launch_mode=None)\n\nGet the default launch mode configured for a product.\n\nParameters\n\nproduct_name (str) – Product to retrieve the launch mode for.\n\nlaunch_mode (str | None, default: None) – Launch mode to use. The default is None, in which case the default\nlaunch mode is used. If a launch mode is specified, this value is returned.\n\nReturns\n\nLaunch mode for the product.\n\nReturn type\n\nstr or None\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/config",
+        "href": "api/config.html#ansys.tools.local_product_launcher.config.is_configured",
+        "title": "Configuration management > Configuration management > is_configured",
+        "section": "Configuration management > is_configured",
+        "text": "ansys.tools.local_product_launcher.config.is_configured(*, product_name, launch_mode=None)\n\nCheck if a configuration exists for the product/launch mode.\n\nNote that if only the fallback launcher/configuration is available, this\nmethod returns False.\n\nParameters\n\nproduct_name (str) – Product whose configuration is checked.\n\nlaunch_mode (str | None, default: None) – Launch mode whose configuration is checked. The default is None,\nin which case the default launch mode is used.\n\nReturn type\n\nbool\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/config",
+        "href": "api/config.html#ansys.tools.local_product_launcher.config.save_config",
+        "title": "Configuration management > Configuration management > save_config",
+        "section": "Configuration management > save_config",
+        "text": "ansys.tools.local_product_launcher.config.save_config()\n\nSave the configuration to a file on disk.\n\nThis method saves the current in-memory configuration to the config.json file.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/config",
+        "href": "api/config.html#ansys.tools.local_product_launcher.config.set_config_for",
+        "title": "Configuration management > Configuration management > set_config_for",
+        "section": "Configuration management > set_config_for",
+        "text": "ansys.tools.local_product_launcher.config.set_config_for(*, product_name, launch_mode, config, overwrite_default=False)\n\nSet the configuration for a given product and launch mode.\n\nUpdate the configuration by setting the configuration for the\ngiven product and launch mode.\n\nThis method only updates the in-memory configuration, and\nit does not store it to a file.\n\nParameters\n\nproduct_name (str) – Name of the product whose configuration to update.\n\nlaunch_mode (str) – Launch mode that the configuration applies to.\n\nconfig (TypeVar(LAUNCHER_CONFIG_T, bound= DataclassProtocol)) – Configuration object.\n\noverwrite_default (bool, default: False) – Whether to change the default launch mode for the product\nto the value specified for the launch_mode parameter.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/helpers/grpc",
+        "href": "api/helpers/grpc.html#grpc-helpers",
+        "title": "gRPC helpers",
+        "section": "gRPC helpers",
+        "text": "Helpers for interacting with gRPC servers.\nCheck that a gRPC server is responding to health check requests.\nchannel (Channel) – Channel to the gRPC server.\ntimeout (float | None, default: None) – Timeout in seconds for the gRPC health check request.\nbool\nTrue if the health check succeeds, False otherwise.\ngRPC helpers\nChannel\nfloat\nNone\nNone\nbool\nTrue\nFalse"
+    },
+    {
+        "objectID": "api/helpers/grpc",
+        "href": "api/helpers/grpc.html#ansys.tools.local_product_launcher.helpers.grpc.check_grpc_health",
+        "title": "gRPC helpers > gRPC helpers > check_grpc_health",
+        "section": "gRPC helpers > check_grpc_health",
+        "text": "ansys.tools.local_product_launcher.helpers.grpc.check_grpc_health(channel, timeout=None)\n\nCheck that a gRPC server is responding to health check requests.\n\nParameters\n\nchannel (Channel) – Channel to the gRPC server.\n\ntimeout (float | None, default: None) – Timeout in seconds for the gRPC health check request.\n\nReturn type\n\nbool\n\nReturns\n\nTrue if the health check succeeds, False otherwise.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "examples/cli_configure",
+        "href": "examples/cli_configure.html#configure-the-launcher-from-the-command-line",
+        "title": "Configure the launcher from the command line",
+        "section": "Configure the launcher from the command line",
+        "text": "This example shows how to configure the example_httpserver plugin from the command line.\nIt consists mostly of command-line interactions. With the exception of interactive commands,\nthis example can be run when downloaded as a Jupyter notebook. The interactive commands and\ntheir outputs are simply shown as text.\nThe configuration contains only a single value, directory, which specifies the\nwhere the HTTP server is to serve files from.\nTo see the list of launch modes for the example_httpserver product, run\nthis code:\nHere is the output:\nConfigure the launcher from the command line\nexample_httpserver\ndirectory\nexample_httpserver"
+    },
+    {
+        "objectID": "examples/cli_configure",
+        "href": "examples/cli_configure.html#interactive-configuration",
+        "title": "Configure the launcher from the command line > Interactive configuration",
+        "section": "Interactive configuration",
+        "text": "To interactively specify the available configuration options, run\nthis command:\nThe preceding command might result in a session like this:\nInteractive configuration"
+    },
+    {
+        "objectID": "examples/cli_configure",
+        "href": "examples/cli_configure.html#non-interactive-configuration",
+        "title": "Configure the launcher from the command line > Non-interactive configuration",
+        "section": "Non-interactive configuration",
+        "text": "Alternatively, you can specify the configuration fully from the command line (non-interactively):\nTotal running time of the script: (0 minutes 0.000 seconds)\nDownload Jupyter notebook: cli_configure.ipynb\nDownload Python source code: cli_configure.py\nDownload zipped: cli_configure.zip\nGallery generated by Sphinx-Gallery\nNon-interactive configuration\nDownload Jupyter notebook: cli_configure.ipynb\nDownload Python source code: cli_configure.py\nDownload zipped: cli_configure.zip"
+    },
+    {
+        "objectID": "api/product_instance",
+        "href": "api/product_instance.html#product-instance",
+        "title": "Product instance",
+        "section": "Product instance",
+        "text": "Defines a wrapper for interacting with launched product instances.\nProvides a wrapper for interacting with the launched product instance.\nThis class allows stopping and starting of the product instance. It also\nprovides access to its server URLs/channels.\nThe ProductInstance class can be used as a context manager, stopping\nthe instance when exiting the context.\nChannels to the gRPC servers of the product instance.\nCheck if all servers are responding to requests.\ntimeout (float | None, default: None) – Time in seconds to wait for the servers to respond. There\nis no guarantee that the check() method returns within this time.\nInstead, this parameter is used as a hint to the launcher implementation.\nbool\nStop and then start the product instance.\nstop_timeout (float | None, default: None) – Time in seconds after which the instance is forcefully stopped.\nNot all launch methods implement this parameter. If the parameter\nis not implemented, it is ignored.\nRuntimeError – If the instance is already in the stopped state.\nRuntimeError – If the URLs exposed by the started instance do not match\nthe expected ones defined in the launcher’s\nLauncherProtocol.SERVER_SPEC attribute.\nNone\nStart the product instance.\nRuntimeError – If the instance is already in the started state.\nRuntimeError – If the URLs exposed by the started instance do not match\nthe expected ones defined in the launcher’s\nLauncherProtocol.SERVER_SPEC attribute.\nNone\nStop the product instance.\ntimeout (float | None, default: None) – Time in seconds after which the instance is forcefully stopped.\nNot all launch methods implement this parameter. If the parameter\nis not implemented, it is ignored.\nRuntimeError – If the instance is already in the stopped state.\nNone\nFlag indicating if the product instance is currently stopped.\nURL and port for the servers of the product instance.\nWait for all servers to respond.\nThis method repeatedly checks if the servers are running, returning as soon\nas they are all ready.\ntimeout (float) – Wait time in seconds before raising an exception.\nRuntimeError – If the server still has not responded after timeout seconds.\nNone\nProduct instance\nProductInstance\nfloat\nNone\nNone\ncheck()\nbool\nfloat\nNone\nNone\nLauncherProtocol.SERVER_SPEC\nNone\nLauncherProtocol.SERVER_SPEC\nNone\nfloat\nNone\nNone\nNone\nfloat\ntimeout\nNone"
+    },
+    {
+        "objectID": "api/product_instance",
+        "href": "api/product_instance.html#ansys.tools.local_product_launcher.product_instance.ProductInstance",
+        "title": "Product instance > Product instance > ProductInstance",
+        "section": "Product instance > ProductInstance",
+        "text": "class ansys.tools.local_product_launcher.product_instance.ProductInstance(*, launcher)\n\nProvides a wrapper for interacting with the launched product instance.\n\nThis class allows stopping and starting of the product instance. It also\nprovides access to its server URLs/channels.\n\nThe ProductInstance class can be used as a context manager, stopping\nthe instance when exiting the context.\n\n!! processed by numpydoc !!\n\n\n\nproperty channels: dict[str, Channel]\n\nChannels to the gRPC servers of the product instance.\n\n!! processed by numpydoc !!\n\n\n\ncheck(timeout=None)\n\nCheck if all servers are responding to requests.\n\nParameters\n\ntimeout (float | None, default: None) – Time in seconds to wait for the servers to respond. There\nis no guarantee that the check() method returns within this time.\nInstead, this parameter is used as a hint to the launcher implementation.\n\nReturn type\n\nbool\n\n!! processed by numpydoc !!\n\n\n\nrestart(stop_timeout=None)\n\nStop and then start the product instance.\n\nParameters\n\nstop_timeout (float | None, default: None) – Time in seconds after which the instance is forcefully stopped.\nNot all launch methods implement this parameter. If the parameter\nis not implemented, it is ignored.\n\nRaises\n\nRuntimeError – If the instance is already in the stopped state.\n\nRuntimeError – If the URLs exposed by the started instance do not match\nthe expected ones defined in the launcher’s\nLauncherProtocol.SERVER_SPEC attribute.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!\n\n\n\nstart()\n\nStart the product instance.\n\nRaises\n\nRuntimeError – If the instance is already in the started state.\n\nRuntimeError – If the URLs exposed by the started instance do not match\nthe expected ones defined in the launcher’s\nLauncherProtocol.SERVER_SPEC attribute.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!\n\n\n\nstop(*, timeout=None)\n\nStop the product instance.\n\nParameters\n\ntimeout (float | None, default: None) – Time in seconds after which the instance is forcefully stopped.\nNot all launch methods implement this parameter. If the parameter\nis not implemented, it is ignored.\n\nRaises\n\nRuntimeError – If the instance is already in the stopped state.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!\n\n\n\nproperty stopped: bool\n\nFlag indicating if the product instance is currently stopped.\n\n!! processed by numpydoc !!\n\n\n\nproperty urls: dict[str, str]\n\nURL and port for the servers of the product instance.\n\n!! processed by numpydoc !!\n\n\n\nwait(timeout)\n\nWait for all servers to respond.\n\nThis method repeatedly checks if the servers are running, returning as soon\nas they are all ready.\n\nParameters\n\ntimeout (float) – Wait time in seconds before raising an exception.\n\nRaises\n\nRuntimeError – If the server still has not responded after timeout seconds.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/product_instance",
+        "href": "api/product_instance.html#ansys.tools.local_product_launcher.product_instance.ProductInstance.channels",
+        "title": "Product instance > Product instance > channels",
+        "section": "Product instance > channels",
+        "text": "property channels: dict[str, Channel]\n\nChannels to the gRPC servers of the product instance.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/product_instance",
+        "href": "api/product_instance.html#ansys.tools.local_product_launcher.product_instance.ProductInstance.check",
+        "title": "Product instance > Product instance > check",
+        "section": "Product instance > check",
+        "text": "check(timeout=None)\n\nCheck if all servers are responding to requests.\n\nParameters\n\ntimeout (float | None, default: None) – Time in seconds to wait for the servers to respond. There\nis no guarantee that the check() method returns within this time.\nInstead, this parameter is used as a hint to the launcher implementation.\n\nReturn type\n\nbool\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/product_instance",
+        "href": "api/product_instance.html#ansys.tools.local_product_launcher.product_instance.ProductInstance.restart",
+        "title": "Product instance > Product instance > restart",
+        "section": "Product instance > restart",
+        "text": "restart(stop_timeout=None)\n\nStop and then start the product instance.\n\nParameters\n\nstop_timeout (float | None, default: None) – Time in seconds after which the instance is forcefully stopped.\nNot all launch methods implement this parameter. If the parameter\nis not implemented, it is ignored.\n\nRaises\n\nRuntimeError – If the instance is already in the stopped state.\n\nRuntimeError – If the URLs exposed by the started instance do not match\nthe expected ones defined in the launcher’s\nLauncherProtocol.SERVER_SPEC attribute.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/product_instance",
+        "href": "api/product_instance.html#ansys.tools.local_product_launcher.product_instance.ProductInstance.start",
+        "title": "Product instance > Product instance > start",
+        "section": "Product instance > start",
+        "text": "start()\n\nStart the product instance.\n\nRaises\n\nRuntimeError – If the instance is already in the started state.\n\nRuntimeError – If the URLs exposed by the started instance do not match\nthe expected ones defined in the launcher’s\nLauncherProtocol.SERVER_SPEC attribute.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/product_instance",
+        "href": "api/product_instance.html#ansys.tools.local_product_launcher.product_instance.ProductInstance.stop",
+        "title": "Product instance > Product instance > stop",
+        "section": "Product instance > stop",
+        "text": "stop(*, timeout=None)\n\nStop the product instance.\n\nParameters\n\ntimeout (float | None, default: None) – Time in seconds after which the instance is forcefully stopped.\nNot all launch methods implement this parameter. If the parameter\nis not implemented, it is ignored.\n\nRaises\n\nRuntimeError – If the instance is already in the stopped state.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/product_instance",
+        "href": "api/product_instance.html#ansys.tools.local_product_launcher.product_instance.ProductInstance.stopped",
+        "title": "Product instance > Product instance > stopped",
+        "section": "Product instance > stopped",
+        "text": "property stopped: bool\n\nFlag indicating if the product instance is currently stopped.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/product_instance",
+        "href": "api/product_instance.html#ansys.tools.local_product_launcher.product_instance.ProductInstance.urls",
+        "title": "Product instance > Product instance > urls",
+        "section": "Product instance > urls",
+        "text": "property urls: dict[str, str]\n\nURL and port for the servers of the product instance.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/product_instance",
+        "href": "api/product_instance.html#ansys.tools.local_product_launcher.product_instance.ProductInstance.wait",
+        "title": "Product instance > Product instance > wait",
+        "section": "Product instance > wait",
+        "text": "wait(timeout)\n\nWait for all servers to respond.\n\nThis method repeatedly checks if the servers are running, returning as soon\nas they are all ready.\n\nParameters\n\ntimeout (float) – Wait time in seconds before raising an exception.\n\nRaises\n\nRuntimeError – If the server still has not responded after timeout seconds.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "intro",
+        "href": "intro.html#getting-started",
+        "title": "Getting started",
+        "section": "Getting started",
+        "text": "The Local Product Launcher is a utility for launching Ansys products on a local machine\nand configuring their settings.\nThis section explains how to install the Local Product Launcher in user mode and then\nhow to configure launcher settings for a specific Ansys product and launch it.\nIf you are interested in contributing to the codebase or documentation for\nthe Local Product Launcher, see Contribute.\nGetting started"
+    },
+    {
+        "objectID": "intro",
+        "href": "intro.html#installation",
+        "title": "Getting started > Installation",
+        "section": "Installation",
+        "text": "Install the Local Product Launcher in user mode with this command:\nTo keep Python packages isolated from your system Python, you should use a\nvirtual environment.\nInstallation"
+    },
+    {
+        "objectID": "intro",
+        "href": "intro.html#configuration",
+        "title": "Getting started > Configuration",
+        "section": "Configuration",
+        "text": "Use the ansys-launcher command-line interface to configure launcher settings\nfor a specific product. Note that this requires a product plug-in to be installed.\nTo list the available plug-ins and their launch modes, run this command:\nThe output might look like this, where ACP is the plugin for Ansys Composite PrepPost:\nAssuming that the ACP plug-in is installed, configure the\nACP launcher to use the direct launch mode by running this command:\nThe command-line tool prompts for the configuration options available for this launcher.\nAfter configuring the launcher, you can inspect the configuration with this command:\nOr you can edit the configuration file directly. To find the configuration file location, run\nthis command:\nConfiguration\nansys-launcher\nACP\nACP"
+    },
+    {
+        "objectID": "intro",
+        "href": "intro.html#launching",
+        "title": "Getting started > Launching",
+        "section": "Launching",
+        "text": "To launch the product, run these commands:\nLaunching"
+    },
+    {
+        "objectID": "api/launch",
+        "href": "api/launch.html#product-launcher",
+        "title": "Product launcher",
+        "section": "Product launcher",
+        "text": "Defines a function for launching Ansys products.\nLaunch a product instance.\nproduct_name (str) – Name of the product to launch.\nlaunch_mode (str | None, default: None) – Launch mode to use. The default is None, in which case\nthe default launched mode is used. Options available\ndepend on the launcher plugin.\nconfig (Optional[TypeVar(LAUNCHER_CONFIG_T, bound= DataclassProtocol)], default: None) – Configuration to use for launching the product. The default is\nNone, in which case the default configuration is used.\nProductInstance\nObject that can be used to interact with the started product.\nTypeError – If the type of the configuration object does not match the type\nrequested by the launcher plugin.\nProduct launcher\nstr\nstr\nNone\nNone\nNone\nOptional\nTypeVar\nLAUNCHER_CONFIG_T\nDataclassProtocol\nNone\nNone\nProductInstance"
+    },
+    {
+        "objectID": "api/launch",
+        "href": "api/launch.html#ansys.tools.local_product_launcher.launch.launch_product",
+        "title": "Product launcher > Product launcher > launch_product",
+        "section": "Product launcher > launch_product",
+        "text": "ansys.tools.local_product_launcher.launch.launch_product(product_name, *, launch_mode=None, config=None)\n\nLaunch a product instance.\n\nParameters\n\nproduct_name (str) – Name of the product to launch.\n\nlaunch_mode (str | None, default: None) – Launch mode to use. The default is None, in which case\nthe default launched mode is used. Options available\ndepend on the launcher plugin.\n\nconfig (Optional[TypeVar(LAUNCHER_CONFIG_T, bound= DataclassProtocol)], default: None) – Configuration to use for launching the product. The default is\nNone, in which case the default configuration is used.\n\nReturn type\n\nProductInstance\n\nReturns\n\nObject that can be used to interact with the started product.\n\nRaises\n\nTypeError – If the type of the configuration object does not match the type\nrequested by the launcher plugin.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "user_guide/rationale",
+        "href": "user_guide/rationale.html#rationale",
+        "title": "Rationale",
+        "section": "Rationale",
+        "text": "This page provides a high-level overview of the problem that the\nLocal Product Launcher solves.\nRationale"
+    },
+    {
+        "objectID": "user_guide/rationale",
+        "href": "user_guide/rationale.html#improvements-over-the-status-quo",
+        "title": "Rationale > Improvements over the status quo",
+        "section": "Improvements over the status quo",
+        "text": "Currently, many PyAnsys libraries implement a launch function, which looks\nsomething like this:\nWhile this approach is reasonably simple to use, it has some disadvantages:\nIt can be difficult to tell from the keyword arguments how the server is launched.\nNon-standard launch parameters must always be passed along to the launch_myproduct()\nmethod. This makes examples that are generated on a continuous integration machine\nnon-tranferable. Users must replace the launch parameters with what is applicable to\ntheir setups.\nEach product implements the local launcher separately, with some accidental differences.\nThis limits code reuse.\nHere’s how the Local Product Launcher improves on the status quo:\nThe launch_mode() method is passed as an explicit argument, and all other configuration\nis collected into a single object. The available configuration options explicitly depend\non the launch mode.\nThe Local Product Launcher separates configuration from the launching code by default.\nTo still enable cases where multiple different configurations must be available at run time,\nthis separation is optional. The full configuration can still be passed to the launching code.\nThe Local Product Launcher provides a common interface for implementing the launching task\nand handles common tasks like ensuring that the product is closed when the Python process exits.\nIt doesn’t attempt to remove the inherent differences between launching different products.\nUltimately, control over the launch is with each specific PyAnsys library through a plugin\nsystem.\nImprovements over the status quo\nlaunch_myproduct()\nlaunch_mode()"
+    },
+    {
+        "objectID": "user_guide/rationale",
+        "href": "user_guide/rationale.html#potential-pitfalls",
+        "title": "Rationale > Potential pitfalls",
+        "section": "Potential pitfalls",
+        "text": "As with any attempt to standardize, there are potential pitfalls:\nSee https://xkcd.com/927/\nPotential pitfalls"
+    },
+    {
+        "objectID": "user_guide/rationale",
+        "href": "user_guide/rationale.html#future-avenues",
+        "title": "Rationale > Future avenues",
+        "section": "Future avenues",
+        "text": "Here are some ideas for how the Local Product Launcher could evolve:\nAdd a server/daemon component that can be controlled:\nVia the PIM API\nFrom the command line\nExtend the helpers module to further ease implementing launcher plugins.\nImplement launcher plugins separate from the product PyAnsys libraries. For\nexample, a docker-compose setup where all launched products share a mounted\nvolume is possible.\nFuture avenues\nhelpers\ndocker-compose"
+    },
+    {
+        "objectID": "user_guide/cli",
+        "href": "user_guide/cli.html#command-line-interface",
+        "title": "Command-line interface",
+        "section": "Command-line interface",
+        "text": "You use the ansys-launcher command-line interface to edit the default\nlaunch configuration.\nConfiguration options for products are defined by each product plugin.\nCommand-line interface\nansys-launcher"
+    },
+    {
+        "objectID": "user_guide/cli",
+        "href": "user_guide/cli.html#ansys-launcher",
+        "title": "Command-line interface > ansys-launcher",
+        "section": "ansys-launcher",
+        "text": "ansys-launcher"
+    },
+    {
+        "objectID": "user_guide/cli",
+        "href": "user_guide/cli.html#configure",
+        "title": "Command-line interface > configure",
+        "section": "configure",
+        "text": "Configure the options for a specific product and launch mode.\nThe available products and launch modes are determined dynamically\nfrom the installed plugins.\nTo get a list of products:\nTo get a list of launch modes for a given product:\nTo configure a product launch mode:\nconfigure"
+    },
+    {
+        "objectID": "user_guide/cli",
+        "href": "user_guide/cli.html#example_httpserver",
+        "title": "Command-line interface > example_httpserver",
+        "section": "example_httpserver",
+        "text": "example_httpserver"
+    },
+    {
+        "objectID": "user_guide/cli",
+        "href": "user_guide/cli.html#direct",
+        "title": "Command-line interface > direct",
+        "section": "direct",
+        "text": "direct"
+    },
+    {
+        "objectID": "user_guide/cli",
+        "href": "user_guide/cli.html#cmdoption-ansys-launcher-configure-example_httpserver-direct-directory",
+        "title": "Command-line interface > direct > cmdoption-ansys-launcher-configure-example_httpserver-direct-directory",
+        "section": "direct > cmdoption-ansys-launcher-configure-example_httpserver-direct-directory",
+        "text": "--directory <directory>\n\n"
+    },
+    {
+        "objectID": "user_guide/cli",
+        "href": "user_guide/cli.html#cmdoption-ansys-launcher-configure-example_httpserver-direct-overwrite_default",
+        "title": "Command-line interface > direct > cmdoption-ansys-launcher-configure-example_httpserver-direct-overwrite_default",
+        "section": "direct > cmdoption-ansys-launcher-configure-example_httpserver-direct-overwrite_default",
+        "text": "--overwrite_default\n\n"
+    },
+    {
+        "objectID": "user_guide/cli",
+        "href": "user_guide/cli.html#list-plugins",
+        "title": "Command-line interface > list-plugins",
+        "section": "list-plugins",
+        "text": "List the possible product/launch mode combinations.\nlist-plugins"
+    },
+    {
+        "objectID": "user_guide/cli",
+        "href": "user_guide/cli.html#show-config",
+        "title": "Command-line interface > show-config",
+        "section": "show-config",
+        "text": "Show the current configuration.\nshow-config"
+    },
+    {
+        "objectID": "user_guide/cli",
+        "href": "user_guide/cli.html#show-config-path",
+        "title": "Command-line interface > show-config-path",
+        "section": "show-config-path",
+        "text": "Show the path to the configuration file.\nshow-config-path"
+    },
+    {
+        "objectID": "api/helpers/index",
+        "href": "api/helpers/index.html#helpers",
+        "title": "Helpers",
+        "section": "Helpers",
+        "text": "Helpers for implementing a Local Product Launcher plugin.\nHelpers"
+    },
+    {
+        "objectID": "examples/sg_execution_times",
+        "href": "examples/sg_execution_times.html#computation-times",
+        "title": "Computation times",
+        "section": "Computation times",
+        "text": "00:00.214 total execution time for 2 files from examples:\nExample\nTime\nMem (MB)\nsphx_glr_examples_py_configure.py (py_configure.py)\n00:00.214\n0.0\nsphx_glr_examples_cli_configure.py (cli_configure.py)\n00:00.000\n0.0\nComputation times\npy_configure.py\ncli_configure.py"
+    },
+    {
+        "objectID": "sg_execution_times",
+        "href": "sg_execution_times.html#computation-times",
+        "title": "Computation times",
+        "section": "Computation times",
+        "text": "00:00.214 total execution time for 2 files from all galleries:\nExample\nTime\nMem (MB)\nsphx_glr_examples_py_configure.py (../../examples/example_scripts/py_configure.py)\n00:00.214\n0.0\nsphx_glr_examples_cli_configure.py (../../examples/example_scripts/cli_configure.py)\n00:00.000\n0.0\nComputation times\n../../examples/example_scripts/py_configure.py\n../../examples/example_scripts/cli_configure.py"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#plugin-interface",
+        "title": "Plugin interface",
+        "section": "Plugin interface",
+        "text": "Interface definitions for implementing a local product launcher.\nA plugin for the Local Product Launcher must implement the LauncherProtocol\nclass and register it.\nProvides the Protocol class for Python dataclasses.\nInterface for managing a local product instance.\nA plugin to the Local Product Launcher must implement the interface\ndefined in this class.\nTo check for compatibility, it is recommended to derive from this\nclass, for example MyLauncher(LauncherProtocol[MyConfigModel]), and\ncheck the resulting code with mypy.\nThe __init__ method should accept exactly one keyword-only\nparameter: config. Note that this is not enforced by mypy.\nconfig (TypeVar(LAUNCHER_CONFIG_T, bound= DataclassProtocol)) – Configuration options used to start the product. This parameter\nmust be an instance of CONFIG_MODEL.\nDefines the configuration options for the launcher.\nThe configuration options which this launcher accepts, specified\nas a dataclass. Note that the\ndefault and metadata[METADATA_KEY_DOC] of the fields are\nused in the configuration CLI, if available.\nDefines the server types that are started.\nThis code defines a server that is accessible via a URL at the\n\"MAIN\" key and a server accessible via gRPC at the\n\"FILE_TRANSFER\" key.\nThe ProductInstance.urls attribute then has keys\n{\"MAIN\", \"FILE_TRANSFER\"}, whereas the\nProductInstance.channels attribute has only the\nkey \"FILE_TRANSFER\".\nCheck if the product instance is responding to requests.\ntimeout (float | None, default: None) – Timeout in seconds for the check.\nThe timeout should be interpreted as a hint to the implementation.\nIt is not required to return within the given time, but the\ncheck must return within a finite time, meaning it must not\nhang indefinitely.\nbool\nWhether the product instance is responding.\nStart the product instance.\nNone\nStop the product instance.\ntimeout (float | None, default: None) – Time after which the instance can be forcefully stopped.\nThe timeout should be interpreted as a hint to the implementation.\nIt is not required to trigger a force-shutdown, but the stop\nmust return within a finite time.\nNone\nDictionary of URLs that the server is listening on.\nThe keys of the returned dictionary must correspond to the keys\ndefined in the LauncherProtocol.SERVER_SPEC attribute.\nKey used in the dataclasses.Field metadata for the option description.\nKey used in the dataclasses.Field metadata to skip prompting for\nthe option by default.\nDefines which protocols the server supports.\nThe ServerType class is used as values in the LauncherProtocol.SERVER_SPEC\nattribute to define the capabilities of the servers started with a given product and\nlaunch method.\nGeneric server, which responds at a given URL and port.\nThe generic server type can be used for any server. It does not\ninclude information about which protocol should be used.\nServer that can be accessed via gRPC.\nServers of this type are accessible via the ProductInstance.channels\nattribute.\nPlugin interface\nLauncherProtocol\nProtocol\nMyLauncher(LauncherProtocol[MyConfigModel])\n__init__\nconfig\nTypeVar\nLAUNCHER_CONFIG_T\nDataclassProtocol\nCONFIG_MODEL\ntype\nTypeVar\nLAUNCHER_CONFIG_T\nDataclassProtocol\ndataclass\ndefault\nmetadata[METADATA_KEY_DOC]\ndict\nstr\nServerType\n\"MAIN\"\n\"FILE_TRANSFER\"\nProductInstance.urls\n{\"MAIN\", \"FILE_TRANSFER\"}\nProductInstance.channels\n\"FILE_TRANSFER\"\nfloat\nNone\nNone\nbool\nNone\nfloat\nNone\nNone\nNone\nLauncherProtocol.SERVER_SPEC\ndataclasses.Field\nmetadata\ndataclasses.Field\nmetadata\nServerType\nLauncherProtocol.SERVER_SPEC\nProductInstance.channels"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#ansys.tools.local_product_launcher.interface.DataclassProtocol",
+        "title": "Plugin interface > Plugin interface > DataclassProtocol",
+        "section": "Plugin interface > DataclassProtocol",
+        "text": "class ansys.tools.local_product_launcher.interface.DataclassProtocol(*args, **kwargs)\n\nProvides the Protocol class for Python dataclasses.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#ansys.tools.local_product_launcher.interface.LauncherProtocol",
+        "title": "Plugin interface > Plugin interface > LauncherProtocol",
+        "section": "Plugin interface > LauncherProtocol",
+        "text": "class ansys.tools.local_product_launcher.interface.LauncherProtocol(*, config)\n\nInterface for managing a local product instance.\n\nA plugin to the Local Product Launcher must implement the interface\ndefined in this class.\n\nTo check for compatibility, it is recommended to derive from this\nclass, for example MyLauncher(LauncherProtocol[MyConfigModel]), and\ncheck the resulting code with mypy.\n\nThe __init__ method should accept exactly one keyword-only\nparameter: config. Note that this is not enforced by mypy.\n\nParameters\n\nconfig (TypeVar(LAUNCHER_CONFIG_T, bound= DataclassProtocol)) – Configuration options used to start the product. This parameter\nmust be an instance of CONFIG_MODEL.\n\n!! processed by numpydoc !!\n\n\n\nCONFIG_MODEL: type[TypeVar(LAUNCHER_CONFIG_T, bound= DataclassProtocol)]\n\nDefines the configuration options for the launcher.\n\nThe configuration options which this launcher accepts, specified\nas a dataclass. Note that the\ndefault and metadata[METADATA_KEY_DOC] of the fields are\nused in the configuration CLI, if available.\n\n!! processed by numpydoc !!\n\n\n\nSERVER_SPEC: dict[str, ServerType]\n\nDefines the server types that are started.\n\nExamples\n\nThis code defines a server that is accessible via a URL at the\n\"MAIN\" key and a server accessible via gRPC at the\n\"FILE_TRANSFER\" key.\n\nSERVER_SPEC = {\n    \"MAIN\": ServerType.GENERIC,\n    \"FILE_TRANSFER\": ServerType.GRPC\n}\n\nThe ProductInstance.urls attribute then has keys\n{\"MAIN\", \"FILE_TRANSFER\"}, whereas the\nProductInstance.channels attribute has only the\nkey \"FILE_TRANSFER\".\n\n!! processed by numpydoc !!\n\n\n\ncheck(*, timeout=None)\n\nCheck if the product instance is responding to requests.\n\nParameters\n\ntimeout (float | None, default: None) – Timeout in seconds for the check.\nThe timeout should be interpreted as a hint to the implementation.\nIt is not required to return within the given time, but the\ncheck must return within a finite time, meaning it must not\nhang indefinitely.\n\nReturn type\n\nbool\n\nReturns\n\nWhether the product instance is responding.\n\n!! processed by numpydoc !!\n\n\n\nstart()\n\nStart the product instance.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!\n\n\n\nstop(*, timeout=None)\n\nStop the product instance.\n\nParameters\n\ntimeout (float | None, default: None) – Time after which the instance can be forcefully stopped.\nThe timeout should be interpreted as a hint to the implementation.\nIt is not required to trigger a force-shutdown, but the stop\nmust return within a finite time.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!\n\n\n\nproperty urls: dict[str, str]\n\nDictionary of URLs that the server is listening on.\n\nThe keys of the returned dictionary must correspond to the keys\ndefined in the LauncherProtocol.SERVER_SPEC attribute.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#ansys.tools.local_product_launcher.interface.LauncherProtocol.CONFIG_MODEL",
+        "title": "Plugin interface > Plugin interface > CONFIG_MODEL",
+        "section": "Plugin interface > CONFIG_MODEL",
+        "text": "CONFIG_MODEL: type[TypeVar(LAUNCHER_CONFIG_T, bound= DataclassProtocol)]\n\nDefines the configuration options for the launcher.\n\nThe configuration options which this launcher accepts, specified\nas a dataclass. Note that the\ndefault and metadata[METADATA_KEY_DOC] of the fields are\nused in the configuration CLI, if available.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#ansys.tools.local_product_launcher.interface.LauncherProtocol.SERVER_SPEC",
+        "title": "Plugin interface > Plugin interface > SERVER_SPEC",
+        "section": "Plugin interface > SERVER_SPEC",
+        "text": "SERVER_SPEC: dict[str, ServerType]\n\nDefines the server types that are started.\n\nExamples\n\nThis code defines a server that is accessible via a URL at the\n\"MAIN\" key and a server accessible via gRPC at the\n\"FILE_TRANSFER\" key.\n\nSERVER_SPEC = {\n    \"MAIN\": ServerType.GENERIC,\n    \"FILE_TRANSFER\": ServerType.GRPC\n}\n\nThe ProductInstance.urls attribute then has keys\n{\"MAIN\", \"FILE_TRANSFER\"}, whereas the\nProductInstance.channels attribute has only the\nkey \"FILE_TRANSFER\".\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#ansys.tools.local_product_launcher.interface.LauncherProtocol.check",
+        "title": "Plugin interface > Plugin interface > check",
+        "section": "Plugin interface > check",
+        "text": "check(*, timeout=None)\n\nCheck if the product instance is responding to requests.\n\nParameters\n\ntimeout (float | None, default: None) – Timeout in seconds for the check.\nThe timeout should be interpreted as a hint to the implementation.\nIt is not required to return within the given time, but the\ncheck must return within a finite time, meaning it must not\nhang indefinitely.\n\nReturn type\n\nbool\n\nReturns\n\nWhether the product instance is responding.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#ansys.tools.local_product_launcher.interface.LauncherProtocol.start",
+        "title": "Plugin interface > Plugin interface > start",
+        "section": "Plugin interface > start",
+        "text": "start()\n\nStart the product instance.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#ansys.tools.local_product_launcher.interface.LauncherProtocol.stop",
+        "title": "Plugin interface > Plugin interface > stop",
+        "section": "Plugin interface > stop",
+        "text": "stop(*, timeout=None)\n\nStop the product instance.\n\nParameters\n\ntimeout (float | None, default: None) – Time after which the instance can be forcefully stopped.\nThe timeout should be interpreted as a hint to the implementation.\nIt is not required to trigger a force-shutdown, but the stop\nmust return within a finite time.\n\nReturn type\n\nNone\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#ansys.tools.local_product_launcher.interface.LauncherProtocol.urls",
+        "title": "Plugin interface > Plugin interface > urls",
+        "section": "Plugin interface > urls",
+        "text": "property urls: dict[str, str]\n\nDictionary of URLs that the server is listening on.\n\nThe keys of the returned dictionary must correspond to the keys\ndefined in the LauncherProtocol.SERVER_SPEC attribute.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#ansys.tools.local_product_launcher.interface.METADATA_KEY_DOC",
+        "title": "Plugin interface > Plugin interface > METADATA_KEY_DOC",
+        "section": "Plugin interface > METADATA_KEY_DOC",
+        "text": "ansys.tools.local_product_launcher.interface.METADATA_KEY_DOC = 'launcher_doc'\n\nKey used in the dataclasses.Field metadata for the option description.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#ansys.tools.local_product_launcher.interface.METADATA_KEY_NOPROMPT",
+        "title": "Plugin interface > Plugin interface > METADATA_KEY_NOPROMPT",
+        "section": "Plugin interface > METADATA_KEY_NOPROMPT",
+        "text": "ansys.tools.local_product_launcher.interface.METADATA_KEY_NOPROMPT = 'launcher_noprompt'\n\nKey used in the dataclasses.Field metadata to skip prompting for\nthe option by default.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#ansys.tools.local_product_launcher.interface.ServerType",
+        "title": "Plugin interface > Plugin interface > ServerType",
+        "section": "Plugin interface > ServerType",
+        "text": "class ansys.tools.local_product_launcher.interface.ServerType(value, names=<not given>, *values, module=None, qualname=None, type=None, start=1, boundary=None)\n\nDefines which protocols the server supports.\n\nThe ServerType class is used as values in the LauncherProtocol.SERVER_SPEC\nattribute to define the capabilities of the servers started with a given product and\nlaunch method.\n\n!! processed by numpydoc !!\n\n\n\nGENERIC = 1\n\nGeneric server, which responds at a given URL and port.\n\nThe generic server type can be used for any server. It does not\ninclude information about which protocol should be used.\n\n!! processed by numpydoc !!\n\n\n\nGRPC = 2\n\nServer that can be accessed via gRPC.\n\nServers of this type are accessible via the ProductInstance.channels\nattribute.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#ansys.tools.local_product_launcher.interface.ServerType.GENERIC",
+        "title": "Plugin interface > Plugin interface > GENERIC",
+        "section": "Plugin interface > GENERIC",
+        "text": "GENERIC = 1\n\nGeneric server, which responds at a given URL and port.\n\nThe generic server type can be used for any server. It does not\ninclude information about which protocol should be used.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/interface",
+        "href": "api/interface.html#ansys.tools.local_product_launcher.interface.ServerType.GRPC",
+        "title": "Plugin interface > Plugin interface > GRPC",
+        "section": "Plugin interface > GRPC",
+        "text": "GRPC = 2\n\nServer that can be accessed via gRPC.\n\nServers of this type are accessible via the ProductInstance.channels\nattribute.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "examples/index",
+        "href": "examples/index.html#examples",
+        "title": "Examples",
+        "section": "Examples",
+        "text": "This section provides examples of how to use the Local Product Launcher to launch a product on\na local machine. For these examples, the Python’s built-in http.server is the application that is\nlaunched.\nExamples\nhttp.server"
+    },
+    {
+        "objectID": "examples/py_configure",
+        "href": "examples/py_configure.html#choose-configuration-at-runtime",
+        "title": "Choose configuration at runtime",
+        "section": "Choose configuration at runtime",
+        "text": "Import the necessary modules.\nChoose configuration at runtime"
+    },
+    {
+        "objectID": "examples/py_configure",
+        "href": "examples/py_configure.html#default-configuration",
+        "title": "Choose configuration at runtime > Default configuration",
+        "section": "Default configuration",
+        "text": "First, launch the product without any configuration. This falls back\nto the default configuration.\nTo ensure that the server is running, use the wait() method.\nRetrieve the content of the server’s main page. This simply serves\na list of files in the directory where the server was launched.\nDefault configuration\nwait()"
+    },
+    {
+        "objectID": "examples/py_configure",
+        "href": "examples/py_configure.html#custom-configuration",
+        "title": "Choose configuration at runtime > Custom configuration",
+        "section": "Custom configuration",
+        "text": "Now, try to launch the product with a custom configuration. This is done\nby passing the config and launch_mode arguments to the launch_product()\nfunction.\nAgain, ensure that the server is running.\nGet the content of the main page.\nYou can see that the server is now showing the files from the parent directory.\nCustom configuration\nconfig\nlaunch_mode\nlaunch_product()"
+    },
+    {
+        "objectID": "examples/py_configure",
+        "href": "examples/py_configure.html#teardown",
+        "title": "Choose configuration at runtime > Teardown",
+        "section": "Teardown",
+        "text": "You can manually stop the server using the stop() method.\nAlternatively,  the server is stopped when all references to product_instance\nare deleted.\nTo ensure that the server is down, try to access the main page again.\nTotal running time of the script: (0 minutes 0.214 seconds)\nDownload Jupyter notebook: py_configure.ipynb\nDownload Python source code: py_configure.py\nDownload zipped: py_configure.zip\nGallery generated by Sphinx-Gallery\nTeardown\nstop()\nproduct_instance\nDownload Jupyter notebook: py_configure.ipynb\nDownload Python source code: py_configure.py\nDownload zipped: py_configure.zip"
+    },
+    {
+        "objectID": "user_guide/plugin_creation",
+        "href": "user_guide/plugin_creation.html#launcher-plugin-creation",
+        "title": "Launcher plugin creation",
+        "section": "Launcher plugin creation",
+        "text": "This page explains how to create a plugin for the Local Product Launcher. The plugin\nin the example launches Ansys Composite PrepPost (ACP) as a subprocess.\nThe Local Product Launcher defines the interface that a plugin must satisfy in the interface module.\nTo simplify the example, the plugin business logic is kept minimal.\nLauncher plugin creation\ninterface"
+    },
+    {
+        "objectID": "user_guide/plugin_creation",
+        "href": "user_guide/plugin_creation.html#create-configuration",
+        "title": "Launcher plugin creation > Create configuration",
+        "section": "Create configuration",
+        "text": "To start, you must create the user-definable configuration for the launcher. Because\nACP should be run as a subprocess, the path to the server binary must be defined.\nThis configuration is defined as a dataclass:\nThe configuration class defines a single binary_path option of type str.\nCreate configuration\ndataclass\nbinary_path\nstr"
+    },
+    {
+        "objectID": "user_guide/plugin_creation",
+        "href": "user_guide/plugin_creation.html#define-launcher",
+        "title": "Launcher plugin creation > Define launcher",
+        "section": "Define launcher",
+        "text": "Next, you must define the launcher itself. The full launcher code follows. Because\nthere’s quite a lot going on in this code, descriptions of each part are provided.\nThe launcher class inherits from LauncherProtocol[LauncherConfig]. This isn’t a requirement, but it means a type checker like mypy can verify that the LauncherProtocol interface is fulfilled.\nNext, setting CONFIG_MODEL = DirectLauncherConfig connects the launcher to the configuration class.\nThe subsequent line, SERVER_SPEC = {\"main\": ServerType.GRPC}, defines which kind of servers the\nproduct starts. Here, there’s only a single server, which is accessible via gRPC. The keys in this\ndictionary can be chosen arbitrarily, but they should be consistent across the launcher implementation.\nIdeally, you use the key to convey some meaning. For example, \"main\" could refer to the main interface\nto your product and file_transfer could refer to an additional service for file upload and download.\nThe __init__ method must accept exactly one keyword-only argument, config, which contains the\nconfiguration instance. In this example, the configuration is stored in the _config attribute.\nFor the _url and _process attributes, only the type is declared for the benefits of the type checker\nThe core of the launcher implementation is in the start() and stop() methods:\nThis start() method selects an available port using the\nfind_free_ports() function. It then starts the server as a subprocess. Note that here, the server output is simply discarded. In a real launcher, the option to redirect it (for example to a file) should be added.\nThe _url attribute keeps track of the URL and port that the server should be accessible on.\nThe start() method terminates the subprocess:\nIf your product is prone to ignoring SIGTERM, you might want to add a timeout to the\n.wait() method and retry with the\n.kill() method instead of the\n.terminate() method.\nNext, you must provide a way to verify that the product has successfully launched. This is implemented\nin the check. Because the server implements gRPC health checking, the\ncheck_grpc_health() helper can be used for this purpose:\nFinally, the _url attribute stored in the start() method must\nbe made available in the urls property:\nNote that the return value for the urls property should adhere to the schema defined in SERVER_SPEC.\nDefine launcher\nLauncherProtocol[LauncherConfig]\nLauncherProtocol\nCONFIG_MODEL = DirectLauncherConfig\nSERVER_SPEC = {\"main\": ServerType.GRPC}\n\"main\"\nfile_transfer\n__init__\nconfig\n_config\n_url\n_process\nstart()\nstop()\nstart()\nfind_free_ports()\n_url\nstart()\nSIGTERM\n.wait()\n.kill()\n.terminate()\ncheck\ncheck_grpc_health()\n_url\nstart()\nurls\nurls\nSERVER_SPEC"
+    },
+    {
+        "objectID": "user_guide/plugin_creation",
+        "href": "user_guide/plugin_creation.html#register-entrypoint",
+        "title": "Launcher plugin creation > Register entrypoint",
+        "section": "Register entrypoint",
+        "text": "Having defined all the necessary components for a Local Product Launcher plugin, you can now register the\nplugin, which makes it available. You do this through the Python entrypoints\nmechanism.\nYou define the entrypoint in your package’s build configuration. The exact syntax depends on which\npackaging tool you use:\nSetuptools can accept its configuration in one of three ways. Choose the one that applies to your project:\nIn a pyproject.toml file:\nIn a setup.cfg file:\nIn a setup.py file:\nFor more information, see the setuptools documentation.\nIn a pyproject.toml file:\nFor more information, see the flit documentation.\nIn a pyproject.toml file:\nFor more information, see the poetry documentation.\nIn all cases, ansys.tools.local_product_launcher.launcher is an identifier specifying that the entrypoint defines a Local Product Launcher plugin. It must be kept the same.\nThe entrypoint itself has two parts:\nThe entrypoint name ACP.direct consists of two parts: ACP is the product name, and\ndirect is the launch mode identifier. The name must be of this format and contain exactly\none dot . separating the two parts.\nThe entrypoint value <your.module.name>:DirectLauncher defines where the launcher\nimplementation is located. In other words, it must load the launcher class:\nFor the entrypoints to update, you must re-install your package (even if it was installed with pip install -e).\nRegister entrypoint\npyproject.toml\nsetup.cfg\nsetup.py\npyproject.toml\npyproject.toml\nansys.tools.local_product_launcher.launcher\nACP.direct\nACP\ndirect\n.\n<your.module.name>:DirectLauncher\npip install -e"
+    },
+    {
+        "objectID": "user_guide/plugin_creation",
+        "href": "user_guide/plugin_creation.html#add-command-line-default-and-description",
+        "title": "Launcher plugin creation > Add command-line default and description",
+        "section": "Add command-line default and description",
+        "text": "With the three preceding parts, you’ve successfully created a Local Product Launcher plugin. <svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-rocket\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M14.064 0h.186C15.216 0 16 .784 16 1.75v.186a8.752 8.752 0 0 1-2.564 6.186l-.458.459c-.314.314-.641.616-.979.904v3.207c0 .608-.315 1.172-.833 1.49l-2.774 1.707a.749.749 0 0 1-1.11-.418l-.954-3.102a1.214 1.214 0 0 1-.145-.125L3.754 9.816a1.218 1.218 0 0 1-.124-.145L.528 8.717a.749.749 0 0 1-.418-1.11l1.71-2.774A1.748 1.748 0 0 1 3.31 4h3.204c.288-.338.59-.665.904-.979l.459-.458A8.749 8.749 0 0 1 14.064 0ZM8.938 3.623h-.002l-.458.458c-.76.76-1.437 1.598-2.02 2.5l-1.5 2.317 2.143 2.143 2.317-1.5c.902-.583 1.74-1.26 2.499-2.02l.459-.458a7.25 7.25 0 0 0 2.123-5.127V1.75a.25.25 0 0 0-.25-.25h-.186a7.249 7.249 0 0 0-5.125 2.123ZM3.56 14.56c-.732.732-2.334 1.045-3.005 1.148a.234.234 0 0 1-.201-.064.234.234 0 0 1-.064-.201c.103-.671.416-2.273 1.15-3.003a1.502 1.502 0 1 1 2.12 2.12Zm6.94-3.935c-.088.06-.177.118-.266.175l-2.35 1.521.548 1.783 1.949-1.2a.25.25 0 0 0 .119-.213ZM3.678 8.116 5.2 5.766c.058-.09.117-.178.176-.266H3.309a.25.25 0 0 0-.213.119l-1.2 1.95ZM12 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z\"></path></svg>\nYou can now improve the usability of the command line by adding a default and description to the configuration class.\nTo do so, edit the DirectLaunchConfig class, using the dataclasses.field() function to enrich\nthe binary_path:\nThe default value is specified as the default argument.\nThe description is given in the metadata dictionary, using the special key METADATA_KEY_DOC.\nFor the default value, use the get_available_ansys_installations\nhelper to find the Ansys installation directory.\nNow, when running ansys-launcher configure ACP direct, users can see and accept the default\nvalue if they want.\nIf the default value is None, it is converted to the string default for the\ncommand-line interface. This allows implementing more complicated default behaviors\nthat may not be expressible when the command-line interface is run.\nAdd command-line default and description\nDirectLaunchConfig\ndataclasses.field()\nbinary_path\ndefault\nmetadata\nMETADATA_KEY_DOC\nget_available_ansys_installations\nansys-launcher configure ACP direct\nNone\ndefault"
+    },
+    {
+        "objectID": "user_guide/plugin_creation",
+        "href": "user_guide/plugin_creation.html#add-a-fallback-launch-mode",
+        "title": "Launcher plugin creation > Add a fallback launch mode",
+        "section": "Add a fallback launch mode",
+        "text": "If you want to provide a fallback launch mode that can be used without any configuration, you can add\nan entrypoint with the special name <product>.__fallback__.\nFor example, if you wanted the DirectLauncher to be the fallback for ACP, you could add this\nentrypoint:\nThe fallback launch mode is used with its default configuration. This means that the configuration class must have default values for all its fields.\nAdd a fallback launch mode\n<product>.__fallback__\nDirectLauncher"
+    },
+    {
+        "objectID": "user_guide/plugin_creation",
+        "href": "user_guide/plugin_creation.html#hide-advanced-options",
+        "title": "Launcher plugin creation > Hide advanced options",
+        "section": "Hide advanced options",
+        "text": "If your launcher plugin has advanced options, you can skip prompting the user for them by default.\nThis is done by setting the special key METADATA_KEY_NOPROMPT\nto True in the metadata dictionary:\nHide advanced options\nMETADATA_KEY_NOPROMPT\nTrue\nmetadata"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#api-reference",
+        "title": "API reference",
+        "section": "API reference",
+        "text": "This section describes Local Product Launcher API endpoints so that you can\nunderstand how to interact with them programmatically.\nAPI reference"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#contribute",
+        "title": "Contribute",
+        "section": "Contribute",
+        "text": "Overall guidance on contributing to a PyAnsys library appears in\nContributing\nin the PyAnsys developer’s guide. Ensure that you are thoroughly familiar\nwith this guide before attempting to contribute to the Local Product Launcher.\nThe following contribution information is specific to the Local Product Launcher.\nContribute"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#install-in-developer-mode",
+        "title": "Contribute > Install in developer mode",
+        "section": "Install in developer mode",
+        "text": "Installing the Local Product Launcher in developer mode allows you to modify\nand enhance the source:\nClone the repository:\nAccess the directory where you have cloned the repository:\nMake sure you have the latest version of Poetry:\nInstall the project and all its development dependencies using Poetry, which takes\ncare of creating a clean virtual environment:\nActivate your development virtual environment:\nVerify your development installation:\nInstall in developer mode"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#testing",
+        "title": "Contribute > Testing",
+        "section": "Testing",
+        "text": "The Local Product Launcher takes advantage of tox. This tool allows you to\nautomate common development tasks (similar to Makefile), but it is oriented\ntowards Python development.\nTesting\nMakefile"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#using-tox",
+        "title": "Contribute > Using tox",
+        "section": "Using tox",
+        "text": "While Makefile has rules, tox has environments. In fact, tox\ncreates its own virtual environment so that anything being tested is isolated\nfrom the project to guarantee the project’s integrity.\nThe following environment commands are provided:\ntox -e style: Checks for coding style quality.\ntox -e py: Checks for unit tests.\ntox -e py-coverage: Checks for unit testing and code coverage.\ntox -e doc: Checks for documentation building.\nUsing tox\ntox\nMakefile\ntox\ntox\ntox -e style\ntox -e py\ntox -e py-coverage\ntox -e doc"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#raw-testing",
+        "title": "Contribute > Raw testing",
+        "section": "Raw testing",
+        "text": "If required, from the command line, you can call style commands like\nBlack, isort, and Flake8. You can also call unit testing commands like pytest.\nHowever, running these commands do not guarantee that your project is being tested\nin an isolated environment, which is the reason why tools like tox exist.\nRaw testing\ntox"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#code-style",
+        "title": "Contribute > Code style",
+        "section": "Code style",
+        "text": "As indicated in Coding style\nin the PyAnsys developer’s guide, the Local Product Launcher follows PEP8 guidelines.\nIt implements pre-commit for style checking.\nTo ensure your code meets minimum code styling standards, run these commands:\nYou can also install this as a pre-commit hook by running this command:\nThis way, it’s not possible for you to push code that fails the style checks:\nCode style"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#documentation",
+        "title": "Contribute > Documentation",
+        "section": "Documentation",
+        "text": "For building documentation, you can manually run this command:\nHowever, the recommended way of checking documentation integrity is to use\ntox:\nDocumentation\ntox"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#distributing",
+        "title": "Contribute > Distributing",
+        "section": "Distributing",
+        "text": "The following commands can be used to build and verify the package:\nThe preceding commands create both a source distribution and a wheel file.\nDistributing"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#post-issues",
+        "title": "Contribute > Post issues",
+        "section": "Post issues",
+        "text": "Use the Local Product Launcher Issues\npage to report bugs and request new features. When possible, use the issue\ntemplates provided. If your issue does not fit into one of these templates,\nclick the link for opening a blank issue.\nOn the Discussions page on the Ansys Developer portal,\nyou can post questions, share ideas, and get community feedback.\nTo reach the project support team, email pyansys.core@ansys.com.\nPost issues"
+    }
+]
