@@ -19,36 +19,17 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
 """Helpers for interacting with gRPC servers."""
 
-import grpc
-from grpc_health.v1.health_pb2 import HealthCheckRequest, HealthCheckResponse
-from grpc_health.v1.health_pb2_grpc import HealthStub
+import warnings
 
+warnings.warn(
+    "This module is deprecated and will no longer be maintained. "
+    "Functionality from this module has been migrated to ``ansys-tools-common``. "
+    "Please consider migrating to ``ansys-tools-common``. "
+    "For more information check "
+    "https://github.com/ansys/ansys-tools-local-product-launcher/issues/264",
+    DeprecationWarning,
+)
 
-def check_grpc_health(channel: grpc.Channel, timeout: float | None = None) -> bool:
-    """Check that a gRPC server is responding to health check requests.
-
-    Parameters
-    ----------
-    channel :
-        Channel to the gRPC server.
-    timeout :
-        Timeout in seconds for the gRPC health check request.
-
-    Returns
-    -------
-    :
-        ``True`` if the health check succeeds, ``False`` otherwise.
-    """
-    try:
-        res = HealthStub(channel).Check(
-            request=HealthCheckRequest(),
-            timeout=timeout,
-        )
-        if res.status == HealthCheckResponse.ServingStatus.SERVING:
-            return True
-    except grpc.RpcError:
-        pass
-    return False
+from ansys.tools.common.launcher.helpers.grpc import *  # noqa

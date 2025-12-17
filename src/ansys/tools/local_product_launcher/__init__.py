@@ -26,10 +26,20 @@ Tools.
 local_product_launcher
 """
 
+import warnings
+
+warnings.warn(
+    "This library is deprecated and will no longer be maintained. "
+    "Functionality from this library has been migrated to ``ansys-tools-common``. "
+    "Please consider migrating to ``ansys-tools-common``. "
+    "For more information check https://github.com/ansys/ansys-tools-local-product-launcher/issues/264",
+    DeprecationWarning,
+)
+
 import importlib.metadata
 
-from . import config, grpc_transport, helpers, interface, product_instance
-from .launch import launch_product
+from ansys.tools.common.launcher import config, grpc_transport, helpers, interface, product_instance
+from ansys.tools.common.launcher.launch import launch_product
 
 __version__ = importlib.metadata.version(__name__.replace(".", "-"))
 

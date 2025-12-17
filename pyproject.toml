@@ -29,11 +29,10 @@ ansys-launcher = "ansys.tools.local_product_launcher._cli:cli"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-click = ">=8.1.3"
+ansys-tools-common = ">=0.1.0"
+grpcio = ">=1.51.1"  # Required since tools-common does not provide grpcio
 grpcio-health-checking = ">=1.43"
-grpcio = ">=1.51.1"
-appdirs = ">=1.4.4"
-typing-extensions = ">=4.5.0"
+
 
 [tool.poetry.group.dev]
 optional = true
@@ -61,6 +60,10 @@ pypandoc = ">=1.12"
 requests = ">=2.31.0"
 ipykernel = ">=6.29.1"
 types-requests = ">=2.31.0.20240125"
+grpcio-health-checking = ">=1.43"
+grpcio = ">=1.51.1"
+appdirs = ">=1.4.4"
+click = ">=8.1.3"
 
 [tool.poetry.group.test]
 optional = true

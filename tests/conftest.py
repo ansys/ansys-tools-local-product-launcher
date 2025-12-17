@@ -52,10 +52,16 @@ def get_mock_entrypoints_from_plugins(
 @pytest.fixture
 def monkeypatch_entrypoints_from_plugins(monkeypatch):
     def inner(target_plugins):
-        monkeypatch.setattr(
-            _plugins,
-            "_get_entry_points",
-            partial(get_mock_entrypoints_from_plugins, target_plugins=target_plugins),
-        )
+        # Patch both the local _plugins module and the actual module from ansys-tools-common
+        mock_fn = partial(get_mock_entrypoints_from_plugins, target_plugins=target_plugins)
+        monkeypatch.setattr(_plugins, "_get_entry_points", mock_fn)
+        # Also patch the underlying module that _plugins imports from
+        try:
+            import ansys.tools.common.launcher._plugins as common_plugins
+
+            monkeypatch.setattr(common_plugins, "_get_entry_points", mock_fn)
+        except ImportError:
+            # If ansys-tools-common is not installed, the local patch should be sufficient
+            pass
 
     return inner
