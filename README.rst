@@ -1,5 +1,5 @@
 [DEPRECATED] Local Product Launcher
-=============================
+===================================
 This library is deprecated and will no longer be maintained. Please consider using alternatives. For more information check
 `this issue <https://github.com/ansys/ansys-tools-local-product-launcher/issues/264>`_.
 
